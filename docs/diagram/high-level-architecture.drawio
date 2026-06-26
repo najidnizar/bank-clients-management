@@ -1,0 +1,92 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="y5owuNVuNfLQSI4UR401">
+    <mxGraphModel dx="1414" dy="912" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Customer Onboarding Service" vertex="1">
+          <mxGeometry height="60" width="120" x="170" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Customer Profile Service" vertex="1">
+          <mxGeometry height="60" width="120" x="420" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Customer Document Service" vertex="1">
+          <mxGeometry height="60" width="120" x="690" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Customer KYC Service" vertex="1">
+          <mxGeometry height="60" width="120" x="957" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-5" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="onboarding-db" vertex="1">
+          <mxGeometry height="60" width="90" x="185" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-6" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="profile-db" vertex="1">
+          <mxGeometry height="60" width="90" x="435" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-7" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="document-db" vertex="1">
+          <mxGeometry height="60" width="90" x="705" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-8" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="kyc-db" vertex="1">
+          <mxGeometry height="60" width="90" x="972" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-15" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="FG4ZtXsdBgL2P84cJgIZ-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="370" />
+              <mxPoint x="230" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-16" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="FG4ZtXsdBgL2P84cJgIZ-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="370" />
+              <mxPoint x="480" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-18" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="FG4ZtXsdBgL2P84cJgIZ-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="370" />
+              <mxPoint x="750" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-19" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="FG4ZtXsdBgL2P84cJgIZ-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="370" />
+              <mxPoint x="1017" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Spring Cloud Gateway" vertex="1">
+          <mxGeometry height="60" width="120" x="550" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;Bank Clients Management&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="340" x="460" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-14" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="FG4ZtXsdBgL2P84cJgIZ-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610" y="190" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-11" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Bank Advisor" vertex="1">
+          <mxGeometry height="60" width="30" x="595" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-20" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="FG4ZtXsdBgL2P84cJgIZ-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-21" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="FG4ZtXsdBgL2P84cJgIZ-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-22" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="FG4ZtXsdBgL2P84cJgIZ-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FG4ZtXsdBgL2P84cJgIZ-23" edge="1" parent="1" source="FG4ZtXsdBgL2P84cJgIZ-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="FG4ZtXsdBgL2P84cJgIZ-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
