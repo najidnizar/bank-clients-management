@@ -65,6 +65,20 @@ Examples:
 - chore: configure Docker
 - build: upgrade dependencies
 
+## Spring Profiles
+
+The project uses dedicated Spring profiles for each environment.
+
+| Profile | Purpose                                  |
+|---------|------------------------------------------|
+| local   | Local development on a developer machine |
+| test    | Automated tests                          |
+| dev     | Shared development environment           |
+| prod    | Production environment                   |
+
+The active profile is never committed in the source code.
+It is configured by the execution environment (IDE, Maven, Docker or Kubernetes).
+
 ## Code Style
 
 ## REST API Standards

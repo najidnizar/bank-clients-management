@@ -1,0 +1,37 @@
+info:
+  name: Duplicate Email
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/v1/customers"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Nizar",
+        "lastName": "Najid",
+        "dateOfBirth": "1995-01-01",
+        "email": "duplicate@test.com",
+        "phoneNumber": "+352621234567"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "409"
+    - expression: res.body.error
+      operator: eq
+      value: Conflict
+    - expression: res.body.message
+      operator: contains
+      value: already exists
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

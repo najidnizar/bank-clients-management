@@ -1,0 +1,31 @@
+info:
+  name: Get Customer Success
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/v1/customers/c87cced3-a5e9-4778-a3ee-bbf9dc66ee68"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status is 200", () => {
+            expect(res.status).to.equal(200);
+        });
+
+        test("Id exists", () => {
+            expect(res.body.id).to.exist;
+        });
+
+        test("Customer number exists", () => {
+            expect(res.body.customerNumber).to.exist;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
