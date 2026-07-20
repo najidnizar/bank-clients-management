@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.UUID;
 
 @Builder
-public record CreateCustomerResponse(
+public record CustomerResponse(
 
         UUID id,
 
@@ -15,6 +15,8 @@ public record CreateCustomerResponse(
 
         String lastName,
 
-        String email
+        String email,
+
+        String phoneNumber
 
 ) {}

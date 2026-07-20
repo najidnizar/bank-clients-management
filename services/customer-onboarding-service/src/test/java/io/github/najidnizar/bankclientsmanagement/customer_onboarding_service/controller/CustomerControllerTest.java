@@ -1,7 +1,7 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.controller;
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
-import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.GlobalExceptionHandler;
@@ -10,15 +10,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -50,7 +53,7 @@ class CustomerControllerTest {
                 .phoneNumber("+352621234567")
                 .build();
 
-        CreateCustomerResponse response = CreateCustomerResponse.builder()
+        CustomerResponse response = CustomerResponse.builder()
                 .id(UUID.randomUUID())
                 .customerNumber("C000000001")
                 .firstName("Nizar")
@@ -125,7 +128,7 @@ class CustomerControllerTest {
         // Arrange
         UUID customerId = UUID.randomUUID();
 
-        CreateCustomerResponse response = CreateCustomerResponse.builder()
+        CustomerResponse response = CustomerResponse.builder()
                 .id(customerId)
                 .customerNumber("C000000001")
                 .firstName("Nizar")
@@ -168,4 +171,60 @@ class CustomerControllerTest {
 
         verify(customerService).getCustomerById(customerId);
     }
+
+    @Test
+    void shouldReturnCustomersPage() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        CustomerResponse response = CustomerResponse.builder()
+                .id(customerId)
+                .customerNumber("C000000001")
+                .firstName("Nizar")
+                .lastName("Najid")
+                .email("nizar@test.com")
+                .build();
+        Page<CustomerResponse> page = new PageImpl<>(List.of(response));
+        when(customerService.getCustomers(any(Pageable.class))).thenReturn(page);
+        mockMvc.perform(
+                        get("/api/v1/customers")
+                                .param("page", "0")
+                                .param("size", "10")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].firstName")
+                        .value("Nizar"))
+                .andExpect(jsonPath("$.totalElements")
+                        .value(1));
+        verify(customerService).getCustomers(any(Pageable.class));
+    }
+
+    @Test
+    void shouldReturnCustomersPageByFirstName() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        CustomerResponse response = CustomerResponse.builder()
+                .id(customerId)
+                .customerNumber("C000000001")
+                .firstName("Nizar")
+                .lastName("Najid")
+                .email("nizar@test.com")
+                .build();
+        Page<CustomerResponse> page = new PageImpl<>(List.of(response));
+        when(customerService.searchCustomersByFirstName(anyString(), any(Pageable.class))).thenReturn(page);
+        mockMvc.perform(
+                        get("/api/v1/customers/search")
+                                .param("firstName", "Nizar")
+                                .param("page", "0")
+                                .param("size", "10")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].firstName")
+                        .value("Nizar"))
+                .andExpect(jsonPath("$.totalElements")
+                        .value(1));
+        verify(customerService).searchCustomersByFirstName(anyString(), any(Pageable.class));
+    }
+
+
+
 }

@@ -1,7 +1,7 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.controller;
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
-import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +41,33 @@ public class CustomerController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateCustomerResponse createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
+    public CustomerResponse createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
         return customerService.createCustomer(request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CreateCustomerResponse> getCustomerById(@PathVariable UUID id) {
-        CreateCustomerResponse response = customerService.getCustomerById(id);
+    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable UUID id) {
+        CustomerResponse response = customerService.getCustomerById(id);
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/customer-number/{customerNumber}")
+    public ResponseEntity<CustomerResponse> getCustomerByCustomerNumber(@PathVariable String customerNumber) {
+        return ResponseEntity.ok(customerService.getCustomerByCustomerNumber(customerNumber));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<CustomerResponse>> getCustomers(Pageable pageable) {
+        return ResponseEntity.ok(customerService.getCustomers(pageable));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<CustomerResponse>> searchCustomersByFirstName(
+            @RequestParam String firstName,
+            Pageable pageable) {
+
+        return ResponseEntity.ok(
+                customerService.searchCustomersByFirstName(firstName, pageable)
+        );
+    }
 }

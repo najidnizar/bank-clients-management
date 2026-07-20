@@ -1,16 +1,20 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.mapper;
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
-import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
     CustomerEntity toEntity(CreateCustomerRequest request);
 
-    CreateCustomerResponse toResponse(CustomerEntity customer);
+    CustomerResponse toResponse(CustomerEntity customer);
 
-    CreateCustomerResponse toCreateCustomerResponse(CustomerEntity customer);
+    CustomerResponse toCustomerResponse(CustomerEntity customer);
+
+    void updateCustomer(UpdateCustomerRequest request, @MappingTarget CustomerEntity customer);
 }

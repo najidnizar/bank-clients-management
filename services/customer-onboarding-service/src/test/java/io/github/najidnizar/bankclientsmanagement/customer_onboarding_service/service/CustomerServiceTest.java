@@ -1,7 +1,8 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.service;
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
-import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
@@ -13,8 +14,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,7 +68,7 @@ class CustomerServiceTest {
         customer.setEmail(EMAIL);
         customer.setPhoneNumber(PHONE_NUMBER);
 
-        CreateCustomerResponse response = CreateCustomerResponse.builder()
+        CustomerResponse response = CustomerResponse.builder()
                 .id(savedCustomer.getId())
                 .customerNumber(savedCustomer.getCustomerNumber())
                 .firstName(FIRST_NAME)
@@ -76,7 +82,7 @@ class CustomerServiceTest {
         when(customerRepository.save(customer)).thenReturn(savedCustomer);
         when(customerMapper.toResponse(savedCustomer)).thenReturn(response);
 
-        CreateCustomerResponse result = customerService.createCustomer(request);
+        CustomerResponse result = customerService.createCustomer(request);
 
         assertNotNull(result);
         assertEquals(savedCustomer.getId(), result.id());
@@ -148,7 +154,7 @@ class CustomerServiceTest {
                 .phoneNumber("+352621234567")
                 .build();
 
-        CreateCustomerResponse response = CreateCustomerResponse.builder()
+        CustomerResponse response = CustomerResponse.builder()
                 .id(customerId)
                 .customerNumber("C000000001")
                 .firstName("Nizar")
@@ -159,18 +165,18 @@ class CustomerServiceTest {
         when(customerRepository.findById(customerId))
                 .thenReturn(Optional.of(customer));
 
-        when(customerMapper.toCreateCustomerResponse(customer))
+        when(customerMapper.toCustomerResponse(customer))
                 .thenReturn(response);
 
         // Act
-        CreateCustomerResponse result = customerService.getCustomerById(customerId);
+        CustomerResponse result = customerService.getCustomerById(customerId);
 
         // Assert
         assertEquals(customerId, result.id());
         assertEquals("C000000001", result.customerNumber());
 
         verify(customerRepository).findById(customerId);
-        verify(customerMapper).toCreateCustomerResponse(customer);
+        verify(customerMapper).toCustomerResponse(customer);
     }
 
     @Test
@@ -188,7 +194,210 @@ class CustomerServiceTest {
         );
 
         verify(customerRepository).findById(customerId);
-        verify(customerMapper, never()).toCreateCustomerResponse(any());
+        verify(customerMapper, never()).toCustomerResponse(any());
     }
+
+    @Test
+    void shouldReturnCustomersPage() {
+        Pageable pageable = PageRequest.of(0, 10);
+
+        UUID customerId = UUID.randomUUID();
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(customerId)
+                .customerNumber("C000000001")
+                .firstName("Nizar")
+                .lastName("Najid")
+                .dateOfBirth(LocalDate.of(1995, 1, 1))
+                .email("nizar@test.com")
+                .phoneNumber("+352621234567")
+                .build();
+
+        CustomerResponse response = CustomerResponse.builder()
+                .id(customerId)
+                .customerNumber("C000000001")
+                .firstName("Nizar")
+                .lastName("Najid")
+                .email("nizar@test.com")
+                .build();
+
+        Page<CustomerEntity> page = new PageImpl<>(List.of(customer), pageable, 1);
+
+        when(customerRepository.findAll(pageable)).thenReturn(page);
+        when(customerMapper.toCustomerResponse(customer)).thenReturn(response);
+
+        Page<CustomerResponse> result = customerService.getCustomers(pageable);
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
+        assertEquals("Nizar", result.getContent().getFirst().firstName());
+        verify(customerRepository).findAll(pageable);
+        verify(customerMapper).toCustomerResponse(customer);
+    }
+
+    @Test
+    void shouldReturnCustomersEmptyPage() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<CustomerEntity> emptyPage = Page.empty(pageable);
+
+        when(customerRepository.findAll(pageable)).thenReturn(emptyPage);
+
+        Page<CustomerResponse> result = customerService.getCustomers(pageable);
+
+        assertTrue(result.isEmpty());
+        verify(customerRepository).findAll(pageable);
+        verify(customerMapper, never()).toCustomerResponse(any());
+    }
+
+    @Test
+    void shouldReturnCustomersPageByFirstName() {
+        Pageable pageable = PageRequest.of(0, 10);
+
+        UUID customerId = UUID.randomUUID();
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(customerId)
+                .customerNumber("C000000001")
+                .firstName("Nizar")
+                .lastName("Najid")
+                .dateOfBirth(LocalDate.of(1995, 1, 1))
+                .email("nizar@test.com")
+                .phoneNumber("+352621234567")
+                .build();
+
+        CustomerResponse response = CustomerResponse.builder()
+                .id(customerId)
+                .customerNumber("C000000001")
+                .firstName("Nizar")
+                .lastName("Najid")
+                .email("nizar@test.com")
+                .build();
+        Page<CustomerEntity> page = new PageImpl<>(List.of(customer), pageable, 1);
+
+        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(page);
+        when(customerMapper.toCustomerResponse(customer)).thenReturn(response);
+
+        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
+        assertEquals("Nizar", result.getContent().getFirst().firstName());
+        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
+        verify(customerMapper).toCustomerResponse(customer);
+
+
+    }
+
+    @Test
+    void shouldReturnCustomersEmptyPageByFirstNameNotFound() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<CustomerEntity> emptyPage = Page.empty(pageable);
+
+        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(emptyPage);
+
+        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
+
+        assertTrue(result.isEmpty());
+        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
+        verify(customerMapper, never()).toCustomerResponse(any());
+    }
+
+    @Test
+    void shouldUpdateCustomer() {
+        UUID id = UUID.randomUUID();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@test.com")
+                .phoneNumber("+352661123456")
+                .build();
+
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(id)
+                .firstName("Old")
+                .lastName("Name")
+                .email("old@test.com")
+                .phoneNumber("+352111111111")
+                .build();
+
+        CustomerResponse response = CustomerResponse.builder()
+                .id(id)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@test.com")
+                .phoneNumber("+352661123456")
+                .build();
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+        when(customerRepository.existsByEmail("john@test.com")).thenReturn(false);
+        when(customerRepository.save(customer)).thenReturn(customer);
+        when(customerMapper.toCustomerResponse(customer)).thenReturn(response);
+
+        CustomerResponse result = customerService.updateCustomer(id, request);
+
+        assertEquals(id, result.id());
+        assertEquals("John", result.firstName());
+        assertEquals("Doe", result.lastName());
+
+        verify(customerRepository).findById(id);
+        verify(customerRepository).existsByEmail("john@test.com");
+        verify(customerMapper).updateCustomer(request, customer);
+        verify(customerRepository).save(customer);
+        verify(customerMapper).toCustomerResponse(customer);
+    }
+
+    @Test
+    void shouldThrowCustomerNotFound() {
+        UUID id = UUID.randomUUID();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@test.com")
+                .phoneNumber("+352661123456")
+                .build();
+        when(customerRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(CustomerNotFoundException.class, () -> customerService.updateCustomer(id, request));
+
+        verify(customerRepository).findById(id);
+        verify(customerRepository, never()).save(any());
+        verify(customerMapper, never()).updateCustomer(any(), any());
+    }
+
+    @Test
+    void shouldThrowDuplicateEmail() {
+        UUID id = UUID.randomUUID();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@test.com")
+                .phoneNumber("+352661123456")
+                .build();
+
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(id)
+                .firstName("Old")
+                .lastName("Name")
+                .email("old@test.com")
+                .phoneNumber("+352111111111")
+                .build();
+
+        CustomerResponse response = CustomerResponse.builder()
+                .id(id)
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@test.com")
+                .phoneNumber("+352661123456")
+                .build();
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+        when(customerRepository.existsByEmail("john@test.com")).thenReturn(true);
+
+        assertThrows(EmailAlreadyExistsException.class, () -> customerService.updateCustomer(id, request));
+
+        verify(customerRepository).findById(id);
+        verify(customerRepository).existsByEmail("john@test.com");
+        verify(customerRepository, never()).save(any());
+        verify(customerMapper, never()).updateCustomer(any(), any());
+
+    }
+
 
 }
