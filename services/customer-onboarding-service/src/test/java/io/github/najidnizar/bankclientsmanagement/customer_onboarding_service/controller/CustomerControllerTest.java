@@ -2,6 +2,7 @@ package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.c
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.GlobalExceptionHandler;
@@ -24,8 +25,8 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -223,6 +224,104 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.totalElements")
                         .value(1));
         verify(customerService).searchCustomersByFirstName(anyString(), any(Pageable.class));
+    }
+
+    @Test
+    void shouldUpdateCustomer() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        CustomerResponse response = CustomerResponse.builder()
+                .id(customerId)
+                .customerNumber("C000000001")
+                .firstName("Nizar")
+                .lastName("Najid")
+                .email("nizar@test.com")
+                .build();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("Nizar")
+                .lastName("Najid")
+                .dateOfBirth(LocalDate.of(1995, 1, 1))
+                .email("nizar@test.com")
+                .phoneNumber("+352621234567")
+                .build();
+        when(customerService.updateCustomer(eq(customerId), any(UpdateCustomerRequest.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        put("/api/v1/customers/{id}", customerId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(customerId.toString()))
+                .andExpect(jsonPath("$.firstName").value("Nizar"))
+                .andExpect(jsonPath("$.lastName").value("Najid"))
+                .andExpect(jsonPath("$.email").value("nizar@test.com"));
+
+        verify(customerService).updateCustomer(eq(customerId), eq(request));
+    }
+
+    @Test
+    void shouldReturnCustomerNotFound() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("Nizar")
+                .lastName("Najid")
+                .dateOfBirth(LocalDate.of(1995, 1, 1))
+                .email("nizar@test.com")
+                .phoneNumber("+352621234567")
+                .build();
+        when(customerService.updateCustomer(eq(customerId), any(UpdateCustomerRequest.class)))
+                .thenThrow(new CustomerNotFoundException(customerId));
+
+        mockMvc.perform(
+                        put("/api/v1/customers/{id}", customerId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+        .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldThrowDuplicateEmailException() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("Nizar")
+                .lastName("Najid")
+                .dateOfBirth(LocalDate.of(1995, 1, 1))
+                .email("nizar@test.com")
+                .phoneNumber("+352621234567")
+                .build();
+        when(customerService.updateCustomer(customerId, request)).thenThrow(new EmailAlreadyExistsException("nizar@test.com"));
+
+        mockMvc.perform(
+                        put("/api/v1/customers/{id}", customerId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void shouldReturnBadRequest() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("")
+                .lastName("")
+                .email("abc")
+                .phoneNumber("123")
+                .build();
+
+        mockMvc.perform(
+                        put("/api/v1/customers/{id}", customerId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Bad Request"));
+
+
+
     }
 
 

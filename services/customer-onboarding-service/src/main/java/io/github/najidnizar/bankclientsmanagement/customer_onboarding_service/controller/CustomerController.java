@@ -2,6 +2,7 @@ package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.c
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -62,12 +63,15 @@ public class CustomerController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<CustomerResponse>> searchCustomersByFirstName(
-            @RequestParam String firstName,
-            Pageable pageable) {
+    public ResponseEntity<Page<CustomerResponse>> searchCustomersByFirstName(@RequestParam String firstName, Pageable pageable) {
 
         return ResponseEntity.ok(
                 customerService.searchCustomersByFirstName(firstName, pageable)
         );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable UUID id, @Valid @RequestBody UpdateCustomerRequest request) {
+        return ResponseEntity.ok(customerService.updateCustomer(id, request));
     }
 }

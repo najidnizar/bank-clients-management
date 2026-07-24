@@ -53,4 +53,7 @@ public class CustomerEntity {
     @UpdateTimestamp
     private Instant updatedAt;
 
+    @Enumerated(EnumType.STRING)
+    private CustomerStatus status;
+
 }

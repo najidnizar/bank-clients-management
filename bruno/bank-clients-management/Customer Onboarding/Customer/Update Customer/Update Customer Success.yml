@@ -1,0 +1,37 @@
+info:
+  name: Update Customer Success
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/api/v1/customers/be487dc2-03e9-4ce9-866f-55cd041b50e8"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Nizar",
+        "lastName": "string",
+        "dateOfBirth": "2026-07-24",
+        "email": "userz@example.com",
+        "phoneNumber": "string"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status is 200", function () {
+            expect(res.status).to.equal(200);
+        });
+
+        test("Customer updated", function () {
+            expect(res.body.firstName).to.equal("Nizar");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
