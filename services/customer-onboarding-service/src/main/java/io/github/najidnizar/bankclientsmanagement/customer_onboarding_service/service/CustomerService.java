@@ -2,12 +2,16 @@ package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.s
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerSearchCriteria;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.InvalidCustomerStatusTransitionException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.mapper.CustomerMapper;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerRepository;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.specification.CustomerSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,10 +33,24 @@ public class CustomerService {
             throw new EmailAlreadyExistsException(request.email());
         }
         CustomerEntity customer = customerMapper.toEntity(request);
+        customer.setStatus(CustomerStatus.ACTIVE);
         Long nextNumber = customerRepository.getNextCustomerNumber();
         customer.setCustomerNumber(String.format("C%09d", nextNumber));
         CustomerEntity savedCustomer = customerRepository.save(customer);
         return customerMapper.toResponse(savedCustomer);
+    }
+
+    @Transactional
+    public void closeCustomer(UUID id) {
+        updateCustomerStatus(id, CustomerStatus.CLOSED);
+    }
+
+    public void blockCustomer(UUID id) {
+        updateCustomerStatus(id, CustomerStatus.BLOCKED);
+    }
+
+    public void unblockCustomer(UUID id) {
+        updateCustomerStatus(id, CustomerStatus.ACTIVE);
     }
 
     public CustomerResponse getCustomerById(UUID id) {
@@ -40,7 +58,7 @@ public class CustomerService {
         CustomerEntity customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
 
-        return customerMapper.toCustomerResponse(customer);
+        return customerMapper.toResponse(customer);
     }
 
     public CustomerResponse getCustomerByCustomerNumber(String customerNumber) {
@@ -49,17 +67,17 @@ public class CustomerService {
                 .orElseThrow(() ->
                         new CustomerNotFoundException(customerNumber));
 
-        return customerMapper.toCustomerResponse(customer);
+        return customerMapper.toResponse(customer);
     }
 
     public Page<CustomerResponse> getCustomers(Pageable pageable) {
-        return customerRepository.findAll(pageable).map(customerMapper::toCustomerResponse);
+        return customerRepository.findAll(pageable).map(customerMapper::toResponse);
     }
 
-    public Page<CustomerResponse> searchCustomersByFirstName(String firstName, Pageable pageable) {
+    public Page<CustomerResponse> searchCustomers(CustomerSearchCriteria criteria, Pageable pageable) {
         return customerRepository
-                .findByFirstNameContainingIgnoreCase(firstName, pageable)
-                .map(customerMapper::toCustomerResponse);
+                .findAll(CustomerSpecification.build(criteria), pageable)
+                .map(customerMapper::toResponse);
     }
 
     public CustomerResponse updateCustomer(UUID id, UpdateCustomerRequest request) {
@@ -69,7 +87,15 @@ public class CustomerService {
         }
         customerMapper.updateCustomer(request, customer);
         CustomerEntity updated = customerRepository.save(customer);
-        return customerMapper.toCustomerResponse(updated);
+        return customerMapper.toResponse(updated);
     }
 
+    private void updateCustomerStatus(UUID id, CustomerStatus status) {
+        CustomerEntity customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
+        if (customer.getStatus() == CustomerStatus.CLOSED) {
+            throw new InvalidCustomerStatusTransitionException(customer.getStatus(), status);
+        }
+        customer.setStatus(status);
+        customerRepository.save(customer);
+    }
 }

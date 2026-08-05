@@ -4,8 +4,10 @@ import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dt
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.InvalidCustomerStatusTransitionException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.mapper.CustomerMapper;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
@@ -396,8 +398,98 @@ class CustomerServiceTest {
         verify(customerRepository).existsByEmail("john@test.com");
         verify(customerRepository, never()).save(any());
         verify(customerMapper, never()).updateCustomer(any(), any());
-
     }
 
+    @Test
+    void shouldCloseCustomer() {
+        UUID id = UUID.randomUUID();
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(id)
+                .status(CustomerStatus.ACTIVE)
+                .firstName("Old")
+                .lastName("Name")
+                .email("old@test.com")
+                .phoneNumber("+352111111111")
+                .build();
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+        when(customerRepository.save(customer)).thenReturn(customer);
+
+        customerService.closeCustomer(id);
+
+        assertEquals(CustomerStatus.CLOSED, customer.getStatus());
+        verify(customerRepository).findById(id);
+        verify(customerRepository).save(customer);
+    }
+
+    @Test
+    void shouldThrowCustomerNotFoundExceptionWhenClosingAndCustomerDoesNotExist() {
+        UUID id = UUID.randomUUID();
+        when(customerRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(CustomerNotFoundException.class, () -> customerService.closeCustomer(id));
+        verify(customerRepository).findById(id);
+        verify(customerRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldBlockCustomer() {
+        UUID id = UUID.randomUUID();
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(id)
+                .status(CustomerStatus.ACTIVE)
+                .build();
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+        when(customerRepository.save(customer)).thenReturn(customer);
+
+        customerService.blockCustomer(id);
+
+        assertEquals(CustomerStatus.BLOCKED, customer.getStatus());
+        verify(customerRepository).findById(id);
+        verify(customerRepository).save(customer);
+    }
+
+    @Test
+    void shouldThrowCustomerNotFoundExceptionWhenBlockCustomerDoesNotExist(){
+        // Arrange
+        UUID customerId = UUID.randomUUID();
+
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CustomerNotFoundException.class, () -> customerService.blockCustomer(customerId));
+
+        verify(customerRepository).findById(customerId);
+        verify(customerMapper, never()).toCustomerResponse(any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenBlockingClosedCustomer() {
+        UUID id = UUID.randomUUID();
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(id)
+                .status(CustomerStatus.CLOSED)
+                .build();
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+
+        assertThrows(InvalidCustomerStatusTransitionException.class, () -> customerService.blockCustomer(id));
+        verify(customerRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUnblockingClosedCustomer() {
+        UUID id = UUID.randomUUID();
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(id)
+                .status(CustomerStatus.CLOSED)
+                .build();
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+
+        assertThrows(InvalidCustomerStatusTransitionException.class, () -> customerService.unblockCustomer(id));
+        verify(customerRepository, never()).save(any());
+    }
 
 }

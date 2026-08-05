@@ -2,7 +2,9 @@ package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.c
 
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerSearchCriteria;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -58,20 +60,45 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CustomerResponse>> getCustomers(Pageable pageable) {
-        return ResponseEntity.ok(customerService.getCustomers(pageable));
-    }
+    public ResponseEntity<Page<CustomerResponse>> getCustomers(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String customerNumber,
+            @RequestParam(required = false) CustomerStatus status,
+            Pageable pageable) {
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<CustomerResponse>> searchCustomersByFirstName(@RequestParam String firstName, Pageable pageable) {
+        CustomerSearchCriteria criteria = CustomerSearchCriteria.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .customerNumber(customerNumber)
+                .status(status)
+                .build();
 
-        return ResponseEntity.ok(
-                customerService.searchCustomersByFirstName(firstName, pageable)
-        );
+        return ResponseEntity.ok(customerService.searchCustomers(criteria, pageable));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable UUID id, @Valid @RequestBody UpdateCustomerRequest request) {
         return ResponseEntity.ok(customerService.updateCustomer(id, request));
+    }
+
+    @PostMapping("/{id}/close")
+    public ResponseEntity<Void> closeCustomer(@PathVariable UUID id) {
+        customerService.closeCustomer(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/block")
+    public ResponseEntity<Void> blockCustomer(@PathVariable UUID id) {
+        customerService.blockCustomer(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/unblock")
+    public ResponseEntity<Void> unblockCustomer(@PathVariable UUID id) {
+        customerService.unblockCustomer(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -14,7 +14,5 @@ public interface CustomerMapper {
 
     CustomerResponse toResponse(CustomerEntity customer);
 
-    CustomerResponse toCustomerResponse(CustomerEntity customer);
-
     void updateCustomer(UpdateCustomerRequest request, @MappingTarget CustomerEntity customer);
 }

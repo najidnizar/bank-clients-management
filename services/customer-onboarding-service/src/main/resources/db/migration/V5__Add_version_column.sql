@@ -1,0 +1,2 @@
+ALTER TABLE customer
+    ADD COLUMN version BIGINT NOT NULL DEFAULT 0;

@@ -2,5 +2,6 @@ package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.e
 
 public enum CustomerStatus {
     ACTIVE,
+    BLOCKED,
     CLOSED
 }

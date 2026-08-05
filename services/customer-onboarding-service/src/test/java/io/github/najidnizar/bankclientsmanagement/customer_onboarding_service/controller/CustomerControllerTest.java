@@ -3,6 +3,7 @@ package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.c
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.GlobalExceptionHandler;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
@@ -319,11 +321,45 @@ class CustomerControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.error").value("Bad Request"));
-
-
-
     }
 
+    @Test
+    void shouldCloseCustomer() throws Exception {
+        UUID id = UUID.randomUUID();
+        doNothing().when(customerService).closeCustomer(id);
+        mockMvc.perform(post("/api/v1/customers/{id}/close", id)).andExpect(status().isNoContent());
+        verify(customerService).closeCustomer(id);
+    }
 
+    @Test
+    void shouldReturnNotFoundWhenClosingUnknownCustomer() throws Exception {
+        UUID id = UUID.randomUUID();
+        doThrow(new CustomerNotFoundException(id)).when(customerService).closeCustomer(id);
+        mockMvc.perform(post("/api/v1/customers/{id}/close", id)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturnConflictWhenOptimisticLockOccurs() throws Exception {
+
+        UUID id = UUID.randomUUID();
+        UpdateCustomerRequest request = UpdateCustomerRequest.builder()
+                .firstName("Nizar")
+                .lastName("Najid")
+                .dateOfBirth(LocalDate.of(1995, 1, 1))
+                .email("nizar@test.com")
+                .phoneNumber("+352621234567")
+                .build();
+        when(customerService.updateCustomer(eq(id), any(UpdateCustomerRequest.class)))
+                .thenThrow(new ObjectOptimisticLockingFailureException("CustomerEntity", id));
+
+        mockMvc.perform(
+                        put("/api/v1/customers/{id}", id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.error").value("Conflict"));
+    }
 
 }

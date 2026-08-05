@@ -1,11 +1,14 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto;
 
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
 import lombok.Builder;
 
 import java.util.UUID;
 
 @Builder
 public record CustomerResponse(
+
+        Long version,
 
         UUID id,
 
@@ -17,6 +20,7 @@ public record CustomerResponse(
 
         String email,
 
-        String phoneNumber
+        String phoneNumber,
 
+        CustomerStatus status
 ) {}
