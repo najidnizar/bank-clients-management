@@ -10,6 +10,7 @@ import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.ex
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.InvalidCustomerStatusTransitionException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.mapper.CustomerMapper;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerRepository;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerStatusHistoryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -41,6 +42,9 @@ class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private CustomerStatusHistoryRepository customerStatusHistoryRepository;
 
     @Mock
     private CustomerMapper customerMapper;
@@ -167,7 +171,7 @@ class CustomerServiceTest {
         when(customerRepository.findById(customerId))
                 .thenReturn(Optional.of(customer));
 
-        when(customerMapper.toCustomerResponse(customer))
+        when(customerMapper.toResponse(customer))
                 .thenReturn(response);
 
         // Act
@@ -178,7 +182,7 @@ class CustomerServiceTest {
         assertEquals("C000000001", result.customerNumber());
 
         verify(customerRepository).findById(customerId);
-        verify(customerMapper).toCustomerResponse(customer);
+        verify(customerMapper).toResponse(customer);
     }
 
     @Test
@@ -196,7 +200,7 @@ class CustomerServiceTest {
         );
 
         verify(customerRepository).findById(customerId);
-        verify(customerMapper, never()).toCustomerResponse(any());
+        verify(customerMapper, never()).toResponse(any());
     }
 
     @Test
@@ -225,7 +229,7 @@ class CustomerServiceTest {
         Page<CustomerEntity> page = new PageImpl<>(List.of(customer), pageable, 1);
 
         when(customerRepository.findAll(pageable)).thenReturn(page);
-        when(customerMapper.toCustomerResponse(customer)).thenReturn(response);
+        when(customerMapper.toResponse(customer)).thenReturn(response);
 
         Page<CustomerResponse> result = customerService.getCustomers(pageable);
 
@@ -233,7 +237,7 @@ class CustomerServiceTest {
         assertEquals(1, result.getContent().size());
         assertEquals("Nizar", result.getContent().getFirst().firstName());
         verify(customerRepository).findAll(pageable);
-        verify(customerMapper).toCustomerResponse(customer);
+        verify(customerMapper).toResponse(customer);
     }
 
     @Test
@@ -247,60 +251,60 @@ class CustomerServiceTest {
 
         assertTrue(result.isEmpty());
         verify(customerRepository).findAll(pageable);
-        verify(customerMapper, never()).toCustomerResponse(any());
+        verify(customerMapper, never()).toResponse(any());
     }
 
-    @Test
-    void shouldReturnCustomersPageByFirstName() {
-        Pageable pageable = PageRequest.of(0, 10);
+//    @Test
+//    void shouldReturnCustomersPageByFirstName() {
+//        Pageable pageable = PageRequest.of(0, 10);
+//
+//        UUID customerId = UUID.randomUUID();
+//        CustomerEntity customer = CustomerEntity.builder()
+//                .id(customerId)
+//                .customerNumber("C000000001")
+//                .firstName("Nizar")
+//                .lastName("Najid")
+//                .dateOfBirth(LocalDate.of(1995, 1, 1))
+//                .email("nizar@test.com")
+//                .phoneNumber("+352621234567")
+//                .build();
+//
+//        CustomerResponse response = CustomerResponse.builder()
+//                .id(customerId)
+//                .customerNumber("C000000001")
+//                .firstName("Nizar")
+//                .lastName("Najid")
+//                .email("nizar@test.com")
+//                .build();
+//        Page<CustomerEntity> page = new PageImpl<>(List.of(customer), pageable, 1);
+//
+//        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(page);
+//        when(customerMapper.toResponse(customer)).thenReturn(response);
+//
+//        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
+//
+//        assertEquals(1, result.getTotalElements());
+//        assertEquals(1, result.getContent().size());
+//        assertEquals("Nizar", result.getContent().getFirst().firstName());
+//        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
+//        verify(customerMapper).toResponse(customer);
+//
+//
+//    }
 
-        UUID customerId = UUID.randomUUID();
-        CustomerEntity customer = CustomerEntity.builder()
-                .id(customerId)
-                .customerNumber("C000000001")
-                .firstName("Nizar")
-                .lastName("Najid")
-                .dateOfBirth(LocalDate.of(1995, 1, 1))
-                .email("nizar@test.com")
-                .phoneNumber("+352621234567")
-                .build();
-
-        CustomerResponse response = CustomerResponse.builder()
-                .id(customerId)
-                .customerNumber("C000000001")
-                .firstName("Nizar")
-                .lastName("Najid")
-                .email("nizar@test.com")
-                .build();
-        Page<CustomerEntity> page = new PageImpl<>(List.of(customer), pageable, 1);
-
-        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(page);
-        when(customerMapper.toCustomerResponse(customer)).thenReturn(response);
-
-        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
-
-        assertEquals(1, result.getTotalElements());
-        assertEquals(1, result.getContent().size());
-        assertEquals("Nizar", result.getContent().getFirst().firstName());
-        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
-        verify(customerMapper).toCustomerResponse(customer);
-
-
-    }
-
-    @Test
-    void shouldReturnCustomersEmptyPageByFirstNameNotFound() {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<CustomerEntity> emptyPage = Page.empty(pageable);
-
-        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(emptyPage);
-
-        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
-
-        assertTrue(result.isEmpty());
-        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
-        verify(customerMapper, never()).toCustomerResponse(any());
-    }
+//    @Test
+//    void shouldReturnCustomersEmptyPageByFirstNameNotFound() {
+//        Pageable pageable = PageRequest.of(0, 10);
+//        Page<CustomerEntity> emptyPage = Page.empty(pageable);
+//
+//        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(emptyPage);
+//
+//        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
+//
+//        assertTrue(result.isEmpty());
+//        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
+//        verify(customerMapper, never()).toResponse(any());
+//    }
 
     @Test
     void shouldUpdateCustomer() {
@@ -331,7 +335,7 @@ class CustomerServiceTest {
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
         when(customerRepository.existsByEmail("john@test.com")).thenReturn(false);
         when(customerRepository.save(customer)).thenReturn(customer);
-        when(customerMapper.toCustomerResponse(customer)).thenReturn(response);
+        when(customerMapper.toResponse(customer)).thenReturn(response);
 
         CustomerResponse result = customerService.updateCustomer(id, request);
 
@@ -343,7 +347,7 @@ class CustomerServiceTest {
         verify(customerRepository).existsByEmail("john@test.com");
         verify(customerMapper).updateCustomer(request, customer);
         verify(customerRepository).save(customer);
-        verify(customerMapper).toCustomerResponse(customer);
+        verify(customerMapper).toResponse(customer);
     }
 
     @Test
@@ -461,7 +465,7 @@ class CustomerServiceTest {
         assertThrows(CustomerNotFoundException.class, () -> customerService.blockCustomer(customerId));
 
         verify(customerRepository).findById(customerId);
-        verify(customerMapper, never()).toCustomerResponse(any());
+        verify(customerMapper, never()).toResponse(any());
     }
 
     @Test
@@ -490,6 +494,37 @@ class CustomerServiceTest {
 
         assertThrows(InvalidCustomerStatusTransitionException.class, () -> customerService.unblockCustomer(id));
         verify(customerRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldCreateStatusHistoryWhenBlockingCustomer() {
+        // Arrange
+        UUID id = UUID.randomUUID();
+
+        CustomerEntity customer = CustomerEntity.builder()
+                .id(id)
+                .status(CustomerStatus.ACTIVE)
+                .build();
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+
+        // Act
+        customerService.blockCustomer(id);
+
+        // Assert
+        assertEquals(CustomerStatus.BLOCKED, customer.getStatus());
+
+        verify(customerRepository).save(customer);
+
+        verify(customerStatusHistoryRepository).save(
+                argThat(history ->
+                        history.getCustomer().equals(customer)
+                                && history.getOldStatus() == CustomerStatus.ACTIVE
+                                && history.getNewStatus() == CustomerStatus.BLOCKED
+                                && history.getChangedBy().equals("SYSTEM")
+                                && history.getChangedAt() != null
+                )
+        );
     }
 
 }

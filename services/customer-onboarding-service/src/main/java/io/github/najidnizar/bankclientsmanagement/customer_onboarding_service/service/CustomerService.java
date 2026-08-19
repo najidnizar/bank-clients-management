@@ -6,11 +6,13 @@ import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dt
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatusHistoryEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.InvalidCustomerStatusTransitionException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.mapper.CustomerMapper;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerRepository;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerStatusHistoryRepository;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.specification.CustomerSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -25,6 +28,7 @@ import java.util.UUID;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerStatusHistoryRepository customerStatusHistoryRepository;
     private final CustomerMapper customerMapper;
 
     @Transactional
@@ -45,10 +49,12 @@ public class CustomerService {
         updateCustomerStatus(id, CustomerStatus.CLOSED);
     }
 
+    @Transactional
     public void blockCustomer(UUID id) {
         updateCustomerStatus(id, CustomerStatus.BLOCKED);
     }
 
+    @Transactional
     public void unblockCustomer(UUID id) {
         updateCustomerStatus(id, CustomerStatus.ACTIVE);
     }
@@ -80,6 +86,7 @@ public class CustomerService {
                 .map(customerMapper::toResponse);
     }
 
+    @Transactional
     public CustomerResponse updateCustomer(UUID id, UpdateCustomerRequest request) {
         CustomerEntity customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
         if (!customer.getEmail().equals(request.email()) && customerRepository.existsByEmail(request.email())) {
@@ -92,10 +99,24 @@ public class CustomerService {
 
     private void updateCustomerStatus(UUID id, CustomerStatus status) {
         CustomerEntity customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
-        if (customer.getStatus() == CustomerStatus.CLOSED) {
+        CustomerStatus oldStatus = customer.getStatus();
+
+        if (oldStatus == CustomerStatus.CLOSED) {
             throw new InvalidCustomerStatusTransitionException(customer.getStatus(), status);
         }
         customer.setStatus(status);
         customerRepository.save(customer);
+
+        CustomerStatusHistoryEntity history =
+                CustomerStatusHistoryEntity.builder()
+                        .id(UUID.randomUUID())
+                        .customer(customer)
+                        .oldStatus(oldStatus)
+                        .newStatus(status)
+                        .changedAt(LocalDateTime.now())
+                        .changedBy("SYSTEM")
+                        .build();
+
+        customerStatusHistoryRepository.save(history);
     }
 }
