@@ -38,7 +38,8 @@ class CustomerRepositoryTest extends AbstractPostgresIntegrationTest {
                 .lastName("Najid")
                 .dateOfBirth(LocalDate.of(1995, 1, 1))
                 .email("nizar@test.com")
-                .phoneNumber("+352621234567").status(CustomerStatus.ACTIVE)
+                .phoneNumber("+352621234567")
+                .status(CustomerStatus.ACTIVE)
                 .build();
 
         customerRepository.save(customer);
