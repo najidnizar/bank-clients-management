@@ -11,5 +11,46 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  customer-kyc-db:
+    image: postgres:17
+    container_name: customer-kyc-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: customer_kyc_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - customer_kyc_postgres_data:/var/lib/postgresql/data
+  customer-document-db:
+    image: postgres:17
+    container_name: customer-document-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: customer_document_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - customer_document_postgres_data:/var/lib/postgresql/data
+  customer-document-storage:
+    image: minio/minio
+    container_name: customer-document-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - customer_document_minio_data:/data
+    command: server /data --console-address ":9001"
+
 volumes:
   postgres_data:
+  customer_kyc_postgres_data:
+  customer_document_postgres_data:
+  customer_document_minio_data:
