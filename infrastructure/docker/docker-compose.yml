@@ -35,6 +35,18 @@ services:
       - "5434:5432"
     volumes:
       - customer_document_postgres_data:/var/lib/postgresql/data
+  customer-account-db:
+    image: postgres:17
+    container_name: customer-account-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: customer_account_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - customer_account_postgres_data:/var/lib/postgresql/data
   customer-document-storage:
     image: minio/minio
     container_name: customer-document-minio
@@ -53,4 +65,5 @@ volumes:
   postgres_data:
   customer_kyc_postgres_data:
   customer_document_postgres_data:
+  customer_account_postgres_data:
   customer_document_minio_data:
