@@ -5,6 +5,7 @@ import io.github.najidnizar.bankclientsmanagement.customer_account_service.domai
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.AccountStatusHistoryEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.BankAccountEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.AccountResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.AccountStatusHistoryResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.CreateAccountRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.AccountNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.CustomerNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -141,5 +143,26 @@ public class BankAccountService {
         if (!valid) {
             throw new InvalidAccountStatusTransitionException(currentStatus, requestedStatus);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<AccountStatusHistoryResponse> getAccountStatusHistory(UUID accountId) {
+
+        if (!bankAccountRepository.existsById(accountId)) {
+            throw new AccountNotFoundException(accountId);
+        }
+
+        return accountStatusHistoryRepository
+                .findByAccountIdOrderByChangedAtAsc(accountId)
+                .stream()
+                .map(history -> new AccountStatusHistoryResponse(
+                        history.getId(),
+                        history.getAccountId(),
+                        history.getPreviousStatus(),
+                        history.getNewStatus(),
+                        history.getChangedAt(),
+                        history.getChangedBy()
+                ))
+                .toList();
     }
 }

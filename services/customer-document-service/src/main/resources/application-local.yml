@@ -17,6 +17,12 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: document-service
+      auto-offset-reset: latest
+
 minio:
   url: http://localhost:9000
   access-key: minio

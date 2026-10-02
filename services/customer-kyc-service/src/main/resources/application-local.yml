@@ -12,6 +12,17 @@ spring:
       hibernate:
         format_sql: true
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: kyc-service-v2
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      properties:
+        spring.json.value.default.type: io.github.najidnizar.bankclientsmanagement.customer_kyc_service.event.CustomerEvent
+        spring.json.trusted.packages: io.github.najidnizar.bankclientsmanagement.customer_kyc_service.event
+
   flyway:
     enabled: true
     locations: classpath:db/migration

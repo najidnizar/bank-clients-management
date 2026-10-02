@@ -7,6 +7,9 @@ import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dt
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatusHistoryEntity;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.event.CustomerEvent;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.event.CustomerEventPublisher;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.event.CustomerEventType;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.InvalidCustomerStatusTransitionException;
@@ -30,6 +33,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerStatusHistoryRepository customerStatusHistoryRepository;
     private final CustomerMapper customerMapper;
+    private final CustomerEventPublisher customerEventPublisher;
 
     @Transactional
     public CustomerResponse createCustomer(CreateCustomerRequest request) {
@@ -41,6 +45,16 @@ public class CustomerService {
         Long nextNumber = customerRepository.getNextCustomerNumber();
         customer.setCustomerNumber(String.format("C%09d", nextNumber));
         CustomerEntity savedCustomer = customerRepository.save(customer);
+
+        customerEventPublisher.publishCustomerCreated(
+                new CustomerEvent(
+                        CustomerEventType.CUSTOMER_CREATED,
+                        savedCustomer.getId(),
+                        savedCustomer.getCustomerNumber(),
+                        savedCustomer.getStatus()
+                )
+        );
+
         return customerMapper.toResponse(savedCustomer);
     }
 
@@ -106,6 +120,15 @@ public class CustomerService {
         }
         customer.setStatus(status);
         customerRepository.save(customer);
+
+        customerEventPublisher.publishCustomerStatusChanged(
+                new CustomerEvent(
+                        CustomerEventType.CUSTOMER_STATUS_CHANGED,
+                        customer.getId(),
+                        customer.getCustomerNumber(),
+                        customer.getStatus()
+                )
+        );
 
         CustomerStatusHistoryEntity history =
                 CustomerStatusHistoryEntity.builder()

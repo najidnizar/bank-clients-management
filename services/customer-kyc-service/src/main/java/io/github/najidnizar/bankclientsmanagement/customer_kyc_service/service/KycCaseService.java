@@ -4,10 +4,13 @@ import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.dto.Creat
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.dto.KycCaseResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.entity.KycCaseEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.entity.KycCaseStatus;
+import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.entity.KycRiskLevel;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.exception.InvalidKycStatusTransitionException;
+import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.exception.KycCaseNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.mapper.KycCaseMapper;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.repository.KycCaseRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KycCaseService {
 
     private final KycCaseRepository kycCaseRepository;
@@ -71,6 +75,51 @@ public class KycCaseService {
         };
         if (!valid) {
             throw new InvalidKycStatusTransitionException(currentStatus, requestedStatus);
+        }
+    }
+
+    @Transactional
+    public KycCaseResponse createFromCustomer(UUID customerId) {
+
+        if (kycCaseRepository.existsByCustomerId(customerId)) {
+            KycCaseEntity caseEntity = kycCaseRepository.findByCustomerId(customerId).orElseThrow();
+            return kycCaseMapper.toResponse(caseEntity);
+        }
+
+        KycCaseEntity kycCase = KycCaseEntity.builder()
+                .customerId(customerId)
+                .status(KycCaseStatus.NOT_STARTED)
+                .riskLevel(KycRiskLevel.LOW)
+                .riskScore(0)
+                .createdAt(LocalDateTime.now())
+                .createdBy("SYSTEM")
+                .updatedAt(LocalDateTime.now())
+                .updatedBy("SYSTEM")
+                .build();
+
+        KycCaseEntity savedCase = kycCaseRepository.save(kycCase);
+
+        return kycCaseMapper.toResponse(savedCase);
+    }
+
+    @Transactional
+    public void handleCustomerStatusChanged(UUID customerId, String customerStatus) {
+        KycCaseEntity kycCase = kycCaseRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new KycCaseNotFoundException(customerId));
+
+        if ("BLOCKED".equals(customerStatus)) {
+            log.info("Customer {} is blocked, KYC case remains unchanged", customerId);
+            return;
+        }
+
+        if ("CLOSED".equals(customerStatus)) {
+            if (kycCase.getStatus() == KycCaseStatus.NOT_STARTED
+                    || kycCase.getStatus() == KycCaseStatus.IN_PROGRESS) {
+                kycCase.setStatus(KycCaseStatus.EXPIRED);
+                kycCase.setUpdatedAt(LocalDateTime.now());
+                kycCase.setUpdatedBy("SYSTEM");
+                kycCaseRepository.save(kycCase);
+            }
         }
     }
 }

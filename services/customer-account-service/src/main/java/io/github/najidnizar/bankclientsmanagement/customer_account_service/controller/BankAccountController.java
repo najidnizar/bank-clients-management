@@ -2,6 +2,7 @@ package io.github.najidnizar.bankclientsmanagement.customer_account_service.cont
 
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.AccountStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.AccountResponse;
+import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.AccountStatusHistoryResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.CreateAccountRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.service.BankAccountService;
 import jakarta.validation.Valid;
@@ -48,5 +49,10 @@ public class BankAccountController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<AccountResponse> updateAccountStatus(@PathVariable UUID id, @RequestParam AccountStatus status) {
         return ResponseEntity.ok(bankAccountService.updateAccountStatus(id, status));
+    }
+
+    @GetMapping("/{id}/status-history")
+    public ResponseEntity<List<AccountStatusHistoryResponse>> getAccountStatusHistory(@PathVariable UUID id) {
+        return ResponseEntity.ok(bankAccountService.getAccountStatusHistory(id));
     }
 }
