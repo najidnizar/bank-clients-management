@@ -11,6 +11,7 @@ import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.ex
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.mapper.CustomerMapper;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerRepository;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.repository.CustomerStatusHistoryRepository;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.event.CustomerEventPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -48,6 +49,9 @@ class CustomerServiceTest {
 
     @Mock
     private CustomerMapper customerMapper;
+
+    @Mock
+    private CustomerEventPublisher customerEventPublisher;
 
     @InjectMocks
     private CustomerService customerService;

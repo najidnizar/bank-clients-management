@@ -1,5 +1,6 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.controller;
 
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerSearchCriteria;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
@@ -185,7 +186,7 @@ class CustomerControllerTest {
                 .email("nizar@test.com")
                 .build();
         Page<CustomerResponse> page = new PageImpl<>(List.of(response));
-        when(customerService.getCustomers(any(Pageable.class))).thenReturn(page);
+        when(customerService.searchCustomers(any(CustomerSearchCriteria.class), any(Pageable.class))).thenReturn(page);
         mockMvc.perform(
                         get("/api/v1/customers")
                                 .param("page", "0")
@@ -197,7 +198,7 @@ class CustomerControllerTest {
                         .value("Nizar"))
                 .andExpect(jsonPath("$.totalElements")
                         .value(1));
-        verify(customerService).getCustomers(any(Pageable.class));
+        verify(customerService).searchCustomers(any(CustomerSearchCriteria.class), any(Pageable.class));
     }
 
 //    @Test
