@@ -4,6 +4,7 @@ package io.github.najidnizar.bankclientsmanagement.customer_document_service.con
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.event.CustomerEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -28,10 +29,11 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, CustomerEvent> consumerFactory() {
+    public ConsumerFactory<String, CustomerEvent> consumerFactory(
+            @Value("${spring.kafka.bootstrap-servers:localhost:9092}") String bootstrapServers) {
         Map<String, Object> properties = new HashMap<>();
 
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "account-service");
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JacksonJsonDeserializer.class);

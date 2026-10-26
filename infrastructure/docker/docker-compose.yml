@@ -84,6 +84,134 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: bank-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+  grafana:
+    image: grafana/grafana:12.2.0
+    container_name: bank-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+  tempo:
+    image: grafana/tempo:2.8.2
+    container_name: bank-tempo
+    restart: unless-stopped
+    command: [ "-config.file=/etc/tempo.yml" ]
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ./tempo/tempo.yml:/etc/tempo.yml:ro
+      - tempo_data:/var/tempo
+
+  # ---------------------------------------------------------------------------
+  # Application services (Compose profile "apps")
+  #   Infra only (run the services from IntelliJ):  docker compose up -d
+  #   Everything in Docker:                         docker compose --profile apps up -d --build
+  # ---------------------------------------------------------------------------
+  service-discovery:
+    profiles: [ "apps" ]
+    build: ../../services/service-discovery
+    container_name: bank-service-discovery
+    restart: on-failure
+    ports:
+      - "8761:8761"
+
+  customer-api-gateway:
+    profiles: [ "apps" ]
+    build: ../../services/customer-api-gateway
+    container_name: bank-api-gateway
+    restart: on-failure
+    ports:
+      - "8088:8088"
+    environment:
+      EUREKA_SERVER_URL: http://service-discovery:8761/eureka/
+    depends_on:
+      - service-discovery
+
+  customer-onboarding-service:
+    profiles: [ "apps" ]
+    build: ../../services/customer-onboarding-service
+    container_name: bank-onboarding-service
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-onboarding-db:5432/customer_onboarding_db
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      EUREKA_SERVER_URL: http://service-discovery:8761/eureka/
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
+    depends_on:
+      - customer-onboarding-db
+      - kafka
+      - service-discovery
+
+  customer-kyc-service:
+    profiles: [ "apps" ]
+    build: ../../services/customer-kyc-service
+    container_name: bank-kyc-service
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-kyc-db:5432/customer_kyc_db
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      EUREKA_SERVER_URL: http://service-discovery:8761/eureka/
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
+    depends_on:
+      - customer-kyc-db
+      - kafka
+      - service-discovery
+
+  customer-document-service:
+    profiles: [ "apps" ]
+    build: ../../services/customer-document-service
+    container_name: bank-document-service
+    restart: on-failure
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-document-db:5432/customer_document_db
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      MINIO_URL: http://customer-document-storage:9000
+      EUREKA_SERVER_URL: http://service-discovery:8761/eureka/
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
+    depends_on:
+      - customer-document-db
+      - customer-document-storage
+      - kafka
+      - service-discovery
+
+  customer-account-service:
+    profiles: [ "apps" ]
+    build: ../../services/customer-account-service
+    container_name: bank-account-service
+    restart: on-failure
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-account-db:5432/customer_account_db
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      EUREKA_SERVER_URL: http://service-discovery:8761/eureka/
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
+    depends_on:
+      - customer-account-db
+      - kafka
+      - service-discovery
 
 volumes:
   postgres_data:
@@ -91,3 +219,6 @@ volumes:
   customer_document_postgres_data:
   customer_account_postgres_data:
   customer_document_minio_data:
+  prometheus_data:
+  grafana_data:
+  tempo_data:
