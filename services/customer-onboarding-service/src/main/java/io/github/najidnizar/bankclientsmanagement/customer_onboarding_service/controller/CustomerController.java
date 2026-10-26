@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -50,6 +52,7 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable UUID id) {
+        log.info("GET customer {}", id);
         CustomerResponse response = customerService.getCustomerById(id);
         return ResponseEntity.ok(response);
     }

@@ -1,6 +1,6 @@
 package io.github.najidnizar.bankclientsmanagement.customer_account_service.service;
 
-import io.github.najidnizar.bankclientsmanagement.customer_account_service.client.CustomerServiceClient;
+import io.github.najidnizar.bankclientsmanagement.customer_account_service.client.CustomerServiceFeignClient;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.AccountStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.AccountStatusHistoryEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.BankAccountEntity;
@@ -8,7 +8,6 @@ import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.A
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.AccountStatusHistoryResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.CreateAccountRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.AccountNotFoundException;
-import io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.InvalidAccountOperationException;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.InvalidAccountStatusTransitionException;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.repository.AccountStatusHistoryRepository;
@@ -30,14 +29,13 @@ public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
     private final AccountStatusHistoryRepository accountStatusHistoryRepository;
-    private final CustomerServiceClient customerServiceClient;
+    private final CustomerServiceFeignClient customerServiceFeignClient;
+    private final CustomerServiceClientService customerServiceClientService;
 
     @Transactional
     public AccountResponse createAccount(CreateAccountRequest request) {
 
-        if (!customerServiceClient.customerExists(request.customerId())) {
-            throw new CustomerNotFoundException(request.customerId());
-        }
+        customerServiceClientService.validateCustomerExists(request.customerId());
 
         BankAccountEntity account = BankAccountEntity.builder()
                 .customerId(request.customerId())

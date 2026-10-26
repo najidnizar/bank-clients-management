@@ -2,3 +2,5 @@ name: Local
 variables:
   - name: baseUrl
     value: http://localhost:8080
+  - name: baseUrlGateway
+    value: http://localhost:8088
