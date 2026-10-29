@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: customer-api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: customer-service
+              uri: lb://customer-onboarding-service
+              predicates:
+                - Path=/api/v1/customers/**
+
+            - id: kyc-service
+              uri: lb://customer-kyc-service
+              predicates:
+                - Path=/api/v1/kyc-cases/**
+
+            - id: document-service
+              uri: lb://customer-document-service
+              predicates:
+                - Path=/api/v1/documents/**
+
+            - id: account-service
+              uri: lb://customer-account-service
+              predicates:
+                - Path=/api/v1/accounts/**
+
+server:
+  port: 8088
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG

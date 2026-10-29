@@ -1,0 +1,36 @@
+info:
+  name: Validation Error
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/v1/customers"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "",
+        "lastName": "",
+        "dateOfBirth": null,
+        "email": "abc",
+        "phoneNumber": ""
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.body.error
+      operator: eq
+      value: Bad Request
+    - expression: res.body.message
+      operator: isDefined
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,41 @@
+info:
+  name: Create Customer
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/v1/customers"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "{{firstName}}",
+        "lastName": "{{lastName}}",
+        "dateOfBirth": "1995-01-01",
+        "email": "{{randomEmail}}",
+        "phoneNumber": "{{randomPhoneNumber}}"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.body.id
+      operator: isDefined
+    - expression: res.body.customerNumber
+      operator: isDefined
+    - expression: res.body.customerNumber
+      operator: startsWith
+      value: '"C"'
+    - expression: res.body.email
+      operator: eq
+      value: "{{randomEmail}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

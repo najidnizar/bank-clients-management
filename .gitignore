@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Maven
+target/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# Generated files
+out/
+bin/
+
+# Maven Wrapper
+!.mvn/wrapper/maven-wrapper.jar

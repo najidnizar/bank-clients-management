@@ -1,0 +1,7 @@
+target/
+.idea/
+*.iml
+HELP.md
+.DS_Store
+Dockerfile
+.dockerignore

@@ -1,0 +1,25 @@
+info:
+  name: Update Customer Duplicate Email
+  type: http
+  seq: 3
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/api/v1/customers/be487dc2-03e9-4ce9-866f-55cd041b50e8"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Nizar2",
+        "lastName": "string",
+        "dateOfBirth": "2026-07-25",
+        "email": "usery@example.com",
+        "phoneNumber": "string"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
