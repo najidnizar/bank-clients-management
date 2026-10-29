@@ -25,5 +25,5 @@ Thumbs.db
 out/
 bin/
 
-# Maven Wrapper (si généré automatiquement)
+# Maven Wrapper
 !.mvn/wrapper/maven-wrapper.jar
