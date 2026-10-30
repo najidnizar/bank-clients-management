@@ -68,6 +68,8 @@ Then open the gateway on http://localhost:8088, Eureka on http://localhost:8761 
 - [ ] Frontend (React and / or Angular)
 - [ ] Kubernetes deployment (Helm)
 
+Known issues and technical debt are tracked in [docs/known-issues.md](docs/known-issues.md).
+
 ---
 
 <details>
