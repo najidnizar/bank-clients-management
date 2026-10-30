@@ -27,3 +27,8 @@ bin/
 
 # Maven Wrapper
 !.mvn/wrapper/maven-wrapper.jar
+
+CLAUDE.md
+
+# draw.io backups
+*.bkp
