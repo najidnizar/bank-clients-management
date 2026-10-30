@@ -151,6 +151,10 @@ Tests: `./mvnw verify` in a service directory (Docker required for Testcontainer
 
 ![Eureka dashboard](docs/images/eureka.png)
 
+**CI pipeline** — every service is built and tested in parallel, then each Docker image is built.
+
+![GitHub Actions pipeline](docs/images/ci-pipeline.png)
+
 </details>
 
 ---
