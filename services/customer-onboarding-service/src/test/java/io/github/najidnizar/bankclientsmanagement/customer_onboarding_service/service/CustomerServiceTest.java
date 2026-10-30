@@ -258,58 +258,6 @@ class CustomerServiceTest {
         verify(customerMapper, never()).toResponse(any());
     }
 
-//    @Test
-//    void shouldReturnCustomersPageByFirstName() {
-//        Pageable pageable = PageRequest.of(0, 10);
-//
-//        UUID customerId = UUID.randomUUID();
-//        CustomerEntity customer = CustomerEntity.builder()
-//                .id(customerId)
-//                .customerNumber("C000000001")
-//                .firstName("Nizar")
-//                .lastName("Najid")
-//                .dateOfBirth(LocalDate.of(1995, 1, 1))
-//                .email("nizar@test.com")
-//                .phoneNumber("+352621234567")
-//                .build();
-//
-//        CustomerResponse response = CustomerResponse.builder()
-//                .id(customerId)
-//                .customerNumber("C000000001")
-//                .firstName("Nizar")
-//                .lastName("Najid")
-//                .email("nizar@test.com")
-//                .build();
-//        Page<CustomerEntity> page = new PageImpl<>(List.of(customer), pageable, 1);
-//
-//        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(page);
-//        when(customerMapper.toResponse(customer)).thenReturn(response);
-//
-//        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
-//
-//        assertEquals(1, result.getTotalElements());
-//        assertEquals(1, result.getContent().size());
-//        assertEquals("Nizar", result.getContent().getFirst().firstName());
-//        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
-//        verify(customerMapper).toResponse(customer);
-//
-//
-//    }
-
-//    @Test
-//    void shouldReturnCustomersEmptyPageByFirstNameNotFound() {
-//        Pageable pageable = PageRequest.of(0, 10);
-//        Page<CustomerEntity> emptyPage = Page.empty(pageable);
-//
-//        when(customerRepository.findByFirstNameContainingIgnoreCase("Nizar", pageable)).thenReturn(emptyPage);
-//
-//        Page<CustomerResponse> result = customerService.searchCustomersByFirstName("Nizar", pageable);
-//
-//        assertTrue(result.isEmpty());
-//        verify(customerRepository).findByFirstNameContainingIgnoreCase("Nizar", pageable);
-//        verify(customerMapper, never()).toResponse(any());
-//    }
-
     @Test
     void shouldUpdateCustomer() {
         UUID id = UUID.randomUUID();

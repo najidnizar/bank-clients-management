@@ -201,33 +201,6 @@ class CustomerControllerTest {
         verify(customerService).searchCustomers(any(CustomerSearchCriteria.class), any(Pageable.class));
     }
 
-//    @Test
-//    void shouldReturnCustomersPageByFirstName() throws Exception {
-//        UUID customerId = UUID.randomUUID();
-//        CustomerResponse response = CustomerResponse.builder()
-//                .id(customerId)
-//                .customerNumber("C000000001")
-//                .firstName("Nizar")
-//                .lastName("Najid")
-//                .email("nizar@test.com")
-//                .build();
-//        Page<CustomerResponse> page = new PageImpl<>(List.of(response));
-//        when(customerService.searchCustomersByFirstName(anyString(), any(Pageable.class))).thenReturn(page);
-//        mockMvc.perform(
-//                        get("/api/v1/customers/search")
-//                                .param("firstName", "Nizar")
-//                                .param("page", "0")
-//                                .param("size", "10")
-//                )
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content").isArray())
-//                .andExpect(jsonPath("$.content[0].firstName")
-//                        .value("Nizar"))
-//                .andExpect(jsonPath("$.totalElements")
-//                        .value(1));
-//        verify(customerService).searchCustomersByFirstName(anyString(), any(Pageable.class));
-//    }
-
     @Test
     void shouldUpdateCustomer() throws Exception {
         UUID customerId = UUID.randomUUID();

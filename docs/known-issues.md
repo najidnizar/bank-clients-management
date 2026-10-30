@@ -29,4 +29,3 @@ Tracked here so nothing is lost; each item is a candidate for a dedicated branch
 - [ ] `customer-service.url` in the account service configuration is unused (Feign resolves the service through Eureka).
 - [ ] `CustomerService.getCustomers(Pageable)` is no longer called by any endpoint (replaced by `searchCustomers`).
 - [ ] `spring.kafka.consumer.*` in the KYC `application-local.yml` is ignored, because Kafka beans are declared in Java.
-- [ ] Gateway logs at `DEBUG` level by default.
