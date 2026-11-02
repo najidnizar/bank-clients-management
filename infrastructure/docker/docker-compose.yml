@@ -155,6 +155,7 @@ services:
       - "8088:8088"
     environment:
       EUREKA_SERVER_URL: http://service-discovery:8761/eureka/
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/bank/protocol/openid-connect/certs
     depends_on:
       - service-discovery
 

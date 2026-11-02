@@ -26,6 +26,13 @@ spring:
               uri: lb://customer-account-service
               predicates:
                 - Path=/api/v1/accounts/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/bank}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8180/realms/bank/protocol/openid-connect/certs}
+          audiences: bank-api
 
 server:
   port: 8088
