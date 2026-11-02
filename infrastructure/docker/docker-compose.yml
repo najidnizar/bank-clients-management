@@ -114,6 +114,25 @@ services:
       - ./tempo/tempo.yml:/etc/tempo.yml:ro
       - tempo_data:/var/tempo
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.4
+    container_name: bank-keycloak
+    restart: unless-stopped
+    # Development mode; the "bank" realm is imported on first start
+    command: [ "start-dev", "--import-realm" ]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Tokens are always issued with this public URL as "iss",
+      # whether Keycloak is reached from the host or from another container
+      KC_HOSTNAME: http://localhost:8180
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./keycloak/realm-bank.json:/opt/keycloak/data/import/realm-bank.json:ro
+
   # ---------------------------------------------------------------------------
   # Application services (Compose profile "apps")
   #   Infra only (run the services from IntelliJ):  docker compose up -d
