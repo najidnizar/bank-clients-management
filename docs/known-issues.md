@@ -23,6 +23,10 @@ Tracked here so nothing is lost; each item is a candidate for a dedicated branch
 - [ ] Document review workflow (`VALIDATED`, `REJECTED`, `EXPIRED`) is defined but not implemented.
 - [ ] No authentication / authorization (planned: Keycloak, OAuth2 / JWT).
 
+## API design
+
+- [ ] **Paginated responses serialize `PageImpl` as-is** (`pageable`, `sort`, `empty`... leak into the JSON of `GET /api/v1/customers`). This format is not stable across Spring Data versions. Fix: `@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)` or return `PagedModel`.
+
 ## Cleanup
 
 - [ ] `RestClientConfig` bean in the account service is unused (replaced by OpenFeign).
