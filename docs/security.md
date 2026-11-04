@@ -2,7 +2,7 @@
 
 How users are authenticated and authorized in this project, the concepts behind it, and how each piece is implemented.
 
-> **Status**: Keycloak and JWT validation at the API gateway are implemented. Validation in each service, role-based rules and token relay between services are in progress.
+> **Status**: Keycloak, JWT validation at the API gateway and in every service, and role-based rules are implemented. Token relay between services (account → onboarding) is in progress.
 
 ---
 
@@ -165,6 +165,32 @@ spring:
 - The gateway is Spring Cloud Gateway **WebMVC** (servlet), so it uses `HttpSecurity` / `SecurityFilterChain`, not the reactive `ServerHttpSecurity`.
 - The `Authorization` header is forwarded unchanged to the services.
 
+### Microservices
+
+Each microservice is also a resource server (defense in depth): calling a service directly, without going through the gateway, still requires a valid token.
+
+- Same dependency and `spring.security.oauth2.resourceserver.jwt` configuration as the gateway, in `application.yml` so that it applies to every profile.
+- **Public endpoints**: `/actuator/health/**`, `/actuator/prometheus` (Prometheus scrapes without a token), `/swagger-ui/**`, `/v3/api-docs/**`. Everything else requires authentication.
+- Kafka consumers are not affected: Spring Security protects HTTP requests only.
+
+**Mapping Keycloak roles to Spring authorities.** By default Spring builds authorities from the `scope` claim (`SCOPE_email`...). Keycloak puts roles in a *nested* claim, `realm_access.roles`. Each service therefore registers a `KeycloakRoleConverter` that turns every role into an authority prefixed with `ROLE_` (`ADVISOR` → `ROLE_ADVISOR`). The converter is plugged into a `JwtAuthenticationConverter`, which also uses `preferred_username` as the principal name (`advisor` instead of a UUID).
+
+`hasRole('ADVISOR')` checks the authority `ROLE_ADVISOR`; `hasAuthority('ROLE_ADVISOR')` is the explicit equivalent. A role is simply an authority with the `ROLE_` prefix.
+
+**Role rules** are declared on controller methods with `@PreAuthorize` (enabled by `@EnableMethodSecurity`), next to the endpoint they protect. Read endpoints only require an authenticated user.
+
+| Service | Endpoint | Required role |
+|---|---|---|
+| Onboarding | `POST /customers`, `PUT /customers/{id}` | `ADVISOR` |
+| Onboarding | `POST /customers/{id}/block`, `/unblock`, `/close` | `ADMIN` |
+| KYC | `POST /kyc-cases`, `PATCH /kyc-cases/{id}/status` | `COMPLIANCE_OFFICER` |
+| Document | `POST /documents` (upload) | `ADVISOR` |
+| Account | `POST /accounts` | `ADVISOR` |
+| Account | `PATCH /accounts/{id}/status` | `ADMIN` |
+| All | `GET` endpoints | any authenticated user |
+
+Expected responses: no token → **401**; valid token without the required role → **403**.
+
 ### Getting a token
 
 ```bash
@@ -179,7 +205,9 @@ See [`scripts/get-token.sh`](../scripts/get-token.sh).
 
 ## 4. Design decisions and limits
 
-- **Validate tokens in every service, not only at the gateway** (*defense in depth*, *zero trust*): a service reachable directly — by mistake, or from inside the network — must not trust the caller. *(In progress.)*
+- **Validate tokens in every service, not only at the gateway** (*defense in depth*, *zero trust*): a service reachable directly — by mistake, or from inside the network — must not trust the caller.
+- **Role rules on methods (`@PreAuthorize`) rather than URL patterns**: the rule sits next to the endpoint, so it is visible when reading the code and hard to forget when adding an endpoint.
+- **The role converter is duplicated in each service** (no shared library, consistent with [ADR-003](adr/ADR-003-event-driven-communication-with-kafka.md)). A shared Spring Boot starter would remove the duplication if more services were added.
 - **CSRF protection disabled**: CSRF exploits credentials the browser sends automatically (cookies). Here authentication only uses a bearer token sent explicitly in a header, with no session or cookie. If tokens were ever stored in cookies (BFF pattern), CSRF protection would have to be re-enabled.
 - **Short-lived access tokens** (15 min) limit the impact of a leaked token, since JWTs cannot be revoked easily.
 - **Coarse roles in Keycloak, fine-grained decisions in the application**: Keycloak says *who* the user is and *which roles* they have; Spring Security decides what each role may do on each endpoint.

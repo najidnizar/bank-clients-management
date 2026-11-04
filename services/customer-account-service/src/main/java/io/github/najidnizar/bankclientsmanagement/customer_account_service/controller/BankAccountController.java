@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class BankAccountController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADVISOR')")
     public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody CreateAccountRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bankAccountService.createAccount(request));
     }
@@ -47,6 +49,7 @@ public class BankAccountController {
     }
 
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AccountResponse> updateAccountStatus(@PathVariable UUID id, @RequestParam AccountStatus status) {
         return ResponseEntity.ok(bankAccountService.updateAccountStatus(id, status));
     }
