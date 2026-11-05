@@ -191,6 +191,15 @@ Each microservice is also a resource server (defense in depth): calling a servic
 
 Expected responses: no token → **401**; valid token without the required role → **403**.
 
+### Testing
+
+- **Controller tests** (`@WebMvcTest`) import the real `SecurityConfig`: without it, the slice falls back to Spring Boot's default security (CSRF enabled, different rules) and the tests would not check the actual rules. A mocked `JwtDecoder` satisfies the resource server configuration.
+- Requests are authenticated with `spring-security-test`: `.with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADVISOR")))` injects an already authenticated user, without Keycloak or a real token.
+- Each secured endpoint family has **negative tests**: no token → `401`, wrong role → `403`, and `verify(service, never())` proves the request was stopped before reaching business code.
+- `jwt().authorities(...)` bypasses the role converter, so `KeycloakRoleConverter` has its own plain unit test (roles present, `realm_access` missing, `roles` missing).
+
+**Order of checks** for a request: security filter (token → `401`) → request body validation (`@Valid` → `400`) → `@PreAuthorize` (role → `403`) → method. Validation runs before the role check: a user without the required role who sends an invalid body gets `400`, not `403`.
+
 ### Getting a token
 
 ```bash

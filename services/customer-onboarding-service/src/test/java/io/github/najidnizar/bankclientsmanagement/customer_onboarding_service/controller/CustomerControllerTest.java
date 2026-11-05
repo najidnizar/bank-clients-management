@@ -1,10 +1,10 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.controller;
 
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.config.SecurityConfig;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerSearchCriteria;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.UpdateCustomerRequest;
-import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.CustomerNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.EmailAlreadyExistsException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.GlobalExceptionHandler;
@@ -18,6 +18,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
@@ -28,13 +30,18 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CustomerController.class)
-@Import(GlobalExceptionHandler.class)
+@Import({GlobalExceptionHandler.class, SecurityConfig.class})
 class CustomerControllerTest {
+
+    private static final SimpleGrantedAuthority ADVISOR = new SimpleGrantedAuthority("ROLE_ADVISOR");
+    private static final SimpleGrantedAuthority ADMIN = new SimpleGrantedAuthority("ROLE_ADMIN");
+    private static final SimpleGrantedAuthority ANY = new SimpleGrantedAuthority("ROLE_ANY");
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,6 +51,9 @@ class CustomerControllerTest {
 
     @MockitoBean
     private CustomerService customerService;
+
+    @MockitoBean
+    private JwtDecoder jwtDecoder;
 
     @Test
     void shouldCreateCustomerSuccessfully() throws Exception {
@@ -67,14 +77,15 @@ class CustomerControllerTest {
         when(customerService.createCustomer(any())).thenReturn(response);
 
         mockMvc.perform(post("/api/v1/customers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.customerNumber").value("C000000001"))
-                .andExpect(jsonPath("$.firstName").value("Nizar"))
-                .andExpect(jsonPath("$.lastName").value("Najid"))
-                .andExpect(jsonPath("$.email").value("nizar@test.com"));
+                        .with(jwt().authorities(ADVISOR))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id").exists())
+                        .andExpect(jsonPath("$.customerNumber").value("C000000001"))
+                        .andExpect(jsonPath("$.firstName").value("Nizar"))
+                        .andExpect(jsonPath("$.lastName").value("Najid"))
+                        .andExpect(jsonPath("$.email").value("nizar@test.com"));
     }
 
     @Test
@@ -89,6 +100,7 @@ class CustomerControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/v1/customers")
+                        .with(jwt().authorities(ADVISOR))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -115,6 +127,7 @@ class CustomerControllerTest {
                 .thenThrow(new EmailAlreadyExistsException(request.email()));
 
         mockMvc.perform(post("/api/v1/customers")
+                        .with(jwt().authorities(ADVISOR))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict())
@@ -143,7 +156,7 @@ class CustomerControllerTest {
                 .thenReturn(response);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/customers/{id}", customerId))
+        mockMvc.perform(get("/api/v1/customers/{id}", customerId).with(jwt().authorities(ANY)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(customerId.toString()))
                 .andExpect(jsonPath("$.customerNumber").value("C000000001"))
@@ -163,7 +176,7 @@ class CustomerControllerTest {
                 .thenThrow(new CustomerNotFoundException(customerId));
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/customers/{id}", customerId))
+        mockMvc.perform(get("/api/v1/customers/{id}", customerId).with(jwt().authorities(ANY)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("Not Found"))
@@ -191,6 +204,7 @@ class CustomerControllerTest {
                         get("/api/v1/customers")
                                 .param("page", "0")
                                 .param("size", "10")
+                                .with(jwt().authorities(ANY))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
@@ -223,6 +237,7 @@ class CustomerControllerTest {
 
         mockMvc.perform(
                         put("/api/v1/customers/{id}", customerId)
+                                .with(jwt().authorities(ADVISOR))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
@@ -250,6 +265,7 @@ class CustomerControllerTest {
 
         mockMvc.perform(
                         put("/api/v1/customers/{id}", customerId)
+                                .with(jwt().authorities(ADVISOR))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
@@ -270,6 +286,7 @@ class CustomerControllerTest {
 
         mockMvc.perform(
                         put("/api/v1/customers/{id}", customerId)
+                                .with(jwt().authorities(ADVISOR))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
@@ -288,6 +305,7 @@ class CustomerControllerTest {
 
         mockMvc.perform(
                         put("/api/v1/customers/{id}", customerId)
+                                .with(jwt().authorities(ADVISOR))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
@@ -300,7 +318,8 @@ class CustomerControllerTest {
     void shouldCloseCustomer() throws Exception {
         UUID id = UUID.randomUUID();
         doNothing().when(customerService).closeCustomer(id);
-        mockMvc.perform(post("/api/v1/customers/{id}/close", id)).andExpect(status().isNoContent());
+        mockMvc.perform(post("/api/v1/customers/{id}/close", id)
+                        .with(jwt().authorities(ADMIN))).andExpect(status().isNoContent());
         verify(customerService).closeCustomer(id);
     }
 
@@ -308,7 +327,7 @@ class CustomerControllerTest {
     void shouldReturnNotFoundWhenClosingUnknownCustomer() throws Exception {
         UUID id = UUID.randomUUID();
         doThrow(new CustomerNotFoundException(id)).when(customerService).closeCustomer(id);
-        mockMvc.perform(post("/api/v1/customers/{id}/close", id)).andExpect(status().isNotFound());
+        mockMvc.perform(post("/api/v1/customers/{id}/close", id).with(jwt().authorities(ADMIN))).andExpect(status().isNotFound());
     }
 
     @Test
@@ -329,10 +348,27 @@ class CustomerControllerTest {
                         put("/api/v1/customers/{id}", id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
+                                .with(jwt().authorities(ADVISOR))
                 )
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409))
                 .andExpect(jsonPath("$.error").value("Conflict"));
     }
 
+    @Test
+    void shouldReturnUnauthorizedWhenClosingWithoutToken() throws Exception {
+        mockMvc.perform(post("/api/v1/customers/{id}/close", UUID.randomUUID()))
+                .andExpect(status().isUnauthorized());
+
+        verify(customerService, never()).closeCustomer(any());
+    }
+
+    @Test
+    void shouldReturnForbiddenWhenAdvisorClosesCustomer() throws Exception {
+        mockMvc.perform(post("/api/v1/customers/{id}/close", UUID.randomUUID())
+                        .with(jwt().authorities(ADVISOR)))
+                .andExpect(status().isForbidden());
+
+        verify(customerService, never()).closeCustomer(any());
+    }
 }

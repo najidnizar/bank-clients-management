@@ -14,13 +14,11 @@ public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedA
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
-        if(null == realmAccess) {
+        if (realmAccess == null || !(realmAccess.get("roles") instanceof Collection<?> roles)) {
             return List.of();
         }
-        Collection<?> roles = (Collection<?>) realmAccess.get("roles");
-        return roles
-                .stream()
-                .map(role -> (GrantedAuthority) new SimpleGrantedAuthority("ROLE_" + role))
+        return roles.stream()
+                .<GrantedAuthority>map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .toList();
     }
 }
