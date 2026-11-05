@@ -214,6 +214,11 @@ The call is made **on behalf of the user** who opened the account, so the accoun
 
 **Order of checks** for a request: security filter (token → `401`) → request body validation (`@Valid` → `400`) → `@PreAuthorize` (role → `403`) → method. Validation runs before the role check: a user without the required role who sends an invalid body gets `400`, not `403`.
 
+### API documentation and tools
+
+- **Swagger UI** (`/swagger-ui/index.html` on each service) declares a bearer JWT scheme (`OpenApiConfig`): click **Authorize**, paste a token, and "Try it out" requests carry it. The documentation itself is public; API calls are not.
+- **Bruno**: a before-request script on each folder fetches a token from Keycloak (password grant, `bank-cli`) for the user set in the `user` environment variable, caches it until shortly before expiry and adds the `Authorization` header. Switch user (`advisor`, `compliance`, `admin`) to test the role rules.
+
 ### Getting a token
 
 ```bash
@@ -227,6 +232,8 @@ See [`scripts/get-token.sh`](../scripts/get-token.sh).
 ---
 
 ## 4. Design decisions and limits
+
+The decision and its alternatives are recorded in [ADR-005](adr/ADR-005-security-with-keycloak-and-jwt.md).
 
 - **Validate tokens in every service, not only at the gateway** (*defense in depth*, *zero trust*): a service reachable directly — by mistake, or from inside the network — must not trust the caller.
 - **Role rules on methods (`@PreAuthorize`) rather than URL patterns**: the rule sits next to the endpoint, so it is visible when reading the code and hard to forget when adding an endpoint.

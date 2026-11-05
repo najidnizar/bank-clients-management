@@ -13,6 +13,26 @@ request:
   scripts:
     - type: before-request
       code: |-
+        // Authentication: gets a Keycloak access token for the user set in the environment
+        // ("user" variable: advisor, compliance or admin; password = user name, demo only)
+        // and adds it to every request of this folder. The token is cached until shortly before it expires.
+        const axios = require("axios");
+        const user = bru.getEnvVar("user") || "advisor";
+        const expiresAt = bru.getVar("accessTokenExpiresAt") || 0;
+
+        if (!bru.getVar("accessToken") || bru.getVar("accessTokenUser") !== user || Date.now() > expiresAt) {
+          const response = await axios.post(
+            `${bru.getEnvVar("keycloakUrl")}/realms/bank/protocol/openid-connect/token`,
+            `grant_type=password&client_id=bank-cli&username=${encodeURIComponent(user)}&password=${encodeURIComponent(user)}`,
+            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+          );
+          bru.setVar("accessToken", response.data.access_token);
+          bru.setVar("accessTokenUser", user);
+          bru.setVar("accessTokenExpiresAt", Date.now() + (response.data.expires_in - 30) * 1000);
+        }
+
+        req.setHeader("Authorization", `Bearer ${bru.getVar("accessToken")}`);
+
         const timestamp = Date.now();
 
         bru.setVar("firstName", "Nizar");
