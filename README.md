@@ -11,6 +11,7 @@ Microservices platform for the **customer lifecycle of a retail bank**: onboardi
 
 - **6 Spring Boot 4 microservices** (Java 25) behind an **API Gateway**, with **Eureka** service discovery
 - **Event-driven** with **Kafka**: a new customer automatically opens a KYC case (idempotent consumer)
+- **Secured** with **Keycloak** (OAuth 2.0 / OpenID Connect): JWT validated at the gateway **and in every service**, role-based access, token relay between services
 - **Resilient** synchronous calls: OpenFeign + **Resilience4j circuit breaker**
 - **Database per service**: PostgreSQL + Flyway migrations
 - **Observability**: distributed tracing (**OpenTelemetry → Tempo**), metrics (**Prometheus**), **Grafana** dashboard
@@ -20,7 +21,8 @@ Microservices platform for the **customer lifecycle of a retail bank**: onboardi
 
 ```mermaid
 flowchart LR
-    client([Client]) -->|HTTP| gw[API Gateway]
+    client([Client]) -. login .-> keycloak[Keycloak]
+    client -->|HTTP + JWT| gw[API Gateway]
     gw --> onb[Onboarding]
     gw --> kyc[KYC]
     gw --> doc[Document]
@@ -36,7 +38,7 @@ flowchart LR
 
 Each service owns its PostgreSQL database. All services register in Eureka. Design choices are documented as [ADRs](docs/adr) and the business rules in the [domain model](docs/domain-model.md).
 
-**One request, one trace across services** — opening an account calls the onboarding service to validate the customer:
+**One request, one trace across services** — opening an account: the JWT is validated and the role checked in the account service, which then calls the onboarding service with the same token to validate the customer:
 
 ![Distributed trace in Grafana Tempo](docs/images/tempo-trace.png)
 
@@ -47,13 +49,21 @@ cd infrastructure/docker
 docker compose --profile apps up -d --build
 ```
 
-Then open the gateway on http://localhost:8088, Eureka on http://localhost:8761 and Grafana on http://localhost:3000.
+Get an access token (demo users `advisor`, `compliance`, `admin`; password = user name) and call the API through the gateway:
+
+```bash
+TOKEN=$(./scripts/get-token.sh advisor)
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/v1/customers
+```
+
+Useful UIs: Eureka http://localhost:8761, Grafana http://localhost:3000, Keycloak http://localhost:8180 (`admin` / `admin`).
 
 ## Tech stack
 
 | Area | Technologies |
 |---|---|
 | Backend | Java 25, Spring Boot 4.1, Spring Cloud (Gateway, Eureka, OpenFeign), Spring Data JPA |
+| Security | Spring Security, OAuth 2.0 resource server, JWT, Keycloak 26 |
 | Data & messaging | PostgreSQL 17, Flyway, Apache Kafka 4, MinIO |
 | Resilience & observability | Resilience4j, Micrometer, OpenTelemetry, Prometheus, Grafana, Tempo |
 | Quality & delivery | JUnit 5, Mockito, Testcontainers, Docker, Docker Compose, GitHub Actions |
@@ -64,7 +74,7 @@ Then open the gateway on http://localhost:8088, Eureka on http://localhost:8761 
 - [x] Kafka events and circuit breaker
 - [x] Metrics and distributed tracing
 - [x] Docker and CI
-- [ ] Security: Keycloak, OAuth2 / JWT
+- [x] Security: Keycloak, OAuth 2.0 / JWT, role-based access
 - [ ] Frontend (React and / or Angular)
 - [ ] Kubernetes deployment (Helm)
 
@@ -84,7 +94,9 @@ Known issues and technical debt are tracked in [docs/known-issues.md](docs/known
 | `customer-document-service` | 8082 | Document upload / download; metadata in PostgreSQL, files in MinIO |
 | `customer-account-service` | 8083 | Bank accounts; validates the customer via Feign with a circuit breaker |
 
-Each service exposes Swagger UI at `http://localhost:<port>/swagger-ui/index.html`. Ready-made requests are in the [Bruno collection](bruno/bank-clients-management).
+Each service exposes Swagger UI at `http://localhost:<port>/swagger-ui/index.html`: click **Authorize** and paste a token from `./scripts/get-token.sh advisor`. Ready-made requests are in the [Bruno collection](bruno/bank-clients-management); it fetches a token automatically for the user set in the `user` environment variable.
+
+Access rules: reads need any authenticated user; creating / updating customers, opening accounts and uploading documents need `ADVISOR`; KYC review needs `COMPLIANCE_OFFICER`; blocking / closing customers and changing account status need `ADMIN`. Details in [docs/security.md](docs/security.md).
 
 </details>
 
@@ -101,7 +113,8 @@ Full reasoning, trade-offs and rejected alternatives are in the Architecture Dec
 [ADR-001 Monorepo](docs/adr/ADR-001-monorepo.md) ·
 [ADR-002 Layered architecture](docs/adr/ADR-002-layered-architecture.md) ·
 [ADR-003 Kafka events](docs/adr/ADR-003-event-driven-communication-with-kafka.md) ·
-[ADR-004 Circuit breaker](docs/adr/ADR-004-synchronous-calls-and-circuit-breaker.md)
+[ADR-004 Circuit breaker](docs/adr/ADR-004-synchronous-calls-and-circuit-breaker.md) ·
+[ADR-005 Security](docs/adr/ADR-005-security-with-keycloak-and-jwt.md)
 
 Aggregates, state machines and business rules: [Domain model](docs/domain-model.md).
 
@@ -112,6 +125,7 @@ Aggregates, state machines and business rules: [Domain model](docs/domain-model.
 
 ```bash
 curl -X POST http://localhost:8088/api/v1/customers \
+  -H "Authorization: Bearer $(./scripts/get-token.sh advisor)" \
   -H "Content-Type: application/json" \
   -d '{
         "firstName": "Jane",

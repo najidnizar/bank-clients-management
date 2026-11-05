@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class KycCaseController {
     private final KycCaseService kycCaseService;
 
     @PostMapping
+    @PreAuthorize("hasRole('COMPLIANCE_OFFICER')")
     public ResponseEntity<KycCaseResponse> createKycCase(@Valid @RequestBody CreateKycCaseRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(kycCaseService.createKycCase(request));
     }
@@ -37,6 +39,7 @@ public class KycCaseController {
     }
 
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('COMPLIANCE_OFFICER')")
     public ResponseEntity<KycCaseResponse> updateKycStatus(@PathVariable UUID id, @RequestParam KycCaseStatus status) {
         return ResponseEntity.ok(kycCaseService.updateKycStatus(id, status));
     }

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -46,6 +47,7 @@ public class CustomerController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADVISOR')")
     public CustomerResponse createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
         return customerService.createCustomer(request);
     }
@@ -83,23 +85,27 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADVISOR')")
     public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable UUID id, @Valid @RequestBody UpdateCustomerRequest request) {
         return ResponseEntity.ok(customerService.updateCustomer(id, request));
     }
 
     @PostMapping("/{id}/close")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> closeCustomer(@PathVariable UUID id) {
         customerService.closeCustomer(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/block")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> blockCustomer(@PathVariable UUID id) {
         customerService.blockCustomer(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/unblock")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> unblockCustomer(@PathVariable UUID id) {
         customerService.unblockCustomer(id);
         return ResponseEntity.noContent().build();
