@@ -36,7 +36,7 @@ flowchart LR
 
 Each service owns its PostgreSQL database. All services register in Eureka. Design choices are documented as [ADRs](docs/adr) and the business rules in the [domain model](docs/domain-model.md).
 
-**One request, one trace across services** — opening an account calls the onboarding service to validate the customer:
+**One request, one trace across services** — opening an account: the JWT is validated and the role checked in the account service, which then calls the onboarding service with the same token to validate the customer:
 
 ![Distributed trace in Grafana Tempo](docs/images/tempo-trace.png)
 

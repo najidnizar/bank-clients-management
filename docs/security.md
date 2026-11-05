@@ -2,7 +2,7 @@
 
 How users are authenticated and authorized in this project, the concepts behind it, and how each piece is implemented.
 
-> **Status**: Keycloak, JWT validation at the API gateway and in every service, and role-based rules are implemented. Token relay between services (account → onboarding) is in progress.
+> **Status**: Keycloak, JWT validation at the API gateway and in every service, role-based rules and token relay between services are implemented.
 
 ---
 
@@ -190,6 +190,20 @@ Each microservice is also a resource server (defense in depth): calling a servic
 | All | `GET` endpoints | any authenticated user |
 
 Expected responses: no token → **401**; valid token without the required role → **403**.
+
+### Service-to-service calls (token relay)
+
+Opening an account triggers a synchronous call from the account service to the onboarding service (OpenFeign, see [ADR-004](adr/ADR-004-synchronous-calls-and-circuit-breaker.md)). The onboarding service is a resource server too, so this call needs a token.
+
+The call is made **on behalf of the user** who opened the account, so the account service **relays the user's own token**: `BearerTokenRelayInterceptor`, a Feign `RequestInterceptor`, reads the `JwtAuthenticationToken` from the `SecurityContextHolder` and copies it into the `Authorization` header of every outgoing Feign request. The onboarding service then applies its own rules to the real user.
+
+- The `SecurityContextHolder` is bound to the **current thread**. The Feign call must run on the request thread; it does, because the circuit breaker is synchronous. With `@Async` or a Resilience4j `TimeLimiter` (which runs the call on another thread), the context would be empty and no token would be sent.
+- Calls **without a user** (scheduled jobs, Kafka consumers) cannot relay a token: they would use the **client credentials** grant, where the service authenticates itself to Keycloak with its own confidential client.
+
+| Approach | Token used | Downstream sees | Use when |
+|---|---|---|---|
+| Token relay (implemented) | The user's token | The real user and roles | The call is made on behalf of a user |
+| Client credentials | The service's own token | The calling service | Background work, no user involved |
 
 ### Testing
 
