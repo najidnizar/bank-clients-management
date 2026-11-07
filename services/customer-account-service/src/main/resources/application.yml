@@ -11,3 +11,19 @@ spring:
 
 server:
   port: 8083
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      customer-service:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        minimum-number-of-calls: 5
+        # Client errors are answers from the onboarding service, not failures: they must not open the circuit
+        ignore-exceptions:
+          - io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.CustomerNotFoundException
+          - org.springframework.security.access.AccessDeniedException
+          - feign.FeignException$FeignClientException

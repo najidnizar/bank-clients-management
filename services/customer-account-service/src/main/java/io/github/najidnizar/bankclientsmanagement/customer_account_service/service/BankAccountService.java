@@ -1,5 +1,6 @@
 package io.github.najidnizar.bankclientsmanagement.customer_account_service.service;
 
+import io.github.najidnizar.bankclientsmanagement.customer_account_service.config.CurrentUser;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.client.CustomerServiceFeignClient;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.AccountStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.domain.AccountStatusHistoryEntity;
@@ -45,9 +46,9 @@ public class BankAccountService {
                 .balance(BigDecimal.ZERO)
                 .currencyCode(request.currencyCode())
                 .createdAt(LocalDateTime.now())
-                .createdBy("SYSTEM")
+                .createdBy(CurrentUser.username())
                 .updatedAt(LocalDateTime.now())
-                .updatedBy("SYSTEM")
+                .updatedBy(CurrentUser.username())
                 .build();
         BankAccountEntity savedAccount = bankAccountRepository.save(account);
 
@@ -63,7 +64,7 @@ public class BankAccountService {
                         .previousStatus(previousStatus)
                         .newStatus(newStatus)
                         .changedAt(LocalDateTime.now())
-                        .changedBy("SYSTEM")
+                        .changedBy(CurrentUser.username())
                         .build();
         accountStatusHistoryRepository.save(history);
     }
@@ -121,7 +122,7 @@ public class BankAccountService {
 
         account.setStatus(requestedStatus);
         account.setUpdatedAt(LocalDateTime.now());
-        account.setUpdatedBy("SYSTEM");
+        account.setUpdatedBy(CurrentUser.username());
 
         BankAccountEntity savedAccount = bankAccountRepository.save(account);
         saveStatusHistory(savedAccount.getId(), previousAccountStatus, requestedStatus);

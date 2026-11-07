@@ -11,7 +11,7 @@ public class AuditorAwareConfig {
 
     @Bean
     public AuditorAware<String> auditorProvider() {
-        return () -> Optional.of("SYSTEM");
+        return () -> Optional.of(CurrentUser.username());
     }
 
 }

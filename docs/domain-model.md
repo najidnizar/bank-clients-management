@@ -29,7 +29,7 @@ stateDiagram-v2
 - The email address is unique.
 - `CLOSED` is final: no transition is allowed out of it.
 - Every status change is recorded in `customer_status_history` (old / new status, author, reason) and published as a `CUSTOMER_STATUS_CHANGED` event.
-- Optimistic locking (`version`) prevents lost updates; `createdBy` / `updatedBy` are filled by JPA auditing.
+- Optimistic locking (`version`) prevents lost updates; `createdBy` / `updatedBy` are filled by JPA auditing with the authenticated user (`SYSTEM` for automatic operations).
 
 **Customer number** — a business identifier generated from a PostgreSQL sequence and formatted as `C` + 9 digits. It is human-readable and easy to communicate by phone, and independent from the technical UUID, which is never exposed as a business reference.
 

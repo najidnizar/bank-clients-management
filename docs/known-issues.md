@@ -4,12 +4,12 @@ Tracked here so nothing is lost; each item is a candidate for a dedicated branch
 
 ## Bugs
 
-- [ ] **Invalid customer status transition returns HTTP 500** (e.g. blocking a closed customer). `InvalidCustomerStatusTransitionException` is not handled by the onboarding `GlobalExceptionHandler`; it should return `409 Conflict` like the KYC and account services.
+- [x] ~~**Invalid customer status transition returns HTTP 500** (e.g. blocking a closed customer). `InvalidCustomerStatusTransitionException` is not handled by the onboarding `GlobalExceptionHandler`; it should return `409 Conflict` like the KYC and account services.~~ Fixed: handled by `GlobalExceptionHandler`, returns `409 Conflict`.
 
 ## Reliability
 
 - [ ] **Customer events are sent before the database commit** (`KafkaTemplate.send` inside `@Transactional`). A failed commit produces an event for a customer that does not exist; an unavailable broker loses the event. Fix: transactional outbox. See [ADR-003](adr/ADR-003-event-driven-communication-with-kafka.md).
-- [ ] **Client errors count as failures in the circuit breaker**: a `401` / `403` / `400` from the onboarding service triggers the fallback ("service unavailable") and is recorded as a failure, so a burst of unauthorized requests could open the circuit for everyone. Only `5xx` errors and timeouts should count: configure `ignore-exceptions` (e.g. `FeignException.FeignClientException`) and map 4xx responses explicitly.
+- [x] ~~**Client errors count as failures in the circuit breaker**~~ Fixed: 4xx are ignored by the circuit breaker (`ignore-exceptions`) and rethrown by dedicated fallbacks; covered by `CustomerServiceClientServiceCircuitBreakerTest`.
 - [ ] **No dead-letter topic**: a message that still fails after retries is only logged.
 - [ ] **No health checks in Docker Compose**: `depends_on` waits for containers to start, not to be ready; services rely on `restart: on-failure`.
 

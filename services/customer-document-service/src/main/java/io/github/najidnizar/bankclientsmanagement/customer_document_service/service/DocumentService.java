@@ -1,5 +1,6 @@
 package io.github.najidnizar.bankclientsmanagement.customer_document_service.service;
 
+import io.github.najidnizar.bankclientsmanagement.customer_document_service.config.CurrentUser;
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.dto.DocumentResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.entity.DocumentEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.entity.DocumentStatus;
@@ -41,7 +42,7 @@ public class DocumentService {
                 .storageKey(storageKey)
                 .status(DocumentStatus.UPLOADED)
                 .createdAt(LocalDateTime.now())
-                .createdBy("SYSTEM")
+                .createdBy(CurrentUser.username())
                 .build();
 
         DocumentEntity saved = documentRepository.save(document);
