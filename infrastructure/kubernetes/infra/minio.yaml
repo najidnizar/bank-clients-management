@@ -8,6 +8,8 @@ metadata:
   name: customer-document-storage
   namespace: bank
 spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
   selector:
     app: minio
   ports:

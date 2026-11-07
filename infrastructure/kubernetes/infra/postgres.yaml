@@ -5,6 +5,8 @@ metadata:
   name: customer-onboarding-db
   namespace: bank
 spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
   selector:
     app: customer-onboarding-db
   ports:
@@ -78,6 +80,8 @@ metadata:
   name: customer-kyc-db
   namespace: bank
 spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
   selector:
     app: customer-kyc-db
   ports:
@@ -151,6 +155,8 @@ metadata:
   name: customer-document-db
   namespace: bank
 spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
   selector:
     app: customer-document-db
   ports:
@@ -224,6 +230,8 @@ metadata:
   name: customer-account-db
   namespace: bank
 spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
   selector:
     app: customer-account-db
   ports:

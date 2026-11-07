@@ -1,41 +1,33 @@
 #!/usr/bin/env bash
 #
-# Creates the local kind cluster "bank" (if needed) and deploys the infrastructure in the namespace "bank":
-# 4 PostgreSQL servers, Kafka, Keycloak and MinIO. Safe to run several times.
+# Creates the local kind cluster "bank" (if it does not exist yet) and deploys the infrastructure
+# in the namespace "bank": 4 PostgreSQL servers, Kafka, Keycloak and S3 storage. Can be run again safely.
 #
 # Requirements: Docker running, kind and kubectl installed (brew install kind kubectl).
+# Delete everything:  kind delete cluster --name bank
 
-set -euo pipefail
-cd "$(dirname "$0")"
+set -euo pipefail          # stop at the first error, on an unset variable, or on a failure inside a pipe
+cd "$(dirname "$0")"       # run from this folder, wherever the script is called from
 
-CLUSTER=bank
-NAMESPACE=bank
-
-if ! kind get clusters | grep -qx "$CLUSTER"; then
-  echo "▶ Creating kind cluster '$CLUSTER'..."
+# 1. Cluster (skipped if it already exists)
+if ! kind get clusters | grep -qx bank; then
   kind create cluster --config kind-config.yaml
-else
-  echo "▶ Cluster '$CLUSTER' already exists"
 fi
-kubectl config use-context "kind-$CLUSTER" >/dev/null
 
-echo "▶ Namespace and Keycloak realm"
+# 2. Keycloak realm: a ConfigMap built from the same JSON file as Docker Compose.
+#    "--dry-run=client -o yaml | kubectl apply" = create it, or update it if it already exists.
 kubectl apply -f infra/namespace.yaml
-# The realm file is shared with Docker Compose; "create --dry-run | apply" makes the command repeatable
-kubectl create configmap keycloak-realm -n "$NAMESPACE" \
+kubectl create configmap keycloak-realm -n bank \
   --from-file=realm-bank.json=../docker/keycloak/realm-bank.json \
   --dry-run=client -o yaml | kubectl apply -f -
 
-echo "▶ Infrastructure"
+# 3. Infrastructure (all manifests listed in infra/kustomization.yaml)
 kubectl apply -k infra
 
-echo "▶ Waiting for the infrastructure to be ready (first run: images are downloaded, a few minutes)..."
-for sts in customer-onboarding-db customer-kyc-db customer-document-db customer-account-db kafka minio; do
-  kubectl rollout status "statefulset/$sts" -n "$NAMESPACE" --timeout=300s
+# 4. Wait until every StatefulSet and Deployment is ready (first run: images are downloaded)
+for workload in $(kubectl get statefulset,deployment -n bank -o name); do
+  kubectl rollout status "$workload" -n bank --timeout=300s
 done
-kubectl rollout status deployment/keycloak -n "$NAMESPACE" --timeout=300s
 
-echo
-kubectl get pods -n "$NAMESPACE"
-echo
-echo "✅ Infrastructure ready. Keycloak: kubectl port-forward -n $NAMESPACE svc/keycloak 8180:8080"
+kubectl get pods -n bank
+echo "✅ Ready. Keycloak: kubectl port-forward -n bank svc/keycloak 8180:8080"

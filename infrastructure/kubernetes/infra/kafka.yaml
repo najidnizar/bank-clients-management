@@ -5,6 +5,8 @@ metadata:
   name: kafka
   namespace: bank
 spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
   selector:
     app: kafka
   ports:
