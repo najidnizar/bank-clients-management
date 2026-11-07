@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1
 
 # ---- Build stage: compile and package the Spring Boot jar ----
-FROM eclipse-temurin:25-jdk AS build
+# Runs on the builder's native platform ($BUILDPLATFORM): the jar is platform-independent, so a multi-platform
+# build (amd64 + arm64) compiles it only once, without slow CPU emulation. Only the runtime stage is per platform.
+FROM --platform=$BUILDPLATFORM eclipse-temurin:25-jdk AS build
 WORKDIR /workspace
 
 COPY .mvn/ .mvn/
