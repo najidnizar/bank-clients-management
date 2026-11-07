@@ -75,8 +75,9 @@ Useful UIs: Eureka http://localhost:8761, Grafana http://localhost:3000, Keycloa
 - [x] Metrics and distributed tracing
 - [x] Docker and CI
 - [x] Security: Keycloak, OAuth 2.0 / JWT, role-based access
-- [ ] Frontend (React and / or Angular)
 - [ ] Kubernetes deployment (Helm)
+- [ ] Frontend (React and / or Angular)
+- [ ] Public demo on the cloud (k3s, HTTPS)
 
 Known issues and technical debt are tracked in [docs/known-issues.md](docs/known-issues.md).
 
