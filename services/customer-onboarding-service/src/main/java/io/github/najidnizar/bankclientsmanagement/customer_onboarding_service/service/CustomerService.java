@@ -1,5 +1,6 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.service;
 
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.config.CurrentUser;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerSearchCriteria;
@@ -137,7 +138,7 @@ public class CustomerService {
                         .oldStatus(oldStatus)
                         .newStatus(status)
                         .changedAt(LocalDateTime.now())
-                        .changedBy("SYSTEM")
+                        .changedBy(CurrentUser.username())
                         .build();
 
         customerStatusHistoryRepository.save(history);

@@ -1,5 +1,6 @@
 package io.github.najidnizar.bankclientsmanagement.customer_kyc_service.service;
 
+import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.config.CurrentUser;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.dto.CreateKycCaseRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.dto.KycCaseResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.entity.KycCaseEntity;
@@ -33,9 +34,9 @@ public class KycCaseService {
         kycCase.setStatus(KycCaseStatus.NOT_STARTED);
 
         kycCase.setCreatedAt(LocalDateTime.now());
-        kycCase.setCreatedBy("SYSTEM");
+        kycCase.setCreatedBy(CurrentUser.username());
         kycCase.setUpdatedAt(LocalDateTime.now());
-        kycCase.setUpdatedBy("SYSTEM");
+        kycCase.setUpdatedBy(CurrentUser.username());
 
         KycCaseEntity savedKycCase = kycCaseRepository.save(kycCase);
 
@@ -60,7 +61,7 @@ public class KycCaseService {
 
         kycCase.setStatus(requestedStatus);
         kycCase.setUpdatedAt(LocalDateTime.now());
-        kycCase.setUpdatedBy("SYSTEM");
+        kycCase.setUpdatedBy(CurrentUser.username());
 
         KycCaseEntity updated = kycCaseRepository.save(kycCase);
         return kycCaseMapper.toResponse(updated);
@@ -92,9 +93,9 @@ public class KycCaseService {
                 .riskLevel(KycRiskLevel.LOW)
                 .riskScore(0)
                 .createdAt(LocalDateTime.now())
-                .createdBy("SYSTEM")
+                .createdBy(CurrentUser.username())
                 .updatedAt(LocalDateTime.now())
-                .updatedBy("SYSTEM")
+                .updatedBy(CurrentUser.username())
                 .build();
 
         KycCaseEntity savedCase = kycCaseRepository.save(kycCase);
@@ -117,7 +118,7 @@ public class KycCaseService {
                     || kycCase.getStatus() == KycCaseStatus.IN_PROGRESS) {
                 kycCase.setStatus(KycCaseStatus.EXPIRED);
                 kycCase.setUpdatedAt(LocalDateTime.now());
-                kycCase.setUpdatedBy("SYSTEM");
+                kycCase.setUpdatedBy(CurrentUser.username());
                 kycCaseRepository.save(kycCase);
             }
         }

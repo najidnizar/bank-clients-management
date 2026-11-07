@@ -205,6 +205,12 @@ The call is made **on behalf of the user** who opened the account, so the accoun
 | Token relay (implemented) | The user's token | The real user and roles | The call is made on behalf of a user |
 | Client credentials | The service's own token | The calling service | Background work, no user involved |
 
+### Audit: who did what
+
+Audit columns (`createdBy`, `updatedBy`, and `changedBy` in the status-history tables) record the **real user**, read from the token: `CurrentUser.username()` returns the authenticated user's name (`preferred_username`, e.g. `advisor`). The onboarding service plugs it into Spring Data JPA auditing (`AuditorAware`); the other services call it when setting the columns.
+
+Operations without a user request — the KYC case opened by a Kafka event, the case expired when a customer is closed — have no authenticated user in the security context and are recorded as `SYSTEM`. The audit trail therefore distinguishes human actions from automatic ones.
+
 ### Testing
 
 - **Controller tests** (`@WebMvcTest`) import the real `SecurityConfig`: without it, the slice falls back to Spring Boot's default security (CSRF enabled, different rules) and the tests would not check the actual rules. A mocked `JwtDecoder` satisfies the resource server configuration.
