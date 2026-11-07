@@ -4,7 +4,7 @@ Tracked here so nothing is lost; each item is a candidate for a dedicated branch
 
 ## Bugs
 
-- [ ] **Invalid customer status transition returns HTTP 500** (e.g. blocking a closed customer). `InvalidCustomerStatusTransitionException` is not handled by the onboarding `GlobalExceptionHandler`; it should return `409 Conflict` like the KYC and account services.
+- [x] ~~**Invalid customer status transition returns HTTP 500** (e.g. blocking a closed customer). `InvalidCustomerStatusTransitionException` is not handled by the onboarding `GlobalExceptionHandler`; it should return `409 Conflict` like the KYC and account services.~~ Fixed: handled by `GlobalExceptionHandler`, returns `409 Conflict`.
 
 ## Reliability
 

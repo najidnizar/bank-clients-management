@@ -1,5 +1,7 @@
 package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.controller;
 
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
+import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.exception.InvalidCustomerStatusTransitionException;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.config.SecurityConfig;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CustomerSearchCriteria;
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.dto.CreateCustomerRequest;
@@ -370,5 +372,18 @@ class CustomerControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(customerService, never()).closeCustomer(any());
+    }
+
+    @Test
+    void shouldReturnConflictWhenStatusTransitionIsInvalid() throws Exception {
+        UUID id = UUID.randomUUID();
+        doThrow(new InvalidCustomerStatusTransitionException(CustomerStatus.CLOSED, CustomerStatus.BLOCKED))
+                .when(customerService).blockCustomer(id);
+
+        mockMvc.perform(post("/api/v1/customers/{id}/block", id)
+                        .with(jwt().authorities(ADMIN)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.message").value("Cannot change customer status from CLOSED to BLOCKED"));
     }
 }

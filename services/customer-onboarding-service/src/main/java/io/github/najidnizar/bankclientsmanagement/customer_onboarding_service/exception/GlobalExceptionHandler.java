@@ -55,6 +55,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(InvalidCustomerStatusTransitionException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidCustomerStatusTransition(
+            InvalidCustomerStatusTransitionException ex,
+            HttpServletRequest request) {
+
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .timestamp(OffsetDateTime.now().toInstant())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleCustomerNotFoundException(
             CustomerNotFoundException ex,
