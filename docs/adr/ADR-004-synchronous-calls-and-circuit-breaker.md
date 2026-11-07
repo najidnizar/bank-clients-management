@@ -14,9 +14,13 @@ The account service calls the onboarding service **synchronously**:
 
 - **OpenFeign** client, resolved through **Eureka** by service name (`customer-onboarding-service`) — no hard-coded URL.
 - Wrapped in a **Resilience4j circuit breaker** (`customer-service`): count-based window of 10 calls, opens at 50 % failures (after at least 5 calls), stays open 10 s, then lets 3 trial calls through.
-- Error mapping:
-  - `404` from onboarding → `CustomerNotFoundException` (the request is invalid).
-  - Timeout, error or open circuit → fallback raising `CustomerServiceUnavailableException` (the request cannot be processed now).
+- Error mapping — only technical failures mean "unavailable":
+  - `404` from onboarding → `CustomerNotFoundException` (404): the request is invalid.
+  - `403` → `AccessDeniedException` (403): the user, whose token is relayed, may not read this customer.
+  - Other `4xx` → kept as an error (they reveal a bug in the caller, e.g. a token not relayed).
+  - `5xx`, timeout, connection error or open circuit → fallback raising `CustomerServiceUnavailableException` (503).
+  - **Client errors are ignored by the circuit breaker** (`ignore-exceptions`): they are answers, not outages. Otherwise a burst of invalid or unauthorized requests could open the circuit and block account opening for everyone.
+  - Resilience4j calls the fallback for *every* exception, choosing the most specific signature; dedicated fallbacks rethrow client errors unchanged, and only the generic `Throwable` fallback reports unavailability.
 - The call is visible in distributed tracing: one trace covers both services.
 
 ## Consequences
