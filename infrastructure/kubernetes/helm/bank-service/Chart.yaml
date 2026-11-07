@@ -1,0 +1,7 @@
+# Generic chart for the Spring Boot microservices: one chart, one release per service,
+# each release configured by its own file in ../values/
+apiVersion: v2
+name: bank-service
+description: A Spring Boot microservice of the bank-clients-management platform
+type: application
+version: 0.1.0

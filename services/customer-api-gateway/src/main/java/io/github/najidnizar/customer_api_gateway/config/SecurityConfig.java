@@ -14,7 +14,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-         http.authorizeHttpRequests(matcher -> matcher.anyRequest().authenticated());
+         http.authorizeHttpRequests(matcher -> matcher
+                 .requestMatchers("/actuator/health/**").permitAll()   // Kubernetes probes, no token
+                 .anyRequest().authenticated());
          http.oauth2ResourceServer(resource -> resource.jwt(Customizer.withDefaults()));
          http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
          http.csrf(csrf -> csrf.disable());

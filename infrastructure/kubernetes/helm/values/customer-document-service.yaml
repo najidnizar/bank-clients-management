@@ -1,0 +1,35 @@
+image:
+  repository: ghcr.io/najidnizar/bank-clients-management/customer-document-service
+
+port: 8082
+
+# The "local" profile holds the JPA / Kafka settings; addresses are overridden for the cluster
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: local
+  - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+    value: kafka:9092
+  - name: SPRING_DATASOURCE_URL
+    value: jdbc:postgresql://customer-document-db:5432/customer_document_db
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: postgres-credentials
+        key: username
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: postgres-credentials
+        key: password
+  - name: MINIO_URL
+    value: http://customer-document-storage:9000
+  - name: MINIO_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: minio-credentials
+        key: access-key
+  - name: MINIO_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: minio-credentials
+        key: secret-key
