@@ -9,3 +9,14 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+# Health endpoints used by the Kubernetes probes: /actuator/health/liveness and /actuator/health/readiness
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true

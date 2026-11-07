@@ -48,7 +48,10 @@ services:
     volumes:
       - customer_account_postgres_data:/var/lib/postgresql/data
   customer-document-storage:
-    image: minio/minio
+    # MinIO stopped distributing community images in 2026 (minio/minio removed from Docker Hub, quay.io requires
+    # authentication). SILO is a maintained community fork of MinIO: same S3 API, MINIO_* variables, ports and
+    # health endpoints. Pinned to a release tag rather than "latest".
+    image: docker.io/pgsty/silo:RELEASE.2026-09-16T00-00-00Z
     container_name: customer-document-minio
     restart: unless-stopped
     environment:

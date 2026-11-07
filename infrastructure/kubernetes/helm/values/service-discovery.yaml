@@ -1,0 +1,4 @@
+image:
+  repository: ghcr.io/najidnizar/bank-clients-management/service-discovery
+
+port: 8761

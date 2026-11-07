@@ -1,0 +1,23 @@
+image:
+  repository: ghcr.io/najidnizar/bank-clients-management/customer-onboarding-service
+
+port: 8080
+
+# The "local" profile holds the JPA / Kafka settings; addresses are overridden for the cluster
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: local
+  - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+    value: kafka:9092
+  - name: SPRING_DATASOURCE_URL
+    value: jdbc:postgresql://customer-onboarding-db:5432/customer_onboarding_db
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: postgres-credentials
+        key: username
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: postgres-credentials
+        key: password

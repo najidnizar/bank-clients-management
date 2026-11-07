@@ -1,0 +1,30 @@
+# Default values, overridden per service by helm/values/<service>.yaml
+
+image:
+  repository: ""            # required, e.g. ghcr.io/najidnizar/bank-clients-management/customer-kyc-service
+  tag: latest               # local cluster; a real environment deploys an immutable tag (sha-<commit>)
+  pullPolicy: Always        # with "latest", always check the registry for a newer image
+
+replicaCount: 1
+
+port: 8080                  # HTTP port of the application (server.port)
+
+# Environment variables shared by all services (addresses of the infrastructure in the namespace)
+commonEnv:
+  - name: EUREKA_SERVER_URL
+    value: http://service-discovery:8761/eureka/
+  - name: KEYCLOAK_JWK_SET_URI
+    value: http://keycloak:8080/realms/bank/protocol/openid-connect/certs
+  # The observability stack (Tempo) is not deployed in the cluster yet: do not sample traces
+  - name: MANAGEMENT_TRACING_SAMPLING_PROBABILITY
+    value: "0.0"
+
+# Service-specific environment variables (set in helm/values/<service>.yaml)
+env: []
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 768Mi           # no CPU limit on purpose: it would throttle the JVM (startup, GC)

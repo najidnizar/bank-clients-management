@@ -1,0 +1,299 @@
+# PostgreSQL for customer_onboarding_db: a StatefulSet (stable identity + its own persistent volume) and a Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-onboarding-db
+  namespace: bank
+spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
+  selector:
+    app: customer-onboarding-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: customer-onboarding-db
+  namespace: bank
+spec:
+  serviceName: customer-onboarding-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-onboarding-db
+  template:
+    metadata:
+      labels:
+        app: customer-onboarding-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: customer_onboarding_db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            # Sub-directory: the root of a fresh volume may contain files (lost+found) that initdb refuses
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  # Each pod gets its own PersistentVolumeClaim, kept when the pod is recreated
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# PostgreSQL for customer_kyc_db: a StatefulSet (stable identity + its own persistent volume) and a Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-kyc-db
+  namespace: bank
+spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
+  selector:
+    app: customer-kyc-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: customer-kyc-db
+  namespace: bank
+spec:
+  serviceName: customer-kyc-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-kyc-db
+  template:
+    metadata:
+      labels:
+        app: customer-kyc-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: customer_kyc_db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            # Sub-directory: the root of a fresh volume may contain files (lost+found) that initdb refuses
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  # Each pod gets its own PersistentVolumeClaim, kept when the pod is recreated
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# PostgreSQL for customer_document_db: a StatefulSet (stable identity + its own persistent volume) and a Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-document-db
+  namespace: bank
+spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
+  selector:
+    app: customer-document-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: customer-document-db
+  namespace: bank
+spec:
+  serviceName: customer-document-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-document-db
+  template:
+    metadata:
+      labels:
+        app: customer-document-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: customer_document_db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            # Sub-directory: the root of a fresh volume may contain files (lost+found) that initdb refuses
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  # Each pod gets its own PersistentVolumeClaim, kept when the pod is recreated
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# PostgreSQL for customer_account_db: a StatefulSet (stable identity + its own persistent volume) and a Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-account-db
+  namespace: bank
+spec:
+  # Headless service (no virtual IP): the DNS name resolves directly to the pod. Standard for StatefulSets.
+  clusterIP: None
+  selector:
+    app: customer-account-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: customer-account-db
+  namespace: bank
+spec:
+  serviceName: customer-account-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-account-db
+  template:
+    metadata:
+      labels:
+        app: customer-account-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: customer_account_db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            # Sub-directory: the root of a fresh volume may contain files (lost+found) that initdb refuses
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  # Each pod gets its own PersistentVolumeClaim, kept when the pod is recreated
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

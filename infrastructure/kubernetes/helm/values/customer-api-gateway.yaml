@@ -1,0 +1,4 @@
+image:
+  repository: ghcr.io/najidnizar/bank-clients-management/customer-api-gateway
+
+port: 8088
