@@ -1,0 +1,14 @@
+# Local Kubernetes cluster with kind (Kubernetes IN Docker): each node is a Docker container.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: bank
+nodes:
+  - role: control-plane
+    # Ports 80/443 of the node are published on the Mac, for the HTTP entry point added in a later step
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP

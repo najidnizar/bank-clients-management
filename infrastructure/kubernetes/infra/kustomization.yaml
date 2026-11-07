@@ -1,0 +1,10 @@
+# Kustomize (built into kubectl): "kubectl apply -k infrastructure/kubernetes/infra" applies all these files
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - secrets.yaml
+  - postgres.yaml
+  - kafka.yaml
+  - keycloak.yaml
+  - minio.yaml
