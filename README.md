@@ -16,6 +16,7 @@ Microservices platform for the **customer lifecycle of a retail bank**: onboardi
 - **Database per service**: PostgreSQL + Flyway migrations
 - **Observability**: distributed tracing (**OpenTelemetry → Tempo**), metrics (**Prometheus**), **Grafana** dashboard
 - **Docker** multi-stage images, one-command startup, **GitHub Actions CI**, **Testcontainers** tests
+- **Kubernetes**: Helm chart for the services, StatefulSets for the infrastructure, probes, Gateway API entry point — [docs/kubernetes.md](docs/kubernetes.md)
 
 ## Architecture
 
@@ -58,6 +59,8 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8088/api/v1/customers
 
 Useful UIs: Eureka http://localhost:8761, Grafana http://localhost:3000, Keycloak http://localhost:8180 (`admin` / `admin`).
 
+Or run everything on a local **Kubernetes** cluster: see [docs/kubernetes.md](docs/kubernetes.md).
+
 ## Tech stack
 
 | Area | Technologies |
@@ -67,6 +70,7 @@ Useful UIs: Eureka http://localhost:8761, Grafana http://localhost:3000, Keycloa
 | Data & messaging | PostgreSQL 17, Flyway, Apache Kafka 4, MinIO |
 | Resilience & observability | Resilience4j, Micrometer, OpenTelemetry, Prometheus, Grafana, Tempo |
 | Quality & delivery | JUnit 5, Mockito, Testcontainers, Docker, Docker Compose, GitHub Actions |
+| Kubernetes | kind, Helm, Kustomize, Gateway API (Traefik), GitHub Container Registry (multi-arch images) |
 
 ## Roadmap
 
@@ -75,7 +79,7 @@ Useful UIs: Eureka http://localhost:8761, Grafana http://localhost:3000, Keycloa
 - [x] Metrics and distributed tracing
 - [x] Docker and CI
 - [x] Security: Keycloak, OAuth 2.0 / JWT, role-based access
-- [ ] Kubernetes deployment (Helm)
+- [x] Kubernetes deployment (Helm, Gateway API)
 - [ ] Frontend (React and / or Angular)
 - [ ] Public demo on the cloud (k3s, HTTPS)
 
@@ -115,7 +119,8 @@ Full reasoning, trade-offs and rejected alternatives are in the Architecture Dec
 [ADR-002 Layered architecture](docs/adr/ADR-002-layered-architecture.md) ·
 [ADR-003 Kafka events](docs/adr/ADR-003-event-driven-communication-with-kafka.md) ·
 [ADR-004 Circuit breaker](docs/adr/ADR-004-synchronous-calls-and-circuit-breaker.md) ·
-[ADR-005 Security](docs/adr/ADR-005-security-with-keycloak-and-jwt.md)
+[ADR-005 Security](docs/adr/ADR-005-security-with-keycloak-and-jwt.md) ·
+[ADR-006 Eureka & gateway on Kubernetes](docs/adr/ADR-006-service-discovery-and-gateway-on-kubernetes.md)
 
 Aggregates, state machines and business rules: [Domain model](docs/domain-model.md).
 

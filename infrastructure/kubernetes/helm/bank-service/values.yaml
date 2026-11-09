@@ -15,6 +15,9 @@ commonEnv:
     value: http://service-discovery:8761/eureka/
   - name: KEYCLOAK_JWK_SET_URI
     value: http://keycloak:8080/realms/bank/protocol/openid-connect/certs
+  # Expected "iss" of the tokens: the public URL of Keycloak (KC_HOSTNAME)
+  - name: KEYCLOAK_ISSUER_URI
+    value: http://keycloak.localhost/realms/bank
   # The observability stack (Tempo) is not deployed in the cluster yet: do not sample traces
   - name: MANAGEMENT_TRACING_SAMPLING_PROBABILITY
     value: "0.0"

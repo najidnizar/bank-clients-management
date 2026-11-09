@@ -1,0 +1,28 @@
+# Traefik, installed with Helm, used as the Gateway API implementation (the "gateway controller").
+# The community Ingress NGINX controller was retired in March 2026; the Gateway API is the recommended standard.
+
+# Traefik implements the Gateway API resources (GatewayClass, Gateway, HTTPRoute)
+providers:
+  kubernetesGateway:
+    enabled: true
+  kubernetesIngress:
+    enabled: false
+ingressClass:
+  enabled: false
+
+# The chart creates the GatewayClass "traefik"; the Gateway itself is defined in gateway.yaml (versioned with the project)
+gatewayClass:
+  enabled: true
+gateway:
+  enabled: false
+
+# Entry point "web" (container port 8000) bound to port 80 of the kind node, which kind-config.yaml publishes on the Mac.
+# hostPort suits a single-node local cluster; a cloud cluster would use a Service of type LoadBalancer instead.
+ports:
+  web:
+    hostPort: 80
+
+# No Service in front of Traefik: traffic reaches the pod directly through the node's port 80 (hostPort).
+# (A LoadBalancer Service would stay "pending" forever in kind, which has no cloud load balancer.)
+service:
+  enabled: false
