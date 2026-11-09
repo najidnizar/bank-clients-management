@@ -48,10 +48,10 @@ spec:
                 secretKeyRef:
                   name: keycloak-admin
                   key: password
-            # Same public issuer as in Docker Compose: tokens are obtained through
-            # "kubectl port-forward svc/keycloak 8180:8080", services fetch keys from http://keycloak:8080
+            # Public URL, exposed by the Gateway (gateway/gateway.yaml): tokens are issued with this issuer,
+            # while services fetch the signing keys inside the cluster from http://keycloak:8080
             - name: KC_HOSTNAME
-              value: http://localhost:8180
+              value: http://keycloak.localhost
             - name: KC_HOSTNAME_BACKCHANNEL_DYNAMIC
               value: "true"
             - name: KC_HEALTH_ENABLED

@@ -1,0 +1,48 @@
+# Gateway API resources: a single HTTP entry point for the platform, routing by host name.
+# *.localhost names resolve to the Mac itself (127.0.0.1), with no /etc/hosts entry needed.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: bank-gateway
+  namespace: bank
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 8000            # Traefik maps a listener to its entry point with the same port ("web" = 8000)
+      allowedRoutes:
+        namespaces:
+          from: Same        # only routes from the namespace "bank"
+---
+# http://api.localhost → API gateway (Spring Cloud Gateway), which then routes to the microservices
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: api
+  namespace: bank
+spec:
+  parentRefs:
+    - name: bank-gateway
+  hostnames:
+    - api.localhost
+  rules:
+    - backendRefs:
+        - name: customer-api-gateway
+          port: 8088
+---
+# http://keycloak.localhost → Keycloak (login, tokens, admin console)
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: keycloak
+  namespace: bank
+spec:
+  parentRefs:
+    - name: bank-gateway
+  hostnames:
+    - keycloak.localhost
+  rules:
+    - backendRefs:
+        - name: keycloak
+          port: 8080

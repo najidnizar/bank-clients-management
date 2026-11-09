@@ -21,4 +21,4 @@ for values in helm/values/*.yaml; do
 done
 
 kubectl get pods -n bank
-echo "✅ Services deployed. Gateway: kubectl port-forward -n bank svc/customer-api-gateway 8088:8088"
+echo "✅ Services deployed. API: http://api.localhost"
