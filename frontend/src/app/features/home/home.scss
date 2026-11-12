@@ -1,0 +1,19 @@
+h1 {
+  font: var(--mat-sys-headline-medium);
+}
+
+.api-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.ok {
+  color: var(--mat-sys-primary);
+}
+
+.error {
+  color: var(--mat-sys-error);
+}

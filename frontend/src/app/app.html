@@ -1,0 +1,28 @@
+<mat-toolbar class="toolbar">
+  <a routerLink="/" class="brand">
+    <mat-icon>account_balance</mat-icon>
+    <span>Bank Clients</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <mat-chip-set aria-label="Your roles">
+    @for (role of auth.roles(); track role) {
+      <mat-chip>{{ roleLabels[role] }}</mat-chip>
+    }
+  </mat-chip-set>
+
+  <span class="username">
+    <mat-icon>person</mat-icon>
+    {{ auth.username() }}
+  </span>
+
+  <button mat-button (click)="auth.logout()">
+    <mat-icon>logout</mat-icon>
+    Log out
+  </button>
+</mat-toolbar>
+
+<main class="content">
+  <router-outlet />
+</main>
