@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "Bank Clients"
+  },
+  "shell": {
+    "roles": "Vos rôles",
+    "language": "Langue",
+    "logout": "Se déconnecter"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "roles": {
+    "ADVISOR": "Conseiller",
+    "COMPLIANCE_OFFICER": "Responsable conformité",
+    "ADMIN": "Administrateur"
+  },
+  "titles": {
+    "home": "Accueil"
+  },
+  "home": {
+    "welcome": "Bienvenue, {{name}}",
+    "whatYouCanDo": "Ce que vous pouvez faire",
+    "actions": {
+      "consult": "Rechercher et consulter les clients, dossiers KYC, comptes et documents",
+      "advisor": "Créer et modifier des clients, ouvrir des comptes, déposer des documents",
+      "compliance": "Traiter les dossiers KYC",
+      "admin": "Bloquer, débloquer et clôturer des clients, changer le statut des comptes"
+    },
+    "api": {
+      "checking": "Vérification de l'API…",
+      "reachable": "API accessible",
+      "unreachable": "API inaccessible"
+    }
+  }
+}

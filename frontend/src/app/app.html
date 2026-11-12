@@ -1,14 +1,14 @@
 <mat-toolbar class="toolbar">
   <a routerLink="/" class="brand">
     <mat-icon>account_balance</mat-icon>
-    <span>Bank Clients</span>
+    <span>{{ 'app.name' | translate }}</span>
   </a>
 
   <span class="spacer"></span>
 
-  <mat-chip-set aria-label="Your roles">
+  <mat-chip-set [attr.aria-label]="'shell.roles' | translate">
     @for (role of auth.roles(); track role) {
-      <mat-chip>{{ roleLabels[role] }}</mat-chip>
+      <mat-chip>{{ 'roles.' + role | translate }}</mat-chip>
     }
   </mat-chip-set>
 
@@ -17,9 +17,31 @@
     {{ auth.username() }}
   </span>
 
-  <button mat-button (click)="auth.logout()">
+  <button
+    mat-button
+    [matMenuTriggerFor]="languageMenu"
+    [attr.aria-label]="'shell.language' | translate"
+    data-testid="language-menu"
+  >
+    <mat-icon>translate</mat-icon>
+    {{ language.current() | uppercase }}
+  </button>
+  <mat-menu #languageMenu="matMenu">
+    @for (lang of languages; track lang) {
+      <button
+        mat-menu-item
+        [attr.lang]="lang"
+        [attr.aria-current]="lang === language.current()"
+        (click)="language.switchTo(lang)"
+      >
+        {{ 'languages.' + lang | translate }}
+      </button>
+    }
+  </mat-menu>
+
+  <button mat-button (click)="auth.logout()" data-testid="logout">
     <mat-icon>logout</mat-icon>
-    Log out
+    {{ 'shell.logout' | translate }}
   </button>
 </mat-toolbar>
 

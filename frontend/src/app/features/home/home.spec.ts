@@ -4,6 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { Home } from './home';
 import { AuthService } from '../../core/auth/auth.service';
 import { Role } from '../../core/auth/role';
+import { provideTranslateTesting } from '../../../testing/translate-testing';
 
 describe('Home', () => {
   let httpMock: HttpTestingController;
@@ -14,6 +15,7 @@ describe('Home', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(), // HTTP calls are captured instead of being sent
+        provideTranslateTesting(),
         {
           provide: AuthService,
           useValue: { username: () => 'user', hasRole: (role: Role) => roles.includes(role) },

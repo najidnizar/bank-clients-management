@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "Bank Clients"
+  },
+  "shell": {
+    "roles": "Your roles",
+    "language": "Language",
+    "logout": "Log out"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "roles": {
+    "ADVISOR": "Advisor",
+    "COMPLIANCE_OFFICER": "Compliance officer",
+    "ADMIN": "Admin"
+  },
+  "titles": {
+    "home": "Home"
+  },
+  "home": {
+    "welcome": "Welcome, {{name}}",
+    "whatYouCanDo": "What you can do",
+    "actions": {
+      "consult": "Search and view customers, KYC cases, accounts and documents",
+      "advisor": "Register and update customers, open accounts, upload documents",
+      "compliance": "Review KYC cases",
+      "admin": "Block, unblock and close customers, change account status"
+    },
+    "api": {
+      "checking": "Checking the API…",
+      "reachable": "API reachable",
+      "unreachable": "API unreachable"
+    }
+  }
+}

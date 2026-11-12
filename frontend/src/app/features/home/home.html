@@ -1,20 +1,20 @@
-<h1>Welcome, {{ auth.username() }}</h1>
+<h1>{{ 'home.welcome' | translate: { name: auth.username() } }}</h1>
 
 <mat-card appearance="outlined">
   <mat-card-header>
-    <mat-card-title>What you can do</mat-card-title>
+    <mat-card-title>{{ 'home.whatYouCanDo' | translate }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <ul>
-      <li>Search and view customers, KYC cases, accounts and documents</li>
+      <li>{{ 'home.actions.consult' | translate }}</li>
       @if (auth.hasRole('ADVISOR')) {
-        <li>Register and update customers, open accounts, upload documents</li>
+        <li>{{ 'home.actions.advisor' | translate }}</li>
       }
       @if (auth.hasRole('COMPLIANCE_OFFICER')) {
-        <li>Review KYC cases</li>
+        <li>{{ 'home.actions.compliance' | translate }}</li>
       }
       @if (auth.hasRole('ADMIN')) {
-        <li>Block, unblock and close customers, change account status</li>
+        <li>{{ 'home.actions.admin' | translate }}</li>
       }
     </ul>
   </mat-card-content>
@@ -22,10 +22,10 @@
 
 <p class="api-status">
   @if (apiStatus.isLoading()) {
-    Checking the API…
+    {{ 'home.api.checking' | translate }}
   } @else if (apiStatus.error()) {
-    <mat-icon class="error">error</mat-icon> API unreachable
+    <mat-icon class="error">error</mat-icon> {{ 'home.api.unreachable' | translate }}
   } @else {
-    <mat-icon class="ok">check_circle</mat-icon> API reachable
+    <mat-icon class="ok">check_circle</mat-icon> {{ 'home.api.reachable' | translate }}
   }
 </p>

@@ -1,6 +1,13 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { TitleStrategy, provideRouter } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
 import {
   AutoRefreshTokenService,
@@ -14,6 +21,9 @@ import {
 } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
+import { DEFAULT_LANGUAGE } from './core/i18n/language';
+import { LanguageService } from './core/i18n/language.service';
+import { TranslatedTitleStrategy } from './core/i18n/translated-title.strategy';
 
 // The access token is only added to calls to our own API (/api/...), never to other domains.
 const apiCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
@@ -43,6 +53,14 @@ export const appConfig: ApplicationConfig = {
     { provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG, useValue: [apiCondition] },
     provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     provideRouter(routes),
+    { provide: TitleStrategy, useClass: TranslatedTitleStrategy },
+    // Translations: public/i18n/<language>.json, downloaded when a language is used.
+    provideTranslateService({
+      loader: provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
+      fallbackLang: DEFAULT_LANGUAGE, // a key missing in French is shown in English
+    }),
+    // Load the language before the first screen is displayed (no flash of untranslated keys).
+    provideAppInitializer(() => inject(LanguageService).init()),
     // index.html loads the "Material Symbols Outlined" icon font: make it the default for <mat-icon>.
     { provide: MAT_ICON_DEFAULT_OPTIONS, useValue: { fontSet: 'material-symbols-outlined' } },
   ],
