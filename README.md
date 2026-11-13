@@ -17,6 +17,7 @@ Microservices platform for the **customer lifecycle of a retail bank**: onboardi
 - **Observability**: distributed tracing (**OpenTelemetry → Tempo**), metrics (**Prometheus**), **Grafana** dashboard
 - **Docker** multi-stage images, one-command startup, **GitHub Actions CI**, **Testcontainers** tests
 - **Kubernetes**: Helm chart for the services, StatefulSets for the infrastructure, probes, Gateway API entry point — [docs/kubernetes.md](docs/kubernetes.md)
+- **Angular 22 frontend** (in progress): Keycloak login with PKCE, role-aware UI, French / English — [docs/frontend.md](docs/frontend.md)
 
 ## Architecture
 
