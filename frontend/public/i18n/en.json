@@ -17,7 +17,20 @@
     "ADMIN": "Admin"
   },
   "titles": {
-    "home": "Home"
+    "home": "Home",
+    "customers": "Customers"
+  },
+  "nav": {
+    "customers": "Customers"
+  },
+  "customers": {
+    "list": {
+      "title": "Customers",
+      "loading": "Loading customers…",
+      "error": "The customers could not be loaded.",
+      "empty": "No customers yet.",
+      "total": "{{count}} customer(s)"
+    }
   },
   "home": {
     "welcome": "Welcome, {{name}}",

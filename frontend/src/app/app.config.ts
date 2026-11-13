@@ -24,6 +24,7 @@ import { routes } from './app.routes';
 import { DEFAULT_LANGUAGE } from './core/i18n/language';
 import { LanguageService } from './core/i18n/language.service';
 import { TranslatedTitleStrategy } from './core/i18n/translated-title.strategy';
+import { provideApi } from './api/onboarding';
 
 // The access token is only added to calls to our own API (/api/...), never to other domains.
 const apiCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
@@ -52,6 +53,8 @@ export const appConfig: ApplicationConfig = {
     }),
     { provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG, useValue: [apiCondition] },
     provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
+    // Generated client: '' replaces http://localhost:8080 from the contract, so calls go to /api/... on our origin.
+    provideApi(''),
     provideRouter(routes),
     { provide: TitleStrategy, useClass: TranslatedTitleStrategy },
     // Translations: public/i18n/<language>.json, downloaded when a language is used.

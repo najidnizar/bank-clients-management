@@ -1,0 +1,31 @@
+firstName,lastName,dateOfBirth,email,phoneNumber
+Camille,Martin,1985-03-14,camille.martin@example.com,+33199000001
+Youssef,El Amrani,1990-07-02,youssef.elamrani@example.com,+212600000001
+Léa,Bernard,1978-11-23,lea.bernard@example.com,+33199000002
+Mehdi,Benali,1988-01-30,mehdi.benali@example.com,+33199000003
+Fatima Zahra,Alaoui,1993-05-17,fatimazahra.alaoui@example.com,+212600000002
+Hugo,Dubois,1982-09-08,hugo.dubois@example.com,+33199000004
+Salma,Bennani,1996-12-01,salma.bennani@example.com,+212600000003
+Julien,Thomas,1975-04-19,julien.thomas@example.com,+33199000005
+Imane,Tazi,1991-08-25,imane.tazi@example.com,+212600000004
+Chloé,Robert,1987-02-11,chloe.robert@example.com,+33199000006
+Omar,Chraibi,1983-06-06,omar.chraibi@example.com,+212600000005
+Manon,Richard,1999-10-14,manon.richard@example.com,+33199000007
+Karim,Ouazzani,1979-03-28,karim.ouazzani@example.com,+212600000006
+Lucas,Petit,1994-07-21,lucas.petit@example.com,+33199000008
+Nadia,Berrada,1986-11-09,nadia.berrada@example.com,+212600000007
+Emma,Durand,1992-01-04,emma.durand@example.com,+33199000009
+Hamza,Idrissi,1997-05-30,hamza.idrissi@example.com,+212600000008
+Thomas,Leroy,1980-08-16,thomas.leroy@example.com,+33199000010
+Sara,Benjelloun,1989-12-27,sara.benjelloun@example.com,+212600000009
+Inès,Moreau,1995-03-03,ines.moreau@example.com,+33199000011
+Anas,Fassi,1984-09-12,anas.fassi@example.com,+212600000010
+Louis,Simon,1977-06-24,louis.simon@example.com,+33199000012
+Kenza,Lahlou,1998-02-15,kenza.lahlou@example.com,+212600000011
+Sarah,Laurent,1990-10-07,sarah.laurent@example.com,+33199000013
+Ayoub,Kettani,1987-04-02,ayoub.kettani@example.com,+212600000012
+Nathan,Lefebvre,1993-08-29,nathan.lefebvre@example.com,+33199000014
+Ghita,Sefrioui,1981-01-18,ghita.sefrioui@example.com,+212600000013
+Jade,Michel,1996-06-13,jade.michel@example.com,+33199000015
+Rachid,Amrani,1976-12-05,rachid.amrani@example.com,+212600000014
+Zoé,Garcia,2000-04-22,zoe.garcia@example.com,+33199000016

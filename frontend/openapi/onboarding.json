@@ -1,0 +1,287 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Customer Onboarding API", "version": "v1" },
+  "servers": [{ "url": "http://localhost:8080", "description": "Generated server url" }],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [{ "name": "Customers", "description": "Customer management APIs" }],
+  "paths": {
+    "/api/v1/customers/{id}": {
+      "get": {
+        "tags": ["Customers"],
+        "operationId": "getCustomerById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Customers"],
+        "operationId": "updateCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateCustomerRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+          }
+        }
+      }
+    },
+    "/api/v1/customers": {
+      "get": {
+        "tags": ["Customers"],
+        "operationId": "getCustomers",
+        "parameters": [
+          { "name": "firstName", "in": "query", "required": false, "schema": { "type": "string" } },
+          { "name": "lastName", "in": "query", "required": false, "schema": { "type": "string" } },
+          { "name": "email", "in": "query", "required": false, "schema": { "type": "string" } },
+          {
+            "name": "customerNumber",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["ACTIVE", "BLOCKED", "CLOSED"] }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/Pageable" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/PageCustomerResponse" } }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Customers"],
+        "summary": "Create a new customer",
+        "description": "Creates a new customer and generates a unique customer number.",
+        "operationId": "createCustomer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateCustomerRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Customer created successfully",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+          },
+          "409": {
+            "description": "Email already exists",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+          }
+        }
+      }
+    },
+    "/api/v1/customers/{id}/unblock": {
+      "post": {
+        "tags": ["Customers"],
+        "operationId": "unblockCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/api/v1/customers/{id}/close": {
+      "post": {
+        "tags": ["Customers"],
+        "operationId": "closeCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/api/v1/customers/{id}/block": {
+      "post": {
+        "tags": ["Customers"],
+        "operationId": "blockCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/api/v1/customers/ping": {
+      "get": {
+        "tags": ["Customers"],
+        "operationId": "ping",
+        "responses": {
+          "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
+        }
+      }
+    },
+    "/api/v1/customers/customer-number/{customerNumber}": {
+      "get": {
+        "tags": ["Customers"],
+        "operationId": "getCustomerByCustomerNumber",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UpdateCustomerRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": { "type": "string", "maxLength": 100, "minLength": 0 },
+          "lastName": { "type": "string", "maxLength": 100, "minLength": 0 },
+          "dateOfBirth": { "type": "string", "format": "date" },
+          "email": { "type": "string", "format": "email", "maxLength": 255, "minLength": 0 },
+          "phoneNumber": { "type": "string", "minLength": 1 }
+        },
+        "required": ["dateOfBirth", "email", "firstName", "lastName", "phoneNumber"]
+      },
+      "CustomerResponse": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "integer", "format": "int64" },
+          "id": { "type": "string", "format": "uuid" },
+          "customerNumber": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "phoneNumber": { "type": "string" },
+          "status": { "type": "string", "enum": ["ACTIVE", "BLOCKED", "CLOSED"] }
+        }
+      },
+      "CreateCustomerRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": { "type": "string", "maxLength": 100, "minLength": 0 },
+          "lastName": { "type": "string", "maxLength": 100, "minLength": 0 },
+          "dateOfBirth": { "type": "string", "format": "date" },
+          "email": { "type": "string", "format": "email", "maxLength": 255, "minLength": 0 },
+          "phoneNumber": { "type": "string", "minLength": 1 }
+        },
+        "required": ["dateOfBirth", "email", "firstName", "lastName", "phoneNumber"]
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": { "type": "integer", "format": "int32", "minimum": 0 },
+          "size": { "type": "integer", "format": "int32", "minimum": 1 },
+          "sort": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "PageCustomerResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CustomerResponse" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "first": { "type": "boolean" },
+          "last": { "type": "boolean" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": { "type": "integer", "format": "int64" },
+          "paged": { "type": "boolean" },
+          "pageNumber": { "type": "integer", "format": "int32" },
+          "pageSize": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "unpaged": { "type": "boolean" }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": { "type": "boolean" },
+          "sorted": { "type": "boolean" },
+          "unsorted": { "type": "boolean" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "Keycloak access token. Get one with: ./scripts/get-token.sh advisor",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

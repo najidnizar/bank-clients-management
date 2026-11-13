@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,6 +24,7 @@ import { LanguageService } from './core/i18n/language.service';
     MatIconModule,
     MatChipsModule,
     MatMenuModule,
+    RouterLinkActive,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

@@ -1,0 +1,20 @@
+<h1>{{ 'customers.list.title' | translate }}</h1>
+
+@if (customers.isLoading()) {
+  <p>{{ 'customers.list.loading' | translate }}</p>
+} @else if (customers.error()) {
+  <p>{{ 'customers.list.error' | translate }}</p>
+} @else {
+  @let page = customers.value();
+  <p>{{ 'customers.list.total' | translate: { count: page?.totalElements ?? 0 } }}</p>
+  <ul>
+    @for (customer of page?.content ?? []; track customer.id) {
+      <li>
+        {{ customer.customerNumber }} — {{ customer.firstName }} {{ customer.lastName }}
+        ({{ customer.status }})
+      </li>
+    } @empty {
+      <li>{{ 'customers.list.empty' | translate }}</li>
+    }
+  </ul>
+}

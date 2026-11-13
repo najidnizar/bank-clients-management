@@ -4,6 +4,12 @@
     <span>{{ 'app.name' | translate }}</span>
   </a>
 
+  <nav>
+    <a mat-button routerLink="/customers" routerLinkActive="active">
+      {{ 'nav.customers' | translate }}
+    </a>
+  </nav>
+
   <span class="spacer"></span>
 
   <mat-chip-set [attr.aria-label]="'shell.roles' | translate">

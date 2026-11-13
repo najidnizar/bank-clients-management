@@ -17,7 +17,20 @@
     "ADMIN": "Administrateur"
   },
   "titles": {
-    "home": "Accueil"
+    "home": "Accueil",
+    "customers": "Clients"
+  },
+  "nav": {
+    "customers": "Clients"
+  },
+  "customers": {
+    "list": {
+      "title": "Clients",
+      "loading": "Chargement des clients…",
+      "error": "Impossible de charger les clients.",
+      "empty": "Aucun client pour l'instant.",
+      "total": "{{count}} client(s)"
+    }
   },
   "home": {
     "welcome": "Bienvenue, {{name}}",
