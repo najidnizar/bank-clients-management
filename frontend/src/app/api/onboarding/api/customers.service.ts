@@ -166,10 +166,10 @@ export class CustomersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createCustomerRequest === null || createCustomerRequest === undefined) {
             throw new Error('Required parameter createCustomerRequest was null or undefined when calling createCustomer.');
         }
@@ -180,7 +180,7 @@ export class CustomersService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -234,10 +234,10 @@ export class CustomersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public getCustomerByCustomerNumber(customerNumber: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public getCustomerByCustomerNumber(customerNumber: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (customerNumber === null || customerNumber === undefined) {
             throw new Error('Required parameter customerNumber was null or undefined when calling getCustomerByCustomerNumber.');
         }
@@ -248,7 +248,7 @@ export class CustomersService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -292,10 +292,10 @@ export class CustomersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCustomerById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public getCustomerById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public getCustomerById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public getCustomerById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCustomerById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public getCustomerById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public getCustomerById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public getCustomerById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getCustomerById.');
         }
@@ -306,7 +306,7 @@ export class CustomersService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -355,10 +355,10 @@ export class CustomersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerResponse>;
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerResponse>>;
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerResponse>>;
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerResponse>;
+    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerResponse>>;
+    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerResponse>>;
+    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (pageable === null || pageable === undefined) {
             throw new Error('Required parameter pageable was null or undefined when calling getCustomers.');
         }
@@ -425,7 +425,7 @@ export class CustomersService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -469,10 +469,10 @@ export class CustomersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public ping(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public ping(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public ping(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public ping(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public ping(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public ping(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public ping(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public ping(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -480,7 +480,7 @@ export class CustomersService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -582,10 +582,10 @@ export class CustomersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateCustomer.');
         }
@@ -599,7 +599,7 @@ export class CustomersService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

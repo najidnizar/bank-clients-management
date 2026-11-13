@@ -20,7 +20,9 @@
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } }
+            }
           }
         }
       },
@@ -46,7 +48,9 @@
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } }
+            }
           }
         }
       }
@@ -82,7 +86,9 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": { "schema": { "$ref": "#/components/schemas/PageCustomerResponse" } }
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PageCustomerResponse" }
+              }
             }
           }
         }
@@ -103,15 +109,21 @@
         "responses": {
           "201": {
             "description": "Customer created successfully",
-            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } }
+            }
           },
           "400": {
             "description": "Invalid request",
-            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } }
+            }
           },
           "409": {
             "description": "Email already exists",
-            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } }
+            }
           }
         }
       }
@@ -166,7 +178,10 @@
         "tags": ["Customers"],
         "operationId": "ping",
         "responses": {
-          "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "string" } } } }
+          "200": {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "string" } } }
+          }
         }
       }
     },
@@ -185,7 +200,9 @@
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CustomerResponse" } }
+            }
           }
         }
       }
