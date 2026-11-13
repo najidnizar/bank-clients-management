@@ -1,20 +1,51 @@
 <h1>{{ 'customers.list.title' | translate }}</h1>
 
 @if (customers.isLoading()) {
-  <p>{{ 'customers.list.loading' | translate }}</p>
-} @else if (customers.error()) {
-  <p>{{ 'customers.list.error' | translate }}</p>
+  <mat-progress-bar mode="indeterminate" />
+}
+
+@if (customers.error()) {
+  <p class="error">{{ 'customers.list.error' | translate }}</p>
 } @else {
   @let page = customers.value();
-  <p>{{ 'customers.list.total' | translate: { count: page?.totalElements ?? 0 } }}</p>
-  <ul>
-    @for (customer of page?.content ?? []; track customer.id) {
-      <li>
-        {{ customer.customerNumber }} — {{ customer.firstName }} {{ customer.lastName }}
-        ({{ customer.status }})
-      </li>
-    } @empty {
-      <li>{{ 'customers.list.empty' | translate }}</li>
-    }
-  </ul>
+
+  <table mat-table [dataSource]="page?.content ?? []">
+    <ng-container matColumnDef="customerNumber">
+      <th mat-header-cell *matHeaderCellDef>{{ 'customers.fields.customerNumber' | translate }}</th>
+      <td mat-cell *matCellDef="let customer">{{ customer.customerNumber }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>{{ 'customers.fields.name' | translate }}</th>
+      <td mat-cell *matCellDef="let customer">{{ customer.firstName }} {{ customer.lastName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>{{ 'customers.fields.email' | translate }}</th>
+      <td mat-cell *matCellDef="let customer">{{ customer.email }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>{{ 'customers.fields.status' | translate }}</th>
+      <td mat-cell *matCellDef="let customer">{{ 'customers.status.' + customer.status | translate }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <!-- Shown when dataSource is empty -->
+    <tr class="mat-mdc-no-data-row" *matNoDataRow>
+      <td class="mat-mdc-cell" [attr.colspan]="displayedColumns.length">
+        {{ 'customers.list.empty' | translate }}
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    [length]="page?.totalElements ?? 0"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="onPage($event)"
+  />
 }

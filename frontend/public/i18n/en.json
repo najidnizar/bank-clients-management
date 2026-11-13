@@ -30,6 +30,17 @@
       "error": "The customers could not be loaded.",
       "empty": "No customers yet.",
       "total": "{{count}} customer(s)"
+    },
+    "fields": {
+      "customerNumber": "Customer no.",
+      "name": "Name",
+      "email": "Email",
+      "status": "Status"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "BLOCKED": "Blocked",
+      "CLOSED": "Closed"
     }
   },
   "home": {

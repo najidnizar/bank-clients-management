@@ -30,6 +30,17 @@
       "error": "Impossible de charger les clients.",
       "empty": "Aucun client pour l'instant.",
       "total": "{{count}} client(s)"
+    },
+    "fields": {
+      "customerNumber": "N° client",
+      "name": "Nom",
+      "email": "E-mail",
+      "status": "Statut"
+    },
+    "status": {
+      "ACTIVE": "Actif",
+      "BLOCKED": "Bloqué",
+      "CLOSED": "Clôturé"
     }
   },
   "home": {
