@@ -27,3 +27,6 @@ resilience4j:
           - io.github.najidnizar.bankclientsmanagement.customer_account_service.exception.CustomerNotFoundException
           - org.springframework.security.access.AccessDeniedException
           - feign.FeignException$FeignClientException
+
+springdoc:
+  default-produces-media-type: application/json
