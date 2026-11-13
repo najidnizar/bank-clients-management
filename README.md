@@ -51,6 +51,15 @@ cd infrastructure/docker
 docker compose --profile apps up -d --build
 ```
 
+### Demo data
+
+```bash
+./scripts/seed-demo-data.sh
+```
+
+Creates 30 fictitious customers **through the API** (gateway + Keycloak token), so validation, security and Kafka apply: each customer also gets a KYC case. Safe to run several times (existing customers are skipped). Requires `jq`.
+
+
 Get an access token (demo users `advisor`, `compliance`, `admin`; password = user name) and call the API through the gateway:
 
 ```bash
