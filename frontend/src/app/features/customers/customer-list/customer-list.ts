@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, linkedSignal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CustomersService } from '../../../api/onboarding';
+import { CustomersService, PageCustomerResponse } from '../../../api/onboarding';
 
 @Component({
   selector: 'app-customer-list',
@@ -27,6 +27,11 @@ export class CustomerList {
       sort: ['customerNumber,asc'], // always sort when paginating: SQL order is not guaranteed otherwise
     }),
     stream: ({ params }) => this.customersService.getCustomers(params),
+  });
+
+  protected readonly page = linkedSignal<PageCustomerResponse | undefined, PageCustomerResponse | undefined>({
+  source: () => (this.customers.hasValue() ? this.customers.value() : undefined),
+  computation: (current, previous) => current ?? previous?.value,
   });
 
   protected onPage(event: PageEvent): void {

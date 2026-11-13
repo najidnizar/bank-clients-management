@@ -57,5 +57,14 @@
       "reachable": "API accessible",
       "unreachable": "API inaccessible"
     }
+  },
+  "paginator": {
+    "itemsPerPage": "Éléments par page",
+    "nextPage": "Page suivante",
+    "previousPage": "Page précédente",
+    "firstPage": "Première page",
+    "lastPage": "Dernière page",
+    "range": "{{start}} – {{end}} sur {{length}}",
+    "empty": "0 sur 0"
   }
 }

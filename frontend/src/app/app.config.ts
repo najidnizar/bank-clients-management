@@ -24,7 +24,9 @@ import { routes } from './app.routes';
 import { DEFAULT_LANGUAGE } from './core/i18n/language';
 import { LanguageService } from './core/i18n/language.service';
 import { TranslatedTitleStrategy } from './core/i18n/translated-title.strategy';
+import { TranslatedPaginatorIntl } from './core/i18n/translated-pagination';
 import { provideApi } from './api/onboarding';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 // The access token is only added to calls to our own API (/api/...), never to other domains.
 const apiCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
@@ -66,5 +68,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => inject(LanguageService).init()),
     // index.html loads the "Material Symbols Outlined" icon font: make it the default for <mat-icon>.
     { provide: MAT_ICON_DEFAULT_OPTIONS, useValue: { fontSet: 'material-symbols-outlined' } },
+        // Translated texts for every paginator (replaces Material's English defaults).
+    { provide: MatPaginatorIntl, useClass: TranslatedPaginatorIntl },
   ],
 };

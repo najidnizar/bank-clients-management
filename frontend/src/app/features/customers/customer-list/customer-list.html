@@ -7,9 +7,8 @@
 @if (customers.error()) {
   <p class="error">{{ 'customers.list.error' | translate }}</p>
 } @else {
-  @let page = customers.value();
 
-  <table mat-table [dataSource]="page?.content ?? []">
+  <table mat-table [dataSource]="page()?.content ?? []">
     <ng-container matColumnDef="customerNumber">
       <th mat-header-cell *matHeaderCellDef>{{ 'customers.fields.customerNumber' | translate }}</th>
       <td mat-cell *matCellDef="let customer">{{ customer.customerNumber }}</td>
@@ -42,7 +41,7 @@
   </table>
 
   <mat-paginator
-    [length]="page?.totalElements ?? 0"
+    [length]="page()?.totalElements ?? 0"
     [pageIndex]="pageIndex()"
     [pageSize]="pageSize()"
     [pageSizeOptions]="[10, 20, 50]"
