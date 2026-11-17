@@ -7,6 +7,26 @@
 @if (customers.error()) {
   <p class="error">{{ 'customers.list.error' | translate }}</p>
 } @else {
+  <div class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'customers.search.lastName' | translate }}</mat-label>
+      <input matInput #lastNameInput (keyup.enter)="search(lastNameInput.value)" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'customers.fields.status' | translate }}</mat-label>
+      <mat-select [value]="statusFilter()" (selectionChange)="filterByStatus($event.value)">
+        <mat-option value="">{{ 'customers.search.allStatuses' | translate }}</mat-option>
+        @for (status of statuses; track status) {
+          <mat-option [value]="status">{{ 'customers.status.' + status | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button (click)="search(lastNameInput.value)">
+      {{ 'customers.search.submit' | translate }}
+    </button>
+  </div>
 
   <table
     mat-table

@@ -30,7 +30,9 @@ public final class CustomerSpecification {
                 return criteriaBuilder.conjunction();
             }
 
-            return criteriaBuilder.equal(root.get("lastName"), lastName);
+            return criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("lastName")),
+                    "%" + lastName.trim().toLowerCase() + "%");
         };
     }
 
@@ -77,7 +79,5 @@ public final class CustomerSpecification {
                 .and(hasCustomerNumber(criteria.customerNumber()))
                 .and(hasStatus(criteria.status()));
     }
-
-
 
 }

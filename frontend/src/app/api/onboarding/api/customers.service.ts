@@ -33,6 +33,44 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
+export interface BlockCustomerRequestParams {
+    id: string;
+}
+
+export interface CloseCustomerRequestParams {
+    id: string;
+}
+
+export interface CreateCustomerRequestParams {
+    createCustomerRequest: CreateCustomerRequest;
+}
+
+export interface GetCustomerByCustomerNumberRequestParams {
+    customerNumber: string;
+}
+
+export interface GetCustomerByIdRequestParams {
+    id: string;
+}
+
+export interface GetCustomersRequestParams {
+    pageable: Pageable;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    customerNumber?: string;
+    status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED';
+}
+
+export interface UnblockCustomerRequestParams {
+    id: string;
+}
+
+export interface UpdateCustomerRequestParams {
+    id: string;
+    updateCustomerRequest: UpdateCustomerRequest;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -45,15 +83,16 @@ export class CustomersService extends BaseService {
 
     /**
      * @endpoint post /api/v1/customers/{id}/block
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public blockCustomer(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public blockCustomer(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public blockCustomer(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public blockCustomer(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public blockCustomer(requestParameters: BlockCustomerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public blockCustomer(requestParameters: BlockCustomerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public blockCustomer(requestParameters: BlockCustomerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public blockCustomer(requestParameters: BlockCustomerRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling blockCustomer.');
         }
@@ -102,15 +141,16 @@ export class CustomersService extends BaseService {
 
     /**
      * @endpoint post /api/v1/customers/{id}/close
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public closeCustomer(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public closeCustomer(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public closeCustomer(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public closeCustomer(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public closeCustomer(requestParameters: CloseCustomerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public closeCustomer(requestParameters: CloseCustomerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public closeCustomer(requestParameters: CloseCustomerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public closeCustomer(requestParameters: CloseCustomerRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling closeCustomer.');
         }
@@ -161,15 +201,16 @@ export class CustomersService extends BaseService {
      * Create a new customer
      * Creates a new customer and generates a unique customer number.
      * @endpoint post /api/v1/customers
-     * @param createCustomerRequest 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public createCustomer(createCustomerRequest: CreateCustomerRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createCustomer(requestParameters: CreateCustomerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public createCustomer(requestParameters: CreateCustomerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public createCustomer(requestParameters: CreateCustomerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public createCustomer(requestParameters: CreateCustomerRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const createCustomerRequest = requestParameters?.createCustomerRequest;
         if (createCustomerRequest === null || createCustomerRequest === undefined) {
             throw new Error('Required parameter createCustomerRequest was null or undefined when calling createCustomer.');
         }
@@ -229,15 +270,16 @@ export class CustomersService extends BaseService {
 
     /**
      * @endpoint get /api/v1/customers/customer-number/{customerNumber}
-     * @param customerNumber 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public getCustomerByCustomerNumber(customerNumber: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public getCustomerByCustomerNumber(customerNumber: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCustomerByCustomerNumber(requestParameters: GetCustomerByCustomerNumberRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public getCustomerByCustomerNumber(requestParameters: GetCustomerByCustomerNumberRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public getCustomerByCustomerNumber(requestParameters: GetCustomerByCustomerNumberRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public getCustomerByCustomerNumber(requestParameters: GetCustomerByCustomerNumberRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const customerNumber = requestParameters?.customerNumber;
         if (customerNumber === null || customerNumber === undefined) {
             throw new Error('Required parameter customerNumber was null or undefined when calling getCustomerByCustomerNumber.');
         }
@@ -287,15 +329,16 @@ export class CustomersService extends BaseService {
 
     /**
      * @endpoint get /api/v1/customers/{id}
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCustomerById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public getCustomerById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public getCustomerById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public getCustomerById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCustomerById(requestParameters: GetCustomerByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public getCustomerById(requestParameters: GetCustomerByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public getCustomerById(requestParameters: GetCustomerByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public getCustomerById(requestParameters: GetCustomerByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getCustomerById.');
         }
@@ -345,23 +388,24 @@ export class CustomersService extends BaseService {
 
     /**
      * @endpoint get /api/v1/customers
-     * @param pageable 
-     * @param firstName 
-     * @param lastName 
-     * @param email 
-     * @param customerNumber 
-     * @param status 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerResponse>;
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerResponse>>;
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerResponse>>;
-    public getCustomers(pageable: Pageable, firstName?: string, lastName?: string, email?: string, customerNumber?: string, status?: 'ACTIVE' | 'BLOCKED' | 'CLOSED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCustomers(requestParameters: GetCustomersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageCustomerResponse>;
+    public getCustomers(requestParameters: GetCustomersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageCustomerResponse>>;
+    public getCustomers(requestParameters: GetCustomersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageCustomerResponse>>;
+    public getCustomers(requestParameters: GetCustomersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const pageable = requestParameters?.pageable;
         if (pageable === null || pageable === undefined) {
             throw new Error('Required parameter pageable was null or undefined when calling getCustomers.');
         }
+        const firstName = requestParameters?.firstName;
+        const lastName = requestParameters?.lastName;
+        const email = requestParameters?.email;
+        const customerNumber = requestParameters?.customerNumber;
+        const status = requestParameters?.status;
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -519,15 +563,16 @@ export class CustomersService extends BaseService {
 
     /**
      * @endpoint post /api/v1/customers/{id}/unblock
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public unblockCustomer(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public unblockCustomer(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public unblockCustomer(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public unblockCustomer(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public unblockCustomer(requestParameters: UnblockCustomerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public unblockCustomer(requestParameters: UnblockCustomerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public unblockCustomer(requestParameters: UnblockCustomerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public unblockCustomer(requestParameters: UnblockCustomerRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling unblockCustomer.');
         }
@@ -576,19 +621,20 @@ export class CustomersService extends BaseService {
 
     /**
      * @endpoint put /api/v1/customers/{id}
-     * @param id 
-     * @param updateCustomerRequest 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
-    public updateCustomer(id: string, updateCustomerRequest: UpdateCustomerRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateCustomer(requestParameters: UpdateCustomerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerResponse>;
+    public updateCustomer(requestParameters: UpdateCustomerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerResponse>>;
+    public updateCustomer(requestParameters: UpdateCustomerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerResponse>>;
+    public updateCustomer(requestParameters: UpdateCustomerRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateCustomer.');
         }
+        const updateCustomerRequest = requestParameters?.updateCustomerRequest;
         if (updateCustomerRequest === null || updateCustomerRequest === undefined) {
             throw new Error('Required parameter updateCustomerRequest was null or undefined when calling updateCustomer.');
         }
