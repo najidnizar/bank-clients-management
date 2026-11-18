@@ -11,10 +11,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../../core/auth/auth.service';
 import { RouterLink } from '@angular/router';
-
+import { CustomerStatus } from '../../../shared/customer-status/customer-status'
+ 
 @Component({
   selector: 'app-customer-list',
-  imports: [MatTableModule, MatPaginatorModule, MatProgressBarModule, TranslatePipe, MatSortModule, MatButtonModule, MatInputModule, MatSelectModule, RouterLink],
+  imports: [MatTableModule, MatPaginatorModule, MatProgressBarModule, TranslatePipe, MatSortModule, MatButtonModule, MatInputModule, MatSelectModule, RouterLink, CustomerStatus ],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })

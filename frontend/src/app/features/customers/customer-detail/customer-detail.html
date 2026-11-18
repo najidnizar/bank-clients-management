@@ -1,0 +1,28 @@
+<a mat-button routerLink="/customers">
+  <mat-icon>arrow_back</mat-icon>
+  {{ 'customers.detail.back' | translate }}
+</a>
+
+@if (customer.isLoading()) {
+  <mat-progress-bar mode="indeterminate" />
+} @else if (customer.error()) {
+  <p class="error" role="alert">{{ 'customers.detail.error' | translate }}</p>
+} @else if (customer.value(); as c) {
+  <h1>
+    {{ c.firstName }} {{ c.lastName }}
+    <app-customer-status [status]="c.status" />
+  </h1>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <dl class="fields">
+        <dt>{{ 'customers.fields.customerNumber' | translate }}</dt>
+        <dd>{{ c.customerNumber }}</dd>
+        <dt>{{ 'customers.fields.email' | translate }}</dt>
+        <dd>{{ c.email }}</dd>
+        <dt>{{ 'customers.fields.phoneNumber' | translate }}</dt>
+        <dd>{{ c.phoneNumber }}</dd>
+      </dl>
+    </mat-card-content>
+  </mat-card>
+}

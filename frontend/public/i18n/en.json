@@ -19,7 +19,8 @@
   "titles": {
     "home": "Home",
     "customers": "Customers",
-    "newCustomer": "New customer"
+    "newCustomer": "New customer",
+    "customerDetail": "Customer"
   },
   "nav": {
     "customers": "Customers"
@@ -59,6 +60,10 @@
       "success": "Customer {{number}} created",
       "invalid": "The server rejected the data. Please check the form.",
       "error": "The customer could not be created. Please try again."
+    },
+    "detail": {
+      "back": "Back to the list",
+      "error": "This customer could not be loaded (it may not exist)."
     }
   },
   "home": {

@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { TitleStrategy, provideRouter } from '@angular/router';
+import { TitleStrategy, provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
@@ -57,7 +57,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     // Generated client: '' replaces http://localhost:8080 from the contract, so calls go to /api/... on our origin.
     provideApi(''),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     { provide: TitleStrategy, useClass: TranslatedTitleStrategy },
     // Translations: public/i18n/<language>.json, downloaded when a language is used.
     provideTranslateService({

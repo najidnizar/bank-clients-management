@@ -1,0 +1,23 @@
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 24px;
+}
+
+dt {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+dd {
+  margin: 0;
+}
+
+.error {
+  color: var(--mat-sys-error);
+}

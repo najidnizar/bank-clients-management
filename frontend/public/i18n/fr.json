@@ -19,7 +19,8 @@
   "titles": {
     "home": "Accueil",
     "customers": "Clients",
-    "newCustomer": "Nouveau client"
+    "newCustomer": "Nouveau client",
+    "customerDetail": "Client"
   },
   "nav": {
     "customers": "Clients"
@@ -59,6 +60,10 @@
       "success": "Client {{number}} créé",
       "invalid": "Le serveur a refusé les données. Vérifiez le formulaire.",
       "error": "Le client n'a pas pu être créé. Réessayez."
+    },
+    "detail": {
+      "back": "Retour à la liste",
+      "error": "Ce client n'a pas pu être chargé (il n'existe peut-être pas)."
     }
   },
   "home": {

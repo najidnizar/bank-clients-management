@@ -56,7 +56,7 @@ export class CustomerCreate {
             undefined,
             { duration: 4000 },
           );
-          this.router.navigate(['/customers']); // F4: go to the new customer's detail page instead
+          this.router.navigate(['/customers', customer.id]);
         },
         error: (error: HttpErrorResponse) => {
           this.saving.set(false);
