@@ -18,7 +18,8 @@
   },
   "titles": {
     "home": "Accueil",
-    "customers": "Clients"
+    "customers": "Clients",
+    "newCustomer": "Nouveau client"
   },
   "nav": {
     "customers": "Clients"
@@ -35,7 +36,11 @@
       "customerNumber": "N° client",
       "name": "Nom",
       "email": "E-mail",
-      "status": "Statut"
+      "status": "Statut",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "dateOfBirth": "Date de naissance",
+      "phoneNumber": "Téléphone"
     },
     "status": {
       "ACTIVE": "Actif",
@@ -46,6 +51,14 @@
       "lastName": "Nom",
       "allStatuses": "Tous les statuts",
       "submit": "Rechercher"
+    },
+    "create": {
+      "title": "Nouveau client",
+      "new": "Nouveau client",
+      "submit": "Créer",
+      "success": "Client {{number}} créé",
+      "invalid": "Le serveur a refusé les données. Vérifiez le formulaire.",
+      "error": "Le client n'a pas pu être créé. Réessayez."
     }
   },
   "home": {
@@ -71,5 +84,15 @@
     "lastPage": "Dernière page",
     "range": "{{start}} – {{end}} sur {{length}}",
     "empty": "0 sur 0"
+  },
+  "validation": {
+    "required": "Obligatoire",
+    "maxLength": "{{max}} caractères maximum",
+    "email": "Adresse e-mail invalide",
+    "underage": "Le client doit être majeur",
+    "emailAlreadyUsed": "Cette adresse e-mail est déjà utilisée par un autre client"
+  },
+  "common": {
+    "cancel": "Annuler"
   }
 }
