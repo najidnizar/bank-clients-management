@@ -43,6 +43,9 @@
     @if (form.controls.email.hasError('email')) {
       <mat-error>{{ 'validation.email' | translate }}</mat-error>
     }
+    @if (form.controls.email.hasError('alreadyUsed')) {
+      <mat-error>{{ 'validation.emailAlreadyUsed' | translate }}</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -53,8 +56,14 @@
     }
   </mat-form-field>
 
+  @if (serverError(); as errorKey) {
+    <p class="error" role="alert">{{ errorKey | translate }}</p>
+  }
+
   <div class="actions">
     <a mat-button routerLink="/customers">{{ 'common.cancel' | translate }}</a>
-    <button mat-flat-button type="submit">{{ 'customers.create.submit' | translate }}</button>
+    <button mat-flat-button type="submit" [disabled]="saving()">
+      {{ 'customers.create.submit' | translate }}
+    </button>
   </div>
 </form>
