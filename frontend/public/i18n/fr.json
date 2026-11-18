@@ -41,6 +41,11 @@
       "ACTIVE": "Actif",
       "BLOCKED": "Bloqué",
       "CLOSED": "Clôturé"
+    },
+    "search": {
+      "lastName": "Nom",
+      "allStatuses": "Tous les statuts",
+      "submit": "Rechercher"
     }
   },
   "home": {

@@ -9,10 +9,12 @@ import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { AuthService } from '../../../core/auth/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-customer-list',
-  imports: [MatTableModule, MatPaginatorModule, MatProgressBarModule, TranslatePipe, MatSortModule, MatButtonModule, MatInputModule, MatSelectModule],
+  imports: [MatTableModule, MatPaginatorModule, MatProgressBarModule, TranslatePipe, MatSortModule, MatButtonModule, MatInputModule, MatSelectModule, RouterLink],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })
@@ -27,6 +29,7 @@ export class CustomerList {
   protected readonly lastNameFilter = signal('');
   protected readonly statusFilter = signal<CustomerResponse.StatusEnum | ''>('');
   protected readonly statuses = Object.values(CustomerResponse.StatusEnum); // ['ACTIVE', 'BLOCKED', 'CLOSED']
+  protected readonly auth = inject(AuthService);
 
   // Reloads automatically whenever pageIndex or pageSize changes (they are read in `params`).
   protected readonly customers = rxResource({

@@ -1,5 +1,9 @@
 <h1>{{ 'customers.list.title' | translate }}</h1>
 
+@if (auth.hasRole('ADVISOR')) {
+  <a mat-flat-button routerLink="/customers/new">{{ 'customers.create.new' | translate }}</a>
+}
+
 @if (customers.isLoading()) {
   <mat-progress-bar mode="indeterminate" />
 }
