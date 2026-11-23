@@ -5,7 +5,7 @@
 
 @if (customer.isLoading()) {
   <mat-progress-bar mode="indeterminate" />
-} @else if (customer.error()) {
+} @if (customer.error()) {
   <p class="error" role="alert">{{ 'customers.detail.error' | translate }}</p>
 } @else if (customer.value(); as c) {
   <h1>
@@ -25,4 +25,22 @@
       </dl>
     </mat-card-content>
   </mat-card>
+
+  @if (auth.hasRole('ADMIN') && c.status !== 'CLOSED') {
+    <div class="actions">
+      @if (c.status === 'ACTIVE') {
+        <button mat-stroked-button [disabled]="busy()" (click)="changeStatus('block')">
+          {{ 'customers.actions.block.button' | translate }}
+        </button>
+      }
+      @if (c.status === 'BLOCKED') {
+        <button mat-stroked-button [disabled]="busy()" (click)="changeStatus('unblock')">
+          {{ 'customers.actions.unblock.button' | translate }}
+        </button>
+      }
+      <button mat-stroked-button class="danger" [disabled]="busy()" (click)="changeStatus('close')">
+        {{ 'customers.actions.close.button' | translate }}
+      </button>
+    </div>
+  }
 }

@@ -64,6 +64,31 @@
     "detail": {
       "back": "Retour à la liste",
       "error": "Ce client n'a pas pu être chargé (il n'existe peut-être pas)."
+    },
+    "actions": {
+      "block": {
+        "button": "Bloquer",
+        "title": "Bloquer ce client ?",
+        "message": "{{name}} sera bloqué : aucun nouveau compte ne pourra être ouvert tant qu'il ne sera pas débloqué.",
+        "confirm": "Bloquer",
+        "done": "Client bloqué"
+      },
+      "unblock": {
+        "button": "Débloquer",
+        "title": "Débloquer ce client ?",
+        "message": "{{name}} sera de nouveau actif.",
+        "confirm": "Débloquer",
+        "done": "Client débloqué"
+      },
+      "close": {
+        "button": "Clôturer",
+        "title": "Clôturer ce client ?",
+        "message": "{{name}} sera clôturé. Cette action est définitive.",
+        "confirm": "Clôturer le client",
+        "done": "Client clôturé"
+      },
+      "notAllowed": "Ce changement n'est pas autorisé pour le statut actuel du client.",
+      "error": "Le changement n'a pas pu être enregistré. Réessayez."
     }
   },
   "home": {

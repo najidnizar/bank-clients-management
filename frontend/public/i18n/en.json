@@ -64,6 +64,31 @@
     "detail": {
       "back": "Back to the list",
       "error": "This customer could not be loaded (it may not exist)."
+    },
+    "actions": {
+      "block": {
+        "button": "Block",
+        "title": "Block this customer?",
+        "message": "{{name}} will be blocked: no new account can be opened until the customer is unblocked.",
+        "confirm": "Block",
+        "done": "Customer blocked"
+      },
+      "unblock": {
+        "button": "Unblock",
+        "title": "Unblock this customer?",
+        "message": "{{name}} will be active again.",
+        "confirm": "Unblock",
+        "done": "Customer unblocked"
+      },
+      "close": {
+        "button": "Close",
+        "title": "Close this customer?",
+        "message": "{{name}} will be closed. This cannot be undone.",
+        "confirm": "Close the customer",
+        "done": "Customer closed"
+      },
+      "notAllowed": "This change is not allowed for the current status of the customer.",
+      "error": "The change could not be saved. Please try again."
     }
   },
   "home": {

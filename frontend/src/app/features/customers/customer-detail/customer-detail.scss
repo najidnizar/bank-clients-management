@@ -21,3 +21,13 @@ dd {
 .error {
   color: var(--mat-sys-error);
 }
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.danger {
+  color: var(--mat-sys-error);
+}
