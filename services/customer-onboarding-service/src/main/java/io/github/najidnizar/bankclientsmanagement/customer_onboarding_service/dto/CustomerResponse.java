@@ -3,6 +3,7 @@ package io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.d
 import io.github.najidnizar.bankclientsmanagement.customer_onboarding_service.entity.CustomerStatus;
 import lombok.Builder;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -17,6 +18,8 @@ public record CustomerResponse(
         String firstName,
 
         String lastName,
+
+        LocalDate dateOfBirth,
 
         String email,
 

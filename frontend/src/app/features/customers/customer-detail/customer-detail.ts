@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, inject, input, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
@@ -13,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../../core/auth/auth.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { ConfirmDialog, ConfirmDialogData } from '../../../shared/confirm-dialog/confirm-dialog';
 
 type CustomerAction = 'block' | 'unblock' | 'close';
@@ -21,6 +23,7 @@ type CustomerAction = 'block' | 'unblock' | 'close';
   selector: 'app-customer-detail',
   imports: [
     RouterLink,
+    DatePipe,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
@@ -37,6 +40,7 @@ export class CustomerDetail {
   private readonly snackBar = inject(MatSnackBar);
   private readonly translate = inject(TranslateService);
   protected readonly auth = inject(AuthService);
+  protected readonly language = inject(LanguageService); // the current language formats the dates
 
   protected readonly busy = signal(false); // disables the buttons while a change is being saved
 

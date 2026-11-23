@@ -18,6 +18,8 @@
       <dl class="fields">
         <dt>{{ 'customers.fields.customerNumber' | translate }}</dt>
         <dd>{{ c.customerNumber }}</dd>
+        <dt>{{ 'customers.fields.dateOfBirth' | translate }}</dt>
+        <dd>{{ c.dateOfBirth | date: 'longDate' : undefined : language.current() }}</dd>
         <dt>{{ 'customers.fields.email' | translate }}</dt>
         <dd>{{ c.email }}</dd>
         <dt>{{ 'customers.fields.phoneNumber' | translate }}</dt>

@@ -229,6 +229,7 @@
           "customerNumber": { "type": "string" },
           "firstName": { "type": "string" },
           "lastName": { "type": "string" },
+          "dateOfBirth": { "type": "string", "format": "date" },
           "email": { "type": "string" },
           "phoneNumber": { "type": "string" },
           "status": { "type": "string", "enum": ["ACTIVE", "BLOCKED", "CLOSED"] }
