@@ -20,7 +20,8 @@
     "home": "Home",
     "customers": "Customers",
     "newCustomer": "New customer",
-    "customerDetail": "Customer"
+    "customerDetail": "Customer",
+    "editCustomer": "Edit customer"
   },
   "nav": {
     "customers": "Customers"
@@ -89,6 +90,13 @@
       },
       "notAllowed": "This change is not allowed for the current status of the customer.",
       "error": "The change could not be saved. Please try again."
+    },
+    "edit": {
+      "button": "Edit",
+      "title": "Edit customer",
+      "submit": "Save",
+      "success": "Customer {{number}} updated",
+      "error": "The customer could not be updated. Please try again."
     }
   },
   "home": {

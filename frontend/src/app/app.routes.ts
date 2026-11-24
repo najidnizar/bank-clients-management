@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { roleGuard } from './core/auth/role.guard'
- 
+import { roleGuard } from './core/auth/role.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -13,7 +13,14 @@ export const routes: Routes = [
     title: 'titles.newCustomer',
     canActivate: [roleGuard('ADVISOR')],
     loadComponent: () =>
-      import('./features/customers/customer-create/customer-create').then((m) => m.CustomerCreate),
+      import('./features/customers/customer-form/customer-form').then((m) => m.CustomerForm),
+  },
+  {
+    path: 'customers/:id/edit',
+    title: 'titles.editCustomer',
+    canActivate: [roleGuard('ADVISOR')],
+    loadComponent: () =>
+      import('./features/customers/customer-form/customer-form').then((m) => m.CustomerForm),
   },
   {
     path: 'customers/:id',

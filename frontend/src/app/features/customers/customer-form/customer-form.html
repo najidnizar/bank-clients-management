@@ -1,4 +1,4 @@
-<h1>{{ 'customers.create.title' | translate }}</h1>
+<h1>{{ (isEdit() ? 'customers.edit.title' : 'customers.create.title') | translate }}</h1>
 
 <form [formGroup]="form" (ngSubmit)="submit()" class="form">
   <mat-form-field appearance="outline">
@@ -61,9 +61,11 @@
   }
 
   <div class="actions">
-    <a mat-button routerLink="/customers">{{ 'common.cancel' | translate }}</a>
+    <a mat-button [routerLink]="isEdit() ? ['/customers', id()] : ['/customers']">
+      {{ 'common.cancel' | translate }}
+    </a>
     <button mat-flat-button type="submit" [disabled]="saving()">
-      {{ 'customers.create.submit' | translate }}
+      {{ (isEdit() ? 'customers.edit.submit' : 'customers.create.submit') | translate }}
     </button>
   </div>
 </form>

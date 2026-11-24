@@ -20,7 +20,8 @@
     "home": "Accueil",
     "customers": "Clients",
     "newCustomer": "Nouveau client",
-    "customerDetail": "Client"
+    "customerDetail": "Client",
+    "editCustomer": "Modifier le client"
   },
   "nav": {
     "customers": "Clients"
@@ -89,6 +90,13 @@
       },
       "notAllowed": "Ce changement n'est pas autorisé pour le statut actuel du client.",
       "error": "Le changement n'a pas pu être enregistré. Réessayez."
+    },
+    "edit": {
+      "button": "Modifier",
+      "title": "Modifier le client",
+      "submit": "Enregistrer",
+      "success": "Client {{number}} mis à jour",
+      "error": "Le client n'a pas pu être mis à jour. Réessayez."
     }
   },
   "home": {
