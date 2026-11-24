@@ -1,0 +1,134 @@
+{
+  "app": {
+    "name": "Bank Clients"
+  },
+  "shell": {
+    "roles": "Your roles",
+    "language": "Language",
+    "logout": "Log out"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "roles": {
+    "ADVISOR": "Advisor",
+    "COMPLIANCE_OFFICER": "Compliance officer",
+    "ADMIN": "Admin"
+  },
+  "titles": {
+    "home": "Home",
+    "customers": "Customers",
+    "newCustomer": "New customer",
+    "customerDetail": "Customer",
+    "editCustomer": "Edit customer"
+  },
+  "nav": {
+    "customers": "Customers"
+  },
+  "customers": {
+    "list": {
+      "title": "Customers",
+      "error": "The customers could not be loaded.",
+      "empty": "No customers yet."
+    },
+    "fields": {
+      "customerNumber": "Customer no.",
+      "name": "Name",
+      "email": "Email",
+      "status": "Status",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "dateOfBirth": "Date of birth",
+      "phoneNumber": "Phone number"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "BLOCKED": "Blocked",
+      "CLOSED": "Closed"
+    },
+    "search": {
+      "lastName": "Last name",
+      "allStatuses": "All statuses",
+      "submit": "Search"
+    },
+    "create": {
+      "title": "New customer",
+      "new": "New customer",
+      "submit": "Create",
+      "success": "Customer {{number}} created",
+      "invalid": "The server rejected the data. Please check the form.",
+      "error": "The customer could not be created. Please try again."
+    },
+    "detail": {
+      "back": "Back to the list",
+      "error": "This customer could not be loaded (it may not exist)."
+    },
+    "actions": {
+      "block": {
+        "button": "Block",
+        "title": "Block this customer?",
+        "message": "{{name}} will be blocked: no new account can be opened until the customer is unblocked.",
+        "confirm": "Block",
+        "done": "Customer blocked"
+      },
+      "unblock": {
+        "button": "Unblock",
+        "title": "Unblock this customer?",
+        "message": "{{name}} will be active again.",
+        "confirm": "Unblock",
+        "done": "Customer unblocked"
+      },
+      "close": {
+        "button": "Close",
+        "title": "Close this customer?",
+        "message": "{{name}} will be closed. This cannot be undone.",
+        "confirm": "Close the customer",
+        "done": "Customer closed"
+      },
+      "notAllowed": "This change is not allowed for the current status of the customer.",
+      "error": "The change could not be saved. Please try again."
+    },
+    "edit": {
+      "button": "Edit",
+      "title": "Edit customer",
+      "submit": "Save",
+      "success": "Customer {{number}} updated",
+      "error": "The customer could not be updated. Please try again."
+    }
+  },
+  "home": {
+    "welcome": "Welcome, {{name}}",
+    "whatYouCanDo": "What you can do",
+    "actions": {
+      "consult": "Search and view customers, KYC cases, accounts and documents",
+      "advisor": "Register and update customers, open accounts, upload documents",
+      "compliance": "Review KYC cases",
+      "admin": "Block, unblock and close customers, change account status"
+    },
+    "api": {
+      "checking": "Checking the API…",
+      "reachable": "API reachable",
+      "unreachable": "API unreachable"
+    }
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "firstPage": "First page",
+    "lastPage": "Last page",
+    "range": "{{start}} – {{end}} of {{length}}",
+    "empty": "0 of 0"
+  },
+  "validation": {
+    "required": "Required",
+    "maxLength": "At most {{max}} characters",
+    "email": "Invalid email address",
+    "underage": "The customer must be an adult",
+    "emailAlreadyUsed": "This email address is already used by another customer"
+  },
+  "common": {
+    "cancel": "Cancel"
+  }
+}

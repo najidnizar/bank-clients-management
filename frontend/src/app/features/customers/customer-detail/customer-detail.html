@@ -1,0 +1,56 @@
+<a mat-button routerLink="/customers">
+  <mat-icon>arrow_back</mat-icon>
+  {{ 'customers.detail.back' | translate }}
+</a>
+
+@if (customer.isLoading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+@if (customer.error()) {
+  <p class="error" role="alert">{{ 'customers.detail.error' | translate }}</p>
+} @else if (customer.value(); as c) {
+  <h1>
+    {{ c.firstName }} {{ c.lastName }}
+    <app-customer-status [status]="c.status" />
+  </h1>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <dl class="fields">
+        <dt>{{ 'customers.fields.customerNumber' | translate }}</dt>
+        <dd>{{ c.customerNumber }}</dd>
+        <dt>{{ 'customers.fields.dateOfBirth' | translate }}</dt>
+        <dd>{{ c.dateOfBirth | date: 'longDate' : undefined : language.current() }}</dd>
+        <dt>{{ 'customers.fields.email' | translate }}</dt>
+        <dd>{{ c.email }}</dd>
+        <dt>{{ 'customers.fields.phoneNumber' | translate }}</dt>
+        <dd>{{ c.phoneNumber }}</dd>
+      </dl>
+    </mat-card-content>
+  </mat-card>
+
+  @if (auth.hasRole('ADVISOR') && c.status !== 'CLOSED') {
+    <a mat-stroked-button class="edit" [routerLink]="['/customers', c.id, 'edit']">
+      <mat-icon>edit</mat-icon>
+      {{ 'customers.edit.button' | translate }}
+    </a>
+  }
+
+  @if (auth.hasRole('ADMIN') && c.status !== 'CLOSED') {
+    <div class="actions">
+      @if (c.status === 'ACTIVE') {
+        <button mat-stroked-button [disabled]="busy()" (click)="changeStatus('block')">
+          {{ 'customers.actions.block.button' | translate }}
+        </button>
+      }
+      @if (c.status === 'BLOCKED') {
+        <button mat-stroked-button [disabled]="busy()" (click)="changeStatus('unblock')">
+          {{ 'customers.actions.unblock.button' | translate }}
+        </button>
+      }
+      <button mat-stroked-button class="danger" [disabled]="busy()" (click)="changeStatus('close')">
+        {{ 'customers.actions.close.button' | translate }}
+      </button>
+    </div>
+  }
+}

@@ -4,6 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { Home } from './home';
 import { AuthService } from '../../core/auth/auth.service';
 import { Role } from '../../core/auth/role';
+import { provideTranslateTesting } from '../../../testing/translate-testing';
 
 describe('Home', () => {
   let httpMock: HttpTestingController;
@@ -13,7 +14,8 @@ describe('Home', () => {
       imports: [Home],
       providers: [
         provideHttpClient(),
-        provideHttpClientTesting(), // HTTP calls are captured instead of being sent
+        provideHttpClientTesting(),
+        provideTranslateTesting(),
         {
           provide: AuthService,
           useValue: { username: () => 'user', hasRole: (role: Role) => roles.includes(role) },
@@ -22,7 +24,7 @@ describe('Home', () => {
     });
     httpMock = TestBed.inject(HttpTestingController);
     const fixture = TestBed.createComponent(Home);
-    TestBed.tick(); // runs change detection, which starts the httpResource request
+    TestBed.tick();
     return fixture;
   }
 
@@ -30,7 +32,7 @@ describe('Home', () => {
     return fixture.nativeElement.textContent ?? '';
   }
 
-  afterEach(() => httpMock.verify()); // no unexpected request left
+  afterEach(() => httpMock.verify());
 
   it('shows only the actions allowed by the roles', async () => {
     const fixture = create(['COMPLIANCE_OFFICER']);

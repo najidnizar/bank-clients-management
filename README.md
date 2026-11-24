@@ -17,6 +17,7 @@ Microservices platform for the **customer lifecycle of a retail bank**: onboardi
 - **Observability**: distributed tracing (**OpenTelemetry → Tempo**), metrics (**Prometheus**), **Grafana** dashboard
 - **Docker** multi-stage images, one-command startup, **GitHub Actions CI**, **Testcontainers** tests
 - **Kubernetes**: Helm chart for the services, StatefulSets for the infrastructure, probes, Gateway API entry point — [docs/kubernetes.md](docs/kubernetes.md)
+- **Angular 22 frontend** (in progress): Keycloak login with PKCE, role-aware UI, French / English — [docs/frontend.md](docs/frontend.md)
 
 ## Architecture
 
@@ -49,6 +50,15 @@ Each service owns its PostgreSQL database. All services register in Eureka. Desi
 cd infrastructure/docker
 docker compose --profile apps up -d --build
 ```
+
+### Demo data
+
+```bash
+./scripts/seed-demo-data.sh
+```
+
+Creates 30 fictitious customers **through the API** (gateway + Keycloak token), so validation, security and Kafka apply: each customer also gets a KYC case. Safe to run several times (existing customers are skipped). Requires `jq`.
+
 
 Get an access token (demo users `advisor`, `compliance`, `admin`; password = user name) and call the API through the gateway:
 

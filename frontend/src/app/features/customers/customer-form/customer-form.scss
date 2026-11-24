@@ -1,0 +1,15 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.error {
+  color: var(--mat-sys-error);
+}

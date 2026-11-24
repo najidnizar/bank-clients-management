@@ -1,0 +1,134 @@
+{
+  "app": {
+    "name": "Bank Clients"
+  },
+  "shell": {
+    "roles": "Vos rôles",
+    "language": "Langue",
+    "logout": "Se déconnecter"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "roles": {
+    "ADVISOR": "Conseiller",
+    "COMPLIANCE_OFFICER": "Responsable conformité",
+    "ADMIN": "Administrateur"
+  },
+  "titles": {
+    "home": "Accueil",
+    "customers": "Clients",
+    "newCustomer": "Nouveau client",
+    "customerDetail": "Client",
+    "editCustomer": "Modifier le client"
+  },
+  "nav": {
+    "customers": "Clients"
+  },
+  "customers": {
+    "list": {
+      "title": "Clients",
+      "error": "Impossible de charger les clients.",
+      "empty": "Aucun client pour l'instant."
+    },
+    "fields": {
+      "customerNumber": "N° client",
+      "name": "Nom",
+      "email": "E-mail",
+      "status": "Statut",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "dateOfBirth": "Date de naissance",
+      "phoneNumber": "Téléphone"
+    },
+    "status": {
+      "ACTIVE": "Actif",
+      "BLOCKED": "Bloqué",
+      "CLOSED": "Clôturé"
+    },
+    "search": {
+      "lastName": "Nom",
+      "allStatuses": "Tous les statuts",
+      "submit": "Rechercher"
+    },
+    "create": {
+      "title": "Nouveau client",
+      "new": "Nouveau client",
+      "submit": "Créer",
+      "success": "Client {{number}} créé",
+      "invalid": "Le serveur a refusé les données. Vérifiez le formulaire.",
+      "error": "Le client n'a pas pu être créé. Réessayez."
+    },
+    "detail": {
+      "back": "Retour à la liste",
+      "error": "Ce client n'a pas pu être chargé (il n'existe peut-être pas)."
+    },
+    "actions": {
+      "block": {
+        "button": "Bloquer",
+        "title": "Bloquer ce client ?",
+        "message": "{{name}} sera bloqué : aucun nouveau compte ne pourra être ouvert tant qu'il ne sera pas débloqué.",
+        "confirm": "Bloquer",
+        "done": "Client bloqué"
+      },
+      "unblock": {
+        "button": "Débloquer",
+        "title": "Débloquer ce client ?",
+        "message": "{{name}} sera de nouveau actif.",
+        "confirm": "Débloquer",
+        "done": "Client débloqué"
+      },
+      "close": {
+        "button": "Clôturer",
+        "title": "Clôturer ce client ?",
+        "message": "{{name}} sera clôturé. Cette action est définitive.",
+        "confirm": "Clôturer le client",
+        "done": "Client clôturé"
+      },
+      "notAllowed": "Ce changement n'est pas autorisé pour le statut actuel du client.",
+      "error": "Le changement n'a pas pu être enregistré. Réessayez."
+    },
+    "edit": {
+      "button": "Modifier",
+      "title": "Modifier le client",
+      "submit": "Enregistrer",
+      "success": "Client {{number}} mis à jour",
+      "error": "Le client n'a pas pu être mis à jour. Réessayez."
+    }
+  },
+  "home": {
+    "welcome": "Bienvenue, {{name}}",
+    "whatYouCanDo": "Ce que vous pouvez faire",
+    "actions": {
+      "consult": "Rechercher et consulter les clients, dossiers KYC, comptes et documents",
+      "advisor": "Créer et modifier des clients, ouvrir des comptes, déposer des documents",
+      "compliance": "Traiter les dossiers KYC",
+      "admin": "Bloquer, débloquer et clôturer des clients, changer le statut des comptes"
+    },
+    "api": {
+      "checking": "Vérification de l'API…",
+      "reachable": "API accessible",
+      "unreachable": "API inaccessible"
+    }
+  },
+  "paginator": {
+    "itemsPerPage": "Éléments par page",
+    "nextPage": "Page suivante",
+    "previousPage": "Page précédente",
+    "firstPage": "Première page",
+    "lastPage": "Dernière page",
+    "range": "{{start}} – {{end}} sur {{length}}",
+    "empty": "0 sur 0"
+  },
+  "validation": {
+    "required": "Obligatoire",
+    "maxLength": "{{max}} caractères maximum",
+    "email": "Adresse e-mail invalide",
+    "underage": "Le client doit être majeur",
+    "emailAlreadyUsed": "Cette adresse e-mail est déjà utilisée par un autre client"
+  },
+  "common": {
+    "cancel": "Annuler"
+  }
+}
