@@ -1,14 +1,14 @@
 import { Component, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CustomerResponse } from '../../api/onboarding';
 
+// Usage: <app-status-badge [status]="customer.status" labelPrefix="customers.status." />
 @Component({
-  selector: 'app-customer-status',
+  selector: 'app-status-badge',
   imports: [TranslatePipe],
   template: `
     @if (status(); as status) {
       <span class="badge" [class]="status.toLowerCase()">
-        {{ 'customers.status.' + status | translate }}
+        {{ labelPrefix() + status | translate }}
       </span>
     }
   `,
@@ -22,6 +22,10 @@ import { CustomerResponse } from '../../api/onboarding';
       background: var(--mat-sys-primary-container);
       color: var(--mat-sys-on-primary-container);
     }
+    .pending {
+      background: var(--mat-sys-tertiary-container);
+      color: var(--mat-sys-on-tertiary-container);
+    }
     .blocked {
       background: var(--mat-sys-error-container);
       color: var(--mat-sys-on-error-container);
@@ -32,6 +36,7 @@ import { CustomerResponse } from '../../api/onboarding';
     }
   `,
 })
-export class CustomerStatus {
-  readonly status = input<CustomerResponse.StatusEnum>();
+export class StatusBadge {
+  readonly status = input<string>();
+  readonly labelPrefix = input.required<string>();
 }

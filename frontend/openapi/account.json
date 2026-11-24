@@ -1,0 +1,247 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Customer Account API", "version": "v1" },
+  "servers": [{ "url": "http://localhost:8083", "description": "Generated server url" }],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [{ "name": "Accounts", "description": "Bank account management APIs" }],
+  "paths": {
+    "/api/v1/accounts": {
+      "post": {
+        "tags": ["Accounts"],
+        "operationId": "createAccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateAccountRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/AccountResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/{id}/status": {
+      "patch": {
+        "tags": ["Accounts"],
+        "operationId": "updateAccountStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["PENDING", "ACTIVE", "BLOCKED", "CLOSED"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/AccountResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/{id}": {
+      "get": {
+        "tags": ["Accounts"],
+        "operationId": "getAccountById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/AccountResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/{id}/status-history": {
+      "get": {
+        "tags": ["Accounts"],
+        "operationId": "getAccountStatusHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/AccountStatusHistoryResponse" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/ping": {
+      "get": {
+        "tags": ["Accounts"],
+        "operationId": "ping",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "string" } } }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/customer/{customerId}": {
+      "get": {
+        "tags": ["Accounts"],
+        "operationId": "getAccountsByCustomerId",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/Pageable" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PageAccountResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "customerId": { "type": "string", "format": "uuid" },
+          "accountType": { "type": "string", "enum": ["CURRENT", "SAVINGS"] },
+          "currencyCode": { "type": "string", "pattern": "^[A-Z]{3}$" }
+        },
+        "required": ["accountType", "currencyCode", "customerId"]
+      },
+      "AccountResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "customerId": { "type": "string", "format": "uuid" },
+          "accountNumber": { "type": "string" },
+          "accountType": { "type": "string", "enum": ["CURRENT", "SAVINGS"] },
+          "status": { "type": "string", "enum": ["PENDING", "ACTIVE", "BLOCKED", "CLOSED"] },
+          "balance": { "type": "number" },
+          "currencyCode": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "createdBy": { "type": "string" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "updatedBy": { "type": "string" }
+        }
+      },
+      "AccountStatusHistoryResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "accountId": { "type": "string", "format": "uuid" },
+          "previousStatus": {
+            "type": "string",
+            "enum": ["PENDING", "ACTIVE", "BLOCKED", "CLOSED"]
+          },
+          "newStatus": { "type": "string", "enum": ["PENDING", "ACTIVE", "BLOCKED", "CLOSED"] },
+          "changedAt": { "type": "string", "format": "date-time" },
+          "changedBy": { "type": "string" }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": { "type": "integer", "format": "int32", "minimum": 0 },
+          "size": { "type": "integer", "format": "int32", "minimum": 1 },
+          "sort": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "PageAccountResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": { "type": "integer", "format": "int32" },
+          "totalElements": { "type": "integer", "format": "int64" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AccountResponse" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "first": { "type": "boolean" },
+          "last": { "type": "boolean" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": { "type": "integer", "format": "int64" },
+          "paged": { "type": "boolean" },
+          "pageNumber": { "type": "integer", "format": "int32" },
+          "pageSize": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "unpaged": { "type": "boolean" }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": { "type": "boolean" },
+          "sorted": { "type": "boolean" },
+          "unsorted": { "type": "boolean" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "Keycloak access token. Get one with: ./scripts/get-token.sh advisor",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

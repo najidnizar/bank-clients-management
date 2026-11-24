@@ -5,6 +5,7 @@ import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.A
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.AccountStatusHistoryResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.dto.CreateAccountRequest;
 import io.github.najidnizar.bankclientsmanagement.customer_account_service.service.BankAccountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
+@Tag(name = "Accounts", description = "Bank account management APIs")
 @RequiredArgsConstructor
 public class BankAccountController {
 

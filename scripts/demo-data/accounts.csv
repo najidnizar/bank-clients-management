@@ -1,0 +1,11 @@
+email,accounts
+camille.martin@example.com,CURRENT:EUR:ACTIVE;SAVINGS:EUR:ACTIVE
+youssef.elamrani@example.com,CURRENT:MAD:ACTIVE
+lea.bernard@example.com,CURRENT:EUR:ACTIVE
+mehdi.benali@example.com,CURRENT:EUR:ACTIVE;SAVINGS:EUR:PENDING
+fatimazahra.alaoui@example.com,CURRENT:MAD:ACTIVE;SAVINGS:MAD:ACTIVE
+hugo.dubois@example.com,CURRENT:EUR:BLOCKED
+salma.bennani@example.com,CURRENT:MAD:PENDING
+julien.thomas@example.com,CURRENT:EUR:ACTIVE;SAVINGS:EUR:CLOSED
+imane.tazi@example.com,CURRENT:MAD:ACTIVE
+chloe.robert@example.com,SAVINGS:EUR:ACTIVE
