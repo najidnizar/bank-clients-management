@@ -3,7 +3,6 @@ import Keycloak from 'keycloak-js';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
-  // Fake keycloak-js instance: only the fields the service reads.
   function setup(username: string, realmRoles: string[]) {
     const keycloak = {
       tokenParsed: { preferred_username: username },

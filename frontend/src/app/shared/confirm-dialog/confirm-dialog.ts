@@ -3,7 +3,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
 
-/** What the confirmation dialog shows: translation keys, and the parameters of the message. */
 export interface ConfirmDialogData {
   title: string;
   message: string;
@@ -11,7 +10,6 @@ export interface ConfirmDialogData {
   params?: Record<string, string>;
 }
 
-/** Generic "Are you sure?" dialog. Closes with true (confirmed) or false (cancelled). */
 @Component({
   selector: 'app-confirm-dialog',
   imports: [MatDialogModule, MatButtonModule, TranslatePipe],

@@ -14,7 +14,5 @@ import { AuthService } from '../../core/auth/auth.service';
 export class Home {
   protected readonly auth = inject(AuthService);
 
-  // Authenticated call through the API gateway: checks the whole chain
-  // (proxy -> gateway -> onboarding service) and that the interceptor adds the token.
   protected readonly apiStatus = httpResource.text(() => '/api/v1/customers/ping');
 }

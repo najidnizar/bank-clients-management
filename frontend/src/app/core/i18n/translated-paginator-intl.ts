@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 
-/** Texts of every <mat-paginator>, translated and updated when the language changes. */
 @Injectable()
 export class TranslatedPaginatorIntl extends MatPaginatorIntl {
   private readonly translate = inject(TranslateService);
@@ -14,7 +13,6 @@ export class TranslatedPaginatorIntl extends MatPaginatorIntl {
     this.translate.onLangChange.pipe(takeUntilDestroyed()).subscribe(() => this.updateLabels());
   }
 
-  // "11 – 20 of 30"
   override getRangeLabel = (page: number, pageSize: number, length: number): string => {
     if (length === 0) {
       return this.translate.instant('paginator.empty');
@@ -30,6 +28,6 @@ export class TranslatedPaginatorIntl extends MatPaginatorIntl {
     this.previousPageLabel = this.translate.instant('paginator.previousPage');
     this.firstPageLabel = this.translate.instant('paginator.firstPage');
     this.lastPageLabel = this.translate.instant('paginator.lastPage');
-    this.changes.next(); // tells every paginator to re-render its texts
+    this.changes.next();
   }
 }

@@ -5,7 +5,8 @@
 
 @if (customer.isLoading()) {
   <mat-progress-bar mode="indeterminate" />
-} @if (customer.error()) {
+}
+@if (customer.error()) {
   <p class="error" role="alert">{{ 'customers.detail.error' | translate }}</p>
 } @else if (customer.value(); as c) {
   <h1>

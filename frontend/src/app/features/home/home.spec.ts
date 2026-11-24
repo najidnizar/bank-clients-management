@@ -14,7 +14,7 @@ describe('Home', () => {
       imports: [Home],
       providers: [
         provideHttpClient(),
-        provideHttpClientTesting(), // HTTP calls are captured instead of being sent
+        provideHttpClientTesting(),
         provideTranslateTesting(),
         {
           provide: AuthService,
@@ -24,7 +24,7 @@ describe('Home', () => {
     });
     httpMock = TestBed.inject(HttpTestingController);
     const fixture = TestBed.createComponent(Home);
-    TestBed.tick(); // runs change detection, which starts the httpResource request
+    TestBed.tick();
     return fixture;
   }
 
@@ -32,7 +32,7 @@ describe('Home', () => {
     return fixture.nativeElement.textContent ?? '';
   }
 
-  afterEach(() => httpMock.verify()); // no unexpected request left
+  afterEach(() => httpMock.verify());
 
   it('shows only the actions allowed by the roles', async () => {
     const fixture = create(['COMPLIANCE_OFFICER']);

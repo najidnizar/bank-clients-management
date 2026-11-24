@@ -29,10 +29,8 @@
   "customers": {
     "list": {
       "title": "Customers",
-      "loading": "Loading customers…",
       "error": "The customers could not be loaded.",
-      "empty": "No customers yet.",
-      "total": "{{count}} customer(s)"
+      "empty": "No customers yet."
     },
     "fields": {
       "customerNumber": "Customer no.",

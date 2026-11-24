@@ -1,5 +1,4 @@
-// Development build (`ng serve`): replaces environment.ts (see fileReplacements in angular.json).
-// Keycloak runs in Docker Compose on port 8180.
+// ng serve (fileReplacements in angular.json): Keycloak from Docker Compose.
 export const environment = {
   keycloak: {
     url: 'http://localhost:8180',

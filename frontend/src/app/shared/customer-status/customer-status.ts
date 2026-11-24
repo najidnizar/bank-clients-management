@@ -2,7 +2,6 @@ import { Component, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CustomerResponse } from '../../api/onboarding';
 
-/** Colored badge with the translated status of a customer: <app-customer-status [status]="..." />. */
 @Component({
   selector: 'app-customer-status',
   imports: [TranslatePipe],

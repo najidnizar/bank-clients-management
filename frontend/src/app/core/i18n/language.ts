@@ -1,4 +1,3 @@
-/** Languages offered by the application; translation files live in public/i18n/<language>.json. */
 export const LANGUAGES = ['en', 'fr'] as const;
 
 export type Language = (typeof LANGUAGES)[number];

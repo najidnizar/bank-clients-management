@@ -11,7 +11,6 @@ import { AuthService } from './core/auth/auth.service';
 import { LANGUAGES } from './core/i18n/language';
 import { LanguageService } from './core/i18n/language.service';
 
-/** Application shell: top bar with the current user and the language menu, and the routed screen below. */
 @Component({
   selector: 'app-root',
   imports: [

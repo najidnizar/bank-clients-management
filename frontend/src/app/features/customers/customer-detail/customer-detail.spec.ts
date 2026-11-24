@@ -11,15 +11,15 @@ describe('CustomerDetail', () => {
     TestBed.configureTestingModule({
       imports: [CustomerDetail],
       providers: [
-        provideRouter([]), 
-        provideTranslateTesting(), 
-        provideHttpClient(), 
+        provideRouter([]),
+        provideTranslateTesting(),
+        provideHttpClient(),
         provideHttpClientTesting(),
         { provide: AuthService, useValue: { hasRole: () => true } },
       ],
     });
     const fixture = TestBed.createComponent(CustomerDetail);
-    fixture.componentRef.setInput('id', 'some-id'); // a required input must be set before rendering
+    fixture.componentRef.setInput('id', 'some-id');
     expect(fixture.componentInstance).toBeTruthy();
   });
 });

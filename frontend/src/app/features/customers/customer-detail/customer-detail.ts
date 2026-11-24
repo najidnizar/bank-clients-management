@@ -40,11 +40,10 @@ export class CustomerDetail {
   private readonly snackBar = inject(MatSnackBar);
   private readonly translate = inject(TranslateService);
   protected readonly auth = inject(AuthService);
-  protected readonly language = inject(LanguageService); // the current language formats the dates
+  protected readonly language = inject(LanguageService);
 
-  protected readonly busy = signal(false); // disables the buttons while a change is being saved
+  protected readonly busy = signal(false);
 
-  /** Filled by the router from the :id URL parameter (withComponentInputBinding). */
   readonly id = input.required<string>();
 
   protected readonly customer = rxResource({
@@ -52,7 +51,6 @@ export class CustomerDetail {
     stream: ({ params }) => this.customersService.getCustomerById(params),
   });
 
-  /** Asks for confirmation, then applies the action. */
   protected changeStatus(action: CustomerAction): void {
     const customer = this.customer.value();
     if (!customer) {
@@ -90,11 +88,12 @@ export class CustomerDetail {
         this.snackBar.open(this.translate.instant(`customers.actions.${action}.done`), undefined, {
           duration: 4000,
         });
-        this.customer.reload(); // fetches the new status; the page stays displayed meanwhile
+        this.customer.reload();
       },
       error: (error: HttpErrorResponse) => {
         this.busy.set(false);
-        const key = error.status === 409 ? 'customers.actions.notAllowed' : 'customers.actions.error';
+        const key =
+          error.status === 409 ? 'customers.actions.notAllowed' : 'customers.actions.error';
         this.snackBar.open(this.translate.instant(key), undefined, { duration: 6000 });
       },
     });

@@ -4,10 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-/**
- * Browser tab title: route `title` values are translation keys ("titles.home"),
- * translated and suffixed with the application name, and updated when the language changes.
- */
+// Route titles are translation keys; the tab title follows the current language.
 @Injectable({ providedIn: 'root' })
 export class TranslatedTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);

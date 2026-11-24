@@ -15,7 +15,7 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CustomersService } from '../../../api/onboarding';
 
-/** One form for both creating (/customers/new) and editing (/customers/:id/edit) a customer. */
+// Used for both /customers/new and /customers/:id/edit.
 @Component({
   selector: 'app-customer-form',
   imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatInputModule, TranslatePipe],
@@ -30,13 +30,12 @@ export class CustomerForm {
   private readonly translate = inject(TranslateService);
 
   protected readonly saving = signal(false);
-  protected readonly serverError = signal<string | undefined>(undefined); // translation key of a form-level error
+  protected readonly serverError = signal<string | undefined>(undefined);
 
-  /** Customer id from the URL (/customers/:id/edit); undefined when creating (/customers/new). */
   readonly id = input<string>();
   protected readonly isEdit = computed(() => !!this.id());
 
-  // Same rules as CreateCustomerRequest / UpdateCustomerRequest in the back-end (which stays the reference).
+  // Same rules as the back-end DTOs.
   protected readonly form = this.formBuilder.group({
     firstName: ['', [Validators.required, Validators.maxLength(100)]],
     lastName: ['', [Validators.required, Validators.maxLength(100)]],
@@ -45,14 +44,12 @@ export class CustomerForm {
     phoneNumber: ['', [Validators.required]],
   });
 
-  // Loads the customer to edit; stays idle (no request) when creating.
   private readonly customer = rxResource({
     params: () => (this.id() ? { id: this.id()! } : undefined),
     stream: ({ params }) => this.customersService.getCustomerById(params),
   });
 
   constructor() {
-    // Fills the form once the customer has been loaded.
     effect(() => {
       if (this.customer.hasValue()) {
         this.form.patchValue(this.customer.value());
@@ -87,7 +84,6 @@ export class CustomerForm {
       error: (error: HttpErrorResponse) => {
         this.saving.set(false);
         if (error.status === 409) {
-          // Email already used by another customer: show it under the email field
           this.form.controls.email.setErrors({ alreadyUsed: true });
           this.form.controls.email.markAsTouched();
         } else if (error.status === 400) {
@@ -100,10 +96,9 @@ export class CustomerForm {
   }
 }
 
-/** Customers must be adults. Returns null when valid, an error object otherwise. */
 function adultValidator(control: AbstractControl<string>): ValidationErrors | null {
   if (!control.value) {
-    return null; // the empty case is handled by Validators.required
+    return null;
   }
   const birth = new Date(control.value);
   const adultFrom = new Date(birth.getFullYear() + 18, birth.getMonth(), birth.getDate());

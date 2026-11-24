@@ -4,8 +4,7 @@ import { roleGuard } from './core/auth/role.guard';
 export const routes: Routes = [
   {
     path: '',
-    title: 'titles.home', // translation key, see TranslatedTitleStrategy
-    // Lazy loading: the screen's code is downloaded only when the route is visited.
+    title: 'titles.home',
     loadComponent: () => import('./features/home/home').then((m) => m.Home),
   },
   {
