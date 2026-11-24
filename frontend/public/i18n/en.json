@@ -165,6 +165,20 @@
       "EUR": "Euro (EUR)",
       "MAD": "Moroccan dirham (MAD)",
       "USD": "US dollar (USD)"
+    },
+    "manage": {
+      "menu": "Account actions",
+      "to": {
+        "ACTIVE": "Activate",
+        "BLOCKED": "Block",
+        "CLOSED": "Close"
+      },
+      "title": "Change the account status?",
+      "message": "Account {{number}} will become: {{status}}.",
+      "confirm": "Confirm",
+      "done": "Account status updated",
+      "notAllowed": "This change is not allowed for the current status of the account.",
+      "error": "The status could not be changed. Please try again."
     }
   }
 }

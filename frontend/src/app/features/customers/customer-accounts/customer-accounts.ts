@@ -1,22 +1,30 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatTableModule } from '@angular/material/table';
-import { TranslatePipe } from '@ngx-translate/core';
-import { AccountsService } from '../../../api/account';
-import { LanguageService } from '../../../core/i18n/language.service';
-import { StatusBadge } from '../../../shared/status-badge/status-badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateService } from '@ngx-translate/core';
-import { OpenAccountDialog, OpenAccountDialogData } from '../open-account-dialog/open-account-dialog';
-import { AccountResponse } from '../../../api/account';
+import { MatTableModule } from '@angular/material/table';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { AccountResponse, AccountsService } from '../../../api/account';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { StatusBadge } from '../../../shared/status-badge/status-badge';
+import {
+  OpenAccountDialog,
+  OpenAccountDialogData,
+} from '../open-account-dialog/open-account-dialog';
 
 @Component({
   selector: 'app-customer-accounts',
-  imports: [CurrencyPipe, MatTableModule, MatProgressBarModule, TranslatePipe, StatusBadge],
+  imports: [
+    CurrencyPipe,
+    MatButtonModule,
+    MatTableModule,
+    MatProgressBarModule,
+    TranslatePipe,
+    StatusBadge,
+  ],
   templateUrl: './customer-accounts.html',
   styleUrl: './customer-accounts.scss',
 })
