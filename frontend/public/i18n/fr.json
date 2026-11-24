@@ -150,6 +150,21 @@
       "ACTIVE": "Actif",
       "BLOCKED": "Bloqué",
       "CLOSED": "Clôturé"
+    },
+    "open": {
+      "button": "Ouvrir un compte",
+      "title": "Ouvrir un compte",
+      "accountType": "Type de compte",
+      "currency": "Devise",
+      "submit": "Ouvrir",
+      "success": "Compte {{number}} ouvert",
+      "unavailable": "Le service clients est momentanément indisponible. Réessayez dans un instant.",
+      "error": "Le compte n'a pas pu être ouvert. Réessayez."
+    },
+    "currency": {
+      "EUR": "Euro (EUR)",
+      "MAD": "Dirham marocain (MAD)",
+      "USD": "Dollar américain (USD)"
     }
   }
 }

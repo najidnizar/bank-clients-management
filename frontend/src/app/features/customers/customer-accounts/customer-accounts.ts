@@ -7,6 +7,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AccountsService } from '../../../api/account';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { StatusBadge } from '../../../shared/status-badge/status-badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
+import { OpenAccountDialog, OpenAccountDialogData } from '../open-account-dialog/open-account-dialog';
+import { AccountResponse } from '../../../api/account';
 
 @Component({
   selector: 'app-customer-accounts',
@@ -17,7 +23,11 @@ import { StatusBadge } from '../../../shared/status-badge/status-badge';
 export class CustomerAccounts {
   private readonly accountsService = inject(AccountsService);
   protected readonly language = inject(LanguageService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
+  readonly canOpenAccount = input(false);
   readonly customerId = input.required<string>();
 
   protected readonly displayedColumns = ['accountNumber', 'accountType', 'status', 'balance'];
@@ -30,4 +40,22 @@ export class CustomerAccounts {
     }),
     stream: ({ params }) => this.accountsService.getAccountsByCustomerId(params),
   });
+
+  protected openAccount(): void {
+    this.dialog
+      .open<OpenAccountDialog, OpenAccountDialogData, AccountResponse>(OpenAccountDialog, {
+        data: { customerId: this.customerId() },
+      })
+      .afterClosed()
+      .subscribe((account) => {
+        if (account) {
+          this.snackBar.open(
+            this.translate.instant('accounts.open.success', { number: account.accountNumber }),
+            undefined,
+            { duration: 4000 },
+          );
+          this.accounts.reload();
+        }
+      });
+  }
 }
