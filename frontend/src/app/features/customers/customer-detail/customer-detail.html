@@ -54,5 +54,8 @@
     </div>
   }
 
-  <app-customer-accounts [customerId]="id()" />
+  <app-customer-accounts
+    [customerId]="id()"
+    [canOpenAccount]="auth.hasRole('ADVISOR') && c.status !== 'CLOSED'"
+  />
 }

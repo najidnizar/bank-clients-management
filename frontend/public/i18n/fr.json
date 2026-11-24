@@ -150,6 +150,35 @@
       "ACTIVE": "Actif",
       "BLOCKED": "Bloqué",
       "CLOSED": "Clôturé"
+    },
+    "open": {
+      "button": "Ouvrir un compte",
+      "title": "Ouvrir un compte",
+      "accountType": "Type de compte",
+      "currency": "Devise",
+      "submit": "Ouvrir",
+      "success": "Compte {{number}} ouvert",
+      "unavailable": "Le service clients est momentanément indisponible. Réessayez dans un instant.",
+      "error": "Le compte n'a pas pu être ouvert. Réessayez."
+    },
+    "currency": {
+      "EUR": "Euro (EUR)",
+      "MAD": "Dirham marocain (MAD)",
+      "USD": "Dollar américain (USD)"
+    },
+    "manage": {
+      "menu": "Actions sur le compte",
+      "to": {
+        "ACTIVE": "Activer",
+        "BLOCKED": "Bloquer",
+        "CLOSED": "Clôturer"
+      },
+      "title": "Changer le statut du compte ?",
+      "message": "Le compte {{number}} passera au statut : {{status}}.",
+      "confirm": "Confirmer",
+      "done": "Statut du compte mis à jour",
+      "notAllowed": "Ce changement n'est pas autorisé pour le statut actuel du compte.",
+      "error": "Le statut n'a pas pu être changé. Réessayez."
     }
   }
 }

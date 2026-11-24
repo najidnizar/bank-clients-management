@@ -1,4 +1,11 @@
-<h2>{{ 'accounts.title' | translate }}</h2>
+<div class="header">
+  <h2>{{ 'accounts.title' | translate }}</h2>
+  @if (canOpenAccount()) {
+    <button mat-stroked-button (click)="openAccount()">
+      {{ 'accounts.open.button' | translate }}
+    </button>
+  }
+</div>
 
 @if (accounts.isLoading()) {
   <mat-progress-bar mode="indeterminate" />

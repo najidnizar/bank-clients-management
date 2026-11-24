@@ -150,6 +150,35 @@
       "ACTIVE": "Active",
       "BLOCKED": "Blocked",
       "CLOSED": "Closed"
+    },
+    "open": {
+      "button": "Open an account",
+      "title": "Open an account",
+      "accountType": "Account type",
+      "currency": "Currency",
+      "submit": "Open",
+      "success": "Account {{number}} opened",
+      "unavailable": "The customer service is temporarily unavailable. Please try again in a moment.",
+      "error": "The account could not be opened. Please try again."
+    },
+    "currency": {
+      "EUR": "Euro (EUR)",
+      "MAD": "Moroccan dirham (MAD)",
+      "USD": "US dollar (USD)"
+    },
+    "manage": {
+      "menu": "Account actions",
+      "to": {
+        "ACTIVE": "Activate",
+        "BLOCKED": "Block",
+        "CLOSED": "Close"
+      },
+      "title": "Change the account status?",
+      "message": "Account {{number}} will become: {{status}}.",
+      "confirm": "Confirm",
+      "done": "Account status updated",
+      "notAllowed": "This change is not allowed for the current status of the account.",
+      "error": "The status could not be changed. Please try again."
     }
   }
 }
