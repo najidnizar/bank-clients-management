@@ -68,7 +68,7 @@
       "block": {
         "button": "Block",
         "title": "Block this customer?",
-        "message": "{{name}} will be blocked: no new account can be opened until the customer is unblocked.",
+        "message": "{{name}} will be blocked until an admin unblocks the customer.",
         "confirm": "Block",
         "done": "Customer blocked"
       },
@@ -130,5 +130,26 @@
   },
   "common": {
     "cancel": "Cancel"
+  },
+  "accounts": {
+    "title": "Accounts",
+    "empty": "No account yet.",
+    "error": "The accounts could not be loaded.",
+    "fields": {
+      "accountNumber": "Account no.",
+      "accountType": "Type",
+      "status": "Status",
+      "balance": "Balance"
+    },
+    "type": {
+      "CURRENT": "Current account",
+      "SAVINGS": "Savings account"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "ACTIVE": "Active",
+      "BLOCKED": "Blocked",
+      "CLOSED": "Closed"
+    }
   }
 }

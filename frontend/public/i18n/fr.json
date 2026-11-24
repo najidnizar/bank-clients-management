@@ -68,7 +68,7 @@
       "block": {
         "button": "Bloquer",
         "title": "Bloquer ce client ?",
-        "message": "{{name}} sera bloqué : aucun nouveau compte ne pourra être ouvert tant qu'il ne sera pas débloqué.",
+        "message": "{{name}} sera bloqué jusqu'à ce qu'un administrateur le débloque.",
         "confirm": "Bloquer",
         "done": "Client bloqué"
       },
@@ -130,5 +130,26 @@
   },
   "common": {
     "cancel": "Annuler"
+  },
+  "accounts": {
+    "title": "Comptes",
+    "empty": "Aucun compte pour l'instant.",
+    "error": "Impossible de charger les comptes.",
+    "fields": {
+      "accountNumber": "N° de compte",
+      "accountType": "Type",
+      "status": "Statut",
+      "balance": "Solde"
+    },
+    "type": {
+      "CURRENT": "Compte courant",
+      "SAVINGS": "Compte épargne"
+    },
+    "status": {
+      "PENDING": "En attente",
+      "ACTIVE": "Actif",
+      "BLOCKED": "Bloqué",
+      "CLOSED": "Clôturé"
+    }
   }
 }

@@ -25,7 +25,8 @@ import { DEFAULT_LANGUAGE } from './core/i18n/language';
 import { LanguageService } from './core/i18n/language.service';
 import { TranslatedTitleStrategy } from './core/i18n/translated-title.strategy';
 import { TranslatedPaginatorIntl } from './core/i18n/translated-paginator-intl';
-import { provideApi } from './api/onboarding';
+import { provideApi as provideAccountApi } from './api/account';
+import { provideApi as provideOnboardingApi } from './api/onboarding';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 
 // Only send the access token to our own API, never to other domains.
@@ -55,7 +56,8 @@ export const appConfig: ApplicationConfig = {
     { provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG, useValue: [apiCondition] },
     provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     // Relative URLs (/api/...): same origin as the app, proxied to the gateway.
-    provideApi(''),
+    provideOnboardingApi(''),
+    provideAccountApi(''),
     provideRouter(routes, withComponentInputBinding()),
     { provide: TitleStrategy, useClass: TranslatedTitleStrategy },
     provideTranslateService({

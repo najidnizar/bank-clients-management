@@ -8,7 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CustomersService } from '../../../api/onboarding';
-import { CustomerStatus } from '../../../shared/customer-status/customer-status';
+import { StatusBadge } from '../../../shared/status-badge/status-badge';
+import { CustomerAccounts } from '../customer-accounts/customer-accounts';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -29,7 +30,8 @@ type CustomerAction = 'block' | 'unblock' | 'close';
     MatIconModule,
     MatProgressBarModule,
     TranslatePipe,
-    CustomerStatus,
+    StatusBadge,
+    CustomerAccounts,
   ],
   templateUrl: './customer-detail.html',
   styleUrl: './customer-detail.scss',

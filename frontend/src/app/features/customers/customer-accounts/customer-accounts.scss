@@ -1,0 +1,16 @@
+h2 {
+  margin-top: 32px;
+}
+
+table {
+  width: 100%;
+}
+
+.amount {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.error {
+  color: var(--mat-sys-error);
+}

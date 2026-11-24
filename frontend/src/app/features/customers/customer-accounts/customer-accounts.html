@@ -1,0 +1,49 @@
+<h2>{{ 'accounts.title' | translate }}</h2>
+
+@if (accounts.isLoading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+@if (accounts.error()) {
+  <p class="error" role="alert">{{ 'accounts.error' | translate }}</p>
+} @else if (accounts.value(); as page) {
+  <table mat-table [dataSource]="page.content ?? []">
+    <ng-container matColumnDef="accountNumber">
+      <th mat-header-cell *matHeaderCellDef>{{ 'accounts.fields.accountNumber' | translate }}</th>
+      <td mat-cell *matCellDef="let account">{{ account.accountNumber }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="accountType">
+      <th mat-header-cell *matHeaderCellDef>{{ 'accounts.fields.accountType' | translate }}</th>
+      <td mat-cell *matCellDef="let account">
+        {{ 'accounts.type.' + account.accountType | translate }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>{{ 'accounts.fields.status' | translate }}</th>
+      <td mat-cell *matCellDef="let account">
+        <app-status-badge [status]="account.status" labelPrefix="accounts.status." />
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="balance">
+      <th mat-header-cell *matHeaderCellDef class="amount">
+        {{ 'accounts.fields.balance' | translate }}
+      </th>
+      <td mat-cell *matCellDef="let account" class="amount">
+        {{
+          account.balance
+            | currency: account.currencyCode : 'symbol' : undefined : language.current()
+        }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr class="mat-mdc-no-data-row" *matNoDataRow>
+      <td class="mat-mdc-cell" [attr.colspan]="displayedColumns.length">
+        {{ 'accounts.empty' | translate }}
+      </td>
+    </tr>
+  </table>
+}

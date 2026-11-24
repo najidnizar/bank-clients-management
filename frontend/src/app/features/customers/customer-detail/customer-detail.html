@@ -11,7 +11,7 @@
 } @else if (customer.value(); as c) {
   <h1>
     {{ c.firstName }} {{ c.lastName }}
-    <app-customer-status [status]="c.status" />
+    <app-status-badge [status]="c.status" labelPrefix="customers.status." />
   </h1>
 
   <mat-card appearance="outlined">
@@ -53,4 +53,6 @@
       </button>
     </div>
   }
+
+  <app-customer-accounts [customerId]="id()" />
 }

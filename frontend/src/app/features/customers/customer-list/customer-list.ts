@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../../core/auth/auth.service';
 import { RouterLink } from '@angular/router';
-import { CustomerStatus } from '../../../shared/customer-status/customer-status';
+import { StatusBadge } from '../../../shared/status-badge/status-badge';
 
 @Component({
   selector: 'app-customer-list',
@@ -25,7 +25,7 @@ import { CustomerStatus } from '../../../shared/customer-status/customer-status'
     MatInputModule,
     MatSelectModule,
     RouterLink,
-    CustomerStatus,
+    StatusBadge,
   ],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
