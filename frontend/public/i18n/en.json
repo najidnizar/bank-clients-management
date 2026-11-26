@@ -204,6 +204,21 @@
       "LOW": "Low",
       "MEDIUM": "Medium",
       "HIGH": "High"
+    },
+    "manage": {
+      "button": "Change status",
+      "to": {
+        "IN_PROGRESS": "Start the review",
+        "PENDING_REVIEW": "Submit for review",
+        "APPROVED": "Approve",
+        "REJECTED": "Reject"
+      },
+      "title": "Change the KYC status?",
+      "message": "The KYC case will become: {{status}}.",
+      "confirm": "Confirm",
+      "done": "KYC status updated",
+      "notAllowed": "This change is not allowed for the current status of the case.",
+      "error": "The status could not be changed. Please try again."
     }
   }
 }

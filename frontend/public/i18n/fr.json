@@ -204,6 +204,21 @@
       "LOW": "Faible",
       "MEDIUM": "Moyen",
       "HIGH": "Élevé"
+    },
+    "manage": {
+      "button": "Changer le statut",
+      "to": {
+        "IN_PROGRESS": "Commencer l'analyse",
+        "PENDING_REVIEW": "Soumettre à la revue",
+        "APPROVED": "Approuver",
+        "REJECTED": "Rejeter"
+      },
+      "title": "Changer le statut du dossier KYC ?",
+      "message": "Le dossier KYC passera au statut : {{status}}.",
+      "confirm": "Confirmer",
+      "done": "Statut du dossier KYC mis à jour",
+      "notAllowed": "Ce changement n'est pas autorisé pour le statut actuel du dossier.",
+      "error": "Le statut n'a pas pu être changé. Réessayez."
     }
   }
 }
