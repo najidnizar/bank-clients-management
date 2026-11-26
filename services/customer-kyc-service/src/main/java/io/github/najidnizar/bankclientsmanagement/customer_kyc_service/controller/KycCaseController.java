@@ -4,6 +4,7 @@ import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.dto.Creat
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.dto.KycCaseResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.entity.KycCaseStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.service.KycCaseService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/kyc-cases")
+@Tag(name = "KycCases", description = "KYC case management APIs")
 @RequiredArgsConstructor
 public class KycCaseController {
 
@@ -36,6 +38,11 @@ public class KycCaseController {
     @GetMapping("/{id}")
     public ResponseEntity<KycCaseResponse> getKycCaseById(@PathVariable UUID id) {
         return ResponseEntity.ok(kycCaseService.getKycCaseById(id));
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<KycCaseResponse> getKycCaseByCustomerId(@PathVariable UUID customerId) {
+        return ResponseEntity.ok(kycCaseService.getKycCaseByCustomerId(customerId));
     }
 
     @PatchMapping("/{id}/status")

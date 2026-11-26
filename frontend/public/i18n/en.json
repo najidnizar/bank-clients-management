@@ -180,5 +180,30 @@
       "notAllowed": "This change is not allowed for the current status of the account.",
       "error": "The status could not be changed. Please try again."
     }
+  },
+  "kyc": {
+    "title": "KYC case",
+    "none": "No KYC case yet: it is created automatically a few seconds after the customer.",
+    "error": "The KYC case could not be loaded.",
+    "fields": {
+      "status": "Status",
+      "riskLevel": "Risk level",
+      "riskScore": "Risk score",
+      "createdAt": "Opened on",
+      "updatedBy": "Last updated by"
+    },
+    "status": {
+      "NOT_STARTED": "Not started",
+      "IN_PROGRESS": "In progress",
+      "PENDING_REVIEW": "Pending review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "EXPIRED": "Expired"
+    },
+    "risk": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High"
+    }
   }
 }

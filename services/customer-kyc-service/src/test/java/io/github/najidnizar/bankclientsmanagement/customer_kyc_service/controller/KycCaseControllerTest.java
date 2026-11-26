@@ -6,6 +6,7 @@ import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.dto.KycCa
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.entity.KycCaseStatus;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.entity.KycRiskLevel;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.exception.InvalidKycStatusTransitionException;
+import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.exception.KycCaseNotFoundException;
 import io.github.najidnizar.bankclientsmanagement.customer_kyc_service.service.KycCaseService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -127,5 +129,17 @@ class KycCaseControllerTest {
                 .andExpect(status().isForbidden());
 
         verifyNoInteractions(kycCaseService);
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenCustomerHasNoKycCase() throws Exception {
+        UUID customerId = UUID.randomUUID();
+        when(kycCaseService.getKycCaseByCustomerId(customerId))
+                .thenThrow(KycCaseNotFoundException.forCustomer(customerId));
+
+        mockMvc.perform(get("/api/v1/kyc-cases/customer/{customerId}", customerId)
+                        .with(jwt().authorities(ADVISOR)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404));
     }
 }

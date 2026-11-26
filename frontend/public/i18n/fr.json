@@ -180,5 +180,30 @@
       "notAllowed": "Ce changement n'est pas autorisé pour le statut actuel du compte.",
       "error": "Le statut n'a pas pu être changé. Réessayez."
     }
+  },
+  "kyc": {
+    "title": "Dossier KYC",
+    "none": "Pas encore de dossier KYC : il est créé automatiquement quelques secondes après le client.",
+    "error": "Impossible de charger le dossier KYC.",
+    "fields": {
+      "status": "Statut",
+      "riskLevel": "Niveau de risque",
+      "riskScore": "Score de risque",
+      "createdAt": "Ouvert le",
+      "updatedBy": "Dernière modification par"
+    },
+    "status": {
+      "NOT_STARTED": "Non commencé",
+      "IN_PROGRESS": "En cours",
+      "PENDING_REVIEW": "En attente de revue",
+      "APPROVED": "Approuvé",
+      "REJECTED": "Rejeté",
+      "EXPIRED": "Expiré"
+    },
+    "risk": {
+      "LOW": "Faible",
+      "MEDIUM": "Moyen",
+      "HIGH": "Élevé"
+    }
   }
 }

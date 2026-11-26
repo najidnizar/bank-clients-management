@@ -45,17 +45,20 @@ public class KycCaseService {
 
     public KycCaseResponse getKycCaseById(UUID id) {
 
-        KycCaseEntity kycCase = kycCaseRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("KYC case not found: " + id));
+        KycCaseEntity kycCase = kycCaseRepository.findById(id).orElseThrow(() -> KycCaseNotFoundException.forId(id));
 
         return kycCaseMapper.toResponse(kycCase);
     }
 
+    public KycCaseResponse getKycCaseByCustomerId(UUID customerId) {
+        return kycCaseRepository.findByCustomerId(customerId)
+                .map(kycCaseMapper::toResponse)
+                .orElseThrow(() -> KycCaseNotFoundException.forCustomer(customerId));
+    }
+
     @Transactional
     public KycCaseResponse updateKycStatus(UUID id, KycCaseStatus requestedStatus) {
-        KycCaseEntity kycCase = kycCaseRepository.findById(id).orElseThrow(() ->
-                        new RuntimeException("KYC case not found: " + id));
+        KycCaseEntity kycCase = kycCaseRepository.findById(id).orElseThrow(() -> KycCaseNotFoundException.forId(id));
 
         validateStatusTransition(kycCase.getStatus(), requestedStatus);
 
@@ -106,7 +109,7 @@ public class KycCaseService {
     @Transactional
     public void handleCustomerStatusChanged(UUID customerId, String customerStatus) {
         KycCaseEntity kycCase = kycCaseRepository.findByCustomerId(customerId)
-                .orElseThrow(() -> new KycCaseNotFoundException(customerId));
+                .orElseThrow(() -> KycCaseNotFoundException.forCustomer(customerId));
 
         if ("BLOCKED".equals(customerStatus)) {
             log.info("Customer {} is blocked, KYC case remains unchanged", customerId);

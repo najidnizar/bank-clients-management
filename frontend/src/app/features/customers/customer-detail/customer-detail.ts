@@ -1,22 +1,23 @@
 import { DatePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, input, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { CustomersService } from '../../../api/onboarding';
-import { StatusBadge } from '../../../shared/status-badge/status-badge';
-import { CustomerAccounts } from '../customer-accounts/customer-accounts';
-import { HttpErrorResponse } from '@angular/common/http';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterLink } from '@angular/router';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { CustomersService } from '../../../api/onboarding';
 import { AuthService } from '../../../core/auth/auth.service';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { ConfirmDialog, ConfirmDialogData } from '../../../shared/confirm-dialog/confirm-dialog';
+import { StatusBadge } from '../../../shared/status-badge/status-badge';
+import { CustomerAccounts } from '../customer-accounts/customer-accounts';
+import { CustomerKyc } from '../customer-kyc/customer-kyc';
 
 type CustomerAction = 'block' | 'unblock' | 'close';
 
@@ -31,6 +32,7 @@ type CustomerAction = 'block' | 'unblock' | 'close';
     MatProgressBarModule,
     TranslatePipe,
     StatusBadge,
+    CustomerKyc,
     CustomerAccounts,
   ],
   templateUrl: './customer-detail.html',
