@@ -20,6 +20,20 @@
         <dt>{{ 'kyc.fields.updatedBy' | translate }}</dt>
         <dd>{{ k.updatedBy }}</dd>
       </dl>
+
+      @if (canReview() && nextStatuses(k).length) {
+        <button mat-stroked-button class="review" [matMenuTriggerFor]="kycMenu">
+          <mat-icon>fact_check</mat-icon>
+          {{ 'kyc.manage.button' | translate }}
+        </button>
+        <mat-menu #kycMenu="matMenu">
+          @for (status of nextStatuses(k); track status) {
+            <button mat-menu-item (click)="changeStatus(k, status)">
+              {{ 'kyc.manage.to.' + status | translate }}
+            </button>
+          }
+        </mat-menu>
+      }
     }
   </mat-card-content>
 </mat-card>

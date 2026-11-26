@@ -54,7 +54,7 @@
     </div>
   }
 
-  <app-customer-kyc [customerId]="id()" />
+  <app-customer-kyc [customerId]="id()" [canReview]="auth.hasRole('COMPLIANCE_OFFICER')" />
 
   <app-customer-accounts
     [customerId]="id()"
