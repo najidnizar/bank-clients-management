@@ -1,0 +1,25 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ 'kyc.title' | translate }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (notCreatedYet()) {
+      <p>{{ 'kyc.none' | translate }}</p>
+    } @else if (kycCase.error()) {
+      <p class="error" role="alert">{{ 'kyc.error' | translate }}</p>
+    } @else if (kycCase.value(); as k) {
+      <dl class="fields">
+        <dt>{{ 'kyc.fields.status' | translate }}</dt>
+        <dd><app-status-badge [status]="k.status" labelPrefix="kyc.status." /></dd>
+        <dt>{{ 'kyc.fields.riskLevel' | translate }}</dt>
+        <dd>{{ 'kyc.risk.' + k.riskLevel | translate }}</dd>
+        <dt>{{ 'kyc.fields.riskScore' | translate }}</dt>
+        <dd>{{ k.riskScore }}</dd>
+        <dt>{{ 'kyc.fields.createdAt' | translate }}</dt>
+        <dd>{{ k.createdAt | date: 'medium' : undefined : language.current() }}</dd>
+        <dt>{{ 'kyc.fields.updatedBy' | translate }}</dt>
+        <dd>{{ k.updatedBy }}</dd>
+      </dl>
+    }
+  </mat-card-content>
+</mat-card>

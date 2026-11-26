@@ -28,6 +28,7 @@ import { TranslatedPaginatorIntl } from './core/i18n/translated-paginator-intl';
 import { provideApi as provideAccountApi } from './api/account';
 import { provideApi as provideOnboardingApi } from './api/onboarding';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { provideApi as provideKycApi } from './api/kyc';
 
 // Only send the access token to our own API, never to other domains.
 const apiCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
@@ -69,5 +70,6 @@ export const appConfig: ApplicationConfig = {
     // index.html loads Material Symbols, not the legacy Material Icons font.
     { provide: MAT_ICON_DEFAULT_OPTIONS, useValue: { fontSet: 'material-symbols-outlined' } },
     { provide: MatPaginatorIntl, useClass: TranslatedPaginatorIntl },
+    provideKycApi(''),
   ],
 };

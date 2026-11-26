@@ -31,4 +31,20 @@ public class GlobalExceptionHandler {
                 .body(error);
     }
 
+    @ExceptionHandler(KycCaseNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleKycCaseNotFound(
+            KycCaseNotFoundException exception,
+            HttpServletRequest request
+    ) {
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Not Found")
+                .message(exception.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
 }
