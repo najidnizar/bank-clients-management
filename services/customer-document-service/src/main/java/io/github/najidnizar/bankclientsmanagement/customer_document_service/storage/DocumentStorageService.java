@@ -1,15 +1,15 @@
 package io.github.najidnizar.bankclientsmanagement.customer_document_service.storage;
 
-import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
+import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.concurrent.TimeUnit;
-
+import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +21,7 @@ public class DocumentStorageService {
 
     public void upload(String storageKey, MultipartFile file) {
         try {
+            createBucketIfMissing();
             minioClient.putObject(PutObjectArgs.builder().bucket(BUCKET_NAME).object(storageKey).stream(
                             file.getInputStream(),
                             file.getSize(),
@@ -34,17 +35,17 @@ public class DocumentStorageService {
         }
     }
 
-    public String generateDownloadUrl(String storageKey) {
+    public InputStream download(String storageKey) {
         try {
-            return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                    .method(Method.GET)
-                    .bucket(BUCKET_NAME)
-                    .object(storageKey)
-                    .expiry(15, TimeUnit.MINUTES)
-                    .build()
-            );
+            return minioClient.getObject(GetObjectArgs.builder().bucket(BUCKET_NAME).object(storageKey).build());
         } catch (Exception exception) {
-            throw new RuntimeException("Failed to generate document download URL", exception);
+            throw new RuntimeException("Failed to download document from storage", exception);
+        }
+    }
+
+    private void createBucketIfMissing() throws Exception {
+        if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build())) {
+            minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
         }
     }
 }
