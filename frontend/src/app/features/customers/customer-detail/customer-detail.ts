@@ -17,6 +17,7 @@ import { LanguageService } from '../../../core/i18n/language.service';
 import { ConfirmDialog, ConfirmDialogData } from '../../../shared/confirm-dialog/confirm-dialog';
 import { StatusBadge } from '../../../shared/status-badge/status-badge';
 import { CustomerAccounts } from '../customer-accounts/customer-accounts';
+import { CustomerDocuments } from '../customer-documents/customer-documents';
 import { CustomerKyc } from '../customer-kyc/customer-kyc';
 
 type CustomerAction = 'block' | 'unblock' | 'close';
@@ -34,6 +35,7 @@ type CustomerAction = 'block' | 'unblock' | 'close';
     StatusBadge,
     CustomerKyc,
     CustomerAccounts,
+    CustomerDocuments,
   ],
   templateUrl: './customer-detail.html',
   styleUrl: './customer-detail.scss',

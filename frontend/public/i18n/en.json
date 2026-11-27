@@ -220,5 +220,34 @@
       "notAllowed": "This change is not allowed for the current status of the case.",
       "error": "The status could not be changed. Please try again."
     }
+  },
+  "documents": {
+    "title": "Documents",
+    "empty": "No document yet.",
+    "error": "The documents could not be loaded.",
+    "fields": {
+      "documentType": "Type",
+      "fileName": "File",
+      "size": "Size (KB)",
+      "createdAt": "Uploaded on",
+      "createdBy": "Uploaded by",
+      "status": "Status"
+    },
+    "type": {
+      "PASSPORT": "Passport",
+      "ID_CARD": "ID card",
+      "PROOF_OF_ADDRESS": "Proof of address",
+      "BANK_STATEMENT": "Bank statement"
+    },
+    "status": {
+      "UPLOADED": "Uploaded",
+      "VALIDATED": "Validated",
+      "REJECTED": "Rejected",
+      "EXPIRED": "Expired"
+    },
+    "download": {
+      "button": "Download",
+      "error": "The document could not be downloaded."
+    }
   }
 }

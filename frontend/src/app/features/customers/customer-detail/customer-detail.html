@@ -61,4 +61,6 @@
     [canOpenAccount]="auth.hasRole('ADVISOR') && c.status !== 'CLOSED'"
     [canManageAccounts]="auth.hasRole('ADMIN')"
   />
+
+  <app-customer-documents [customerId]="id()" />
 }

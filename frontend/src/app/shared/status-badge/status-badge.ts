@@ -19,13 +19,15 @@ import { TranslatePipe } from '@ngx-translate/core';
       font: var(--mat-sys-label-medium);
     }
     .active,
-    .approved {
+    .approved,
+    .validated {
       background: var(--mat-sys-primary-container);
       color: var(--mat-sys-on-primary-container);
     }
     .pending,
     .in_progress,
-    .pending_review {
+    .pending_review,
+    .uploaded {
       background: var(--mat-sys-tertiary-container);
       color: var(--mat-sys-on-tertiary-container);
     }

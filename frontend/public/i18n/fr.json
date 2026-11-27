@@ -220,5 +220,34 @@
       "notAllowed": "Ce changement n'est pas autorisé pour le statut actuel du dossier.",
       "error": "Le statut n'a pas pu être changé. Réessayez."
     }
+  },
+  "documents": {
+    "title": "Documents",
+    "empty": "Aucun document pour l'instant.",
+    "error": "Impossible de charger les documents.",
+    "fields": {
+      "documentType": "Type",
+      "fileName": "Fichier",
+      "size": "Taille (Ko)",
+      "createdAt": "Déposé le",
+      "createdBy": "Déposé par",
+      "status": "Statut"
+    },
+    "type": {
+      "PASSPORT": "Passeport",
+      "ID_CARD": "Carte d'identité",
+      "PROOF_OF_ADDRESS": "Justificatif de domicile",
+      "BANK_STATEMENT": "Relevé bancaire"
+    },
+    "status": {
+      "UPLOADED": "Déposé",
+      "VALIDATED": "Validé",
+      "REJECTED": "Rejeté",
+      "EXPIRED": "Expiré"
+    },
+    "download": {
+      "button": "Télécharger",
+      "error": "Impossible de télécharger le document."
+    }
   }
 }
