@@ -248,6 +248,18 @@
     "download": {
       "button": "Télécharger",
       "error": "Impossible de télécharger le document."
+    },
+    "upload": {
+      "button": "Ajouter un document",
+      "title": "Ajouter un document",
+      "documentType": "Type de document",
+      "chooseFile": "Choisir un fichier",
+      "noFile": "Aucun fichier choisi",
+      "hint": "PDF, JPG ou PNG, 10 Mo maximum.",
+      "tooLarge": "Le fichier dépasse 10 Mo.",
+      "submit": "Envoyer",
+      "success": "Document {{name}} ajouté",
+      "error": "Impossible d'envoyer le document. Veuillez réessayer."
     }
   }
 }

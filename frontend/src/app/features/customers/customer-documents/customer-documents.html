@@ -1,4 +1,11 @@
-<h2>{{ 'documents.title' | translate }}</h2>
+<div class="header">
+  <h2>{{ 'documents.title' | translate }}</h2>
+  @if (canUpload()) {
+    <button mat-stroked-button (click)="upload()">
+      {{ 'documents.upload.button' | translate }}
+    </button>
+  }
+</div>
 
 @if (documents.isLoading()) {
   <mat-progress-bar mode="indeterminate" />
