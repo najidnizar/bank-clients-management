@@ -29,6 +29,7 @@ import { provideApi as provideAccountApi } from './api/account';
 import { provideApi as provideOnboardingApi } from './api/onboarding';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideApi as provideKycApi } from './api/kyc';
+import { provideApi as provideDocumentApi } from './api/document';
 
 // Only send the access token to our own API, never to other domains.
 const apiCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
@@ -71,5 +72,6 @@ export const appConfig: ApplicationConfig = {
     { provide: MAT_ICON_DEFAULT_OPTIONS, useValue: { fontSet: 'material-symbols-outlined' } },
     { provide: MatPaginatorIntl, useClass: TranslatedPaginatorIntl },
     provideKycApi(''),
+    provideDocumentApi(''),
   ],
 };

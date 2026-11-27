@@ -7,10 +7,11 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate:api": "npm run generate:api:onboarding && npm run generate:api:account && npm run generate:api:kyc",
+    "generate:api": "npm run generate:api:onboarding && npm run generate:api:account && npm run generate:api:kyc && npm run generate:api:document",
     "generate:api:onboarding": "openapi-generator-cli generate -i openapi/onboarding.json -g typescript-angular -o src/app/api/onboarding --additional-properties=useSingleRequestParameter=true",
     "generate:api:account": "openapi-generator-cli generate -i openapi/account.json -g typescript-angular -o src/app/api/account --additional-properties=useSingleRequestParameter=true",
-    "generate:api:kyc": "openapi-generator-cli generate -i openapi/kyc.json -g typescript-angular -o src/app/api/kyc --additional-properties=useSingleRequestParameter=true"
+    "generate:api:kyc": "openapi-generator-cli generate -i openapi/kyc.json -g typescript-angular -o src/app/api/kyc --additional-properties=useSingleRequestParameter=true",
+    "generate:api:document": "openapi-generator-cli generate -i openapi/document.json -g typescript-angular -o src/app/api/document --additional-properties=useSingleRequestParameter=true"
   },
   "private": true,
   "packageManager": "npm@11.16.0",
