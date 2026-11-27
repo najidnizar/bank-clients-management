@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>{{ 'documents.upload.title' | translate }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'documents.upload.documentType' | translate }}</mat-label>
+      <mat-select formControlName="documentType">
+        @for (type of documentTypes; track type) {
+          <mat-option [value]="type">{{ 'documents.type.' + type | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <input
+      #fileInput
+      type="file"
+      hidden
+      accept=".pdf,.jpg,.jpeg,.png"
+      (change)="selectFile($event)"
+    />
+    <div class="file">
+      <button mat-stroked-button type="button" (click)="fileInput.click()">
+        <mat-icon>attach_file</mat-icon>
+        {{ 'documents.upload.chooseFile' | translate }}
+      </button>
+      <span>{{ file()?.name ?? ('documents.upload.noFile' | translate) }}</span>
+    </div>
+    <p class="hint">{{ 'documents.upload.hint' | translate }}</p>
+
+    @if (tooLarge()) {
+      <p class="error" role="alert">{{ 'documents.upload.tooLarge' | translate }}</p>
+    }
+    @if (errorKey(); as key) {
+      <p class="error" role="alert">{{ key | translate }}</p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button mat-flat-button type="submit" [disabled]="!file() || tooLarge() || saving()">
+      {{ 'documents.upload.submit' | translate }}
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -248,6 +248,18 @@
     "download": {
       "button": "Download",
       "error": "The document could not be downloaded."
+    },
+    "upload": {
+      "button": "Add a document",
+      "title": "Add a document",
+      "documentType": "Document type",
+      "chooseFile": "Choose a file",
+      "noFile": "No file chosen",
+      "hint": "PDF, JPG or PNG, 10 MB max.",
+      "tooLarge": "The file is larger than 10 MB.",
+      "submit": "Upload",
+      "success": "Document {{name}} added",
+      "error": "The document could not be uploaded. Please try again."
     }
   }
 }
