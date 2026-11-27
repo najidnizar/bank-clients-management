@@ -1,6 +1,7 @@
 package io.github.najidnizar.bankclientsmanagement.customer_document_service.service;
 
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.config.CurrentUser;
+import io.github.najidnizar.bankclientsmanagement.customer_document_service.dto.DocumentContent;
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.dto.DocumentResponse;
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.entity.DocumentEntity;
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.entity.DocumentStatus;
@@ -10,13 +11,16 @@ import io.github.najidnizar.bankclientsmanagement.customer_document_service.mapp
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.repository.DocumentRepository;
 import io.github.najidnizar.bankclientsmanagement.customer_document_service.storage.DocumentStorageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DocumentService {
@@ -50,10 +54,18 @@ public class DocumentService {
         return documentMapper.toResponse(saved);
     }
 
-    public String generateDownloadUrl(UUID documentId) {
-        DocumentEntity document = documentRepository.findById(documentId).orElseThrow(() ->
-                new DocumentNotFoundException(documentId));
-        return documentStorageService.generateDownloadUrl(document.getStorageKey());
+    public List<DocumentResponse> getDocumentsByCustomerId(UUID customerId) {
+        return documentRepository.findByCustomerIdOrderByCreatedAtDesc(customerId).stream()
+                .map(documentMapper::toResponse)
+                .toList();
+    }
+
+    public DocumentContent downloadDocument(UUID documentId) {
+        DocumentEntity document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new DocumentNotFoundException(documentId));
+        log.info("Document {} downloaded by {}", documentId, CurrentUser.username());
+        return new DocumentContent(document.getFileName(), document.getContentType(), document.getFileSize(),
+                documentStorageService.download(document.getStorageKey()));
     }
 
     public DocumentResponse getDocumentById(UUID id) {
